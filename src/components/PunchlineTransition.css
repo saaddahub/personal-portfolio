@@ -65,6 +65,23 @@
   line-height: 1.5;
 }
 
+.scribble-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  pointer-events: none;
+  z-index: -1;
+  fill: none;
+  stroke: var(--color-accent-pastel-a);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+}
+
 /* Reduced motion fallback */
 @media (prefers-reduced-motion: reduce) {
   .punchline-transition-section {

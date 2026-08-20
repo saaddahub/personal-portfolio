@@ -97,7 +97,16 @@
   flex-wrap: wrap;
   gap: var(--space-sm);
   justify-content: center;
-  margin-bottom: var(--space-md);
+  align-items: center;
+  margin-bottom: var(--space-xs); /* Brought closer to headline */
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.hero-eyebrow .separator {
+  color: var(--color-text-muted);
 }
 
 .hero-headline {

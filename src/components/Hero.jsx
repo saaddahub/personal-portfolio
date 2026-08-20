@@ -87,8 +87,9 @@ const Hero = ({ animationReady = true }) => {
       <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
         <div className="hero-text-content">
           <div className="hero-eyebrow">
-            <span className="pill-tag tag-a">AI UNDERGRADUATE</span>
-            <span className="pill-tag tag-b">A FULL-STACK DEVELOPER</span>
+            <span>AI UNDERGRADUATE</span>
+            <span className="separator">•</span>
+            <span>FULL-STACK DEVELOPER</span>
           </div>
           <h1 className="hero-headline text-gradient">
             Saad Akhtar

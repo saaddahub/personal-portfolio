@@ -119,67 +119,74 @@ const DottedText = ({ text = "data", className = "" }) => {
     let animationFrame;
     let isVisible = false;
     
-    const render = (time) => {
-      if (!isVisible && !prefersReducedMotion) {
-        // If not visible, we can just request next frame and return early without drawing
-        animationFrame = requestAnimationFrame(render);
-        return;
-      }
-
-      ctx.clearRect(0, 0, finalWidth, finalHeight);
-
-      dots.forEach(dot => {
-        // 1. Idle Jitter (Layer 1)
-        let idleX = 0;
-        let idleY = 0;
-        
-        if (!prefersReducedMotion) {
-          idleX = Math.sin(time * dot.freqX + dot.phaseX) * idleAmplitude;
-          idleY = Math.cos(time * dot.freqY + dot.phaseY) * idleAmplitude;
-        }
-
-        // Current position before mouse push
-        const currentX = dot.homeX + idleX + dot.pushX;
-        const currentY = dot.homeY + idleY + dot.pushY;
-
-        // 2. Mouse Proximity Scatter (Layer 2)
-        if (!prefersReducedMotion) {
-          const dx = currentX - mouseX;
-          const dy = currentY - mouseY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < repelRadius) {
-            const force = (repelRadius - dist) / repelRadius;
-            const dirX = dx / (dist || 1);
-            const dirY = dy / (dist || 1);
-            
-            dot.pushX += dirX * force * maxPushDistance;
-            dot.pushY += dirY * force * maxPushDistance;
-          }
-        }
-        
-        // 3. Spring Back for the push offset
-        dot.pushX += (0 - dot.pushX) * springBack;
-        dot.pushY += (0 - dot.pushY) * springBack;
-        
-        // 4. Final Position
-        const finalX = dot.homeX + idleX + dot.pushX;
-        const finalY = dot.homeY + idleY + dot.pushY;
-
-        // Draw
-        ctx.beginPath();
-        ctx.arc(finalX, finalY, dot.r, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color;
-        ctx.fill();
-      });
+      let currentFillStyle = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
       
-      if (!prefersReducedMotion) {
-        animationFrame = requestAnimationFrame(render);
-      }
-    };
-    
-    // Initial render
-    render(performance.now());
+      const themeObserver = new MutationObserver(() => {
+        currentFillStyle = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
+      });
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+      const render = (time) => {
+        if (!isVisible && !prefersReducedMotion) {
+          // If not visible, we can just request next frame and return early without drawing
+          animationFrame = requestAnimationFrame(render);
+          return;
+        }
+
+        ctx.clearRect(0, 0, finalWidth, finalHeight);
+
+        dots.forEach(dot => {
+          // 1. Idle Jitter (Layer 1)
+          let idleX = 0;
+          let idleY = 0;
+          
+          if (!prefersReducedMotion) {
+            idleX = Math.sin(time * dot.freqX + dot.phaseX) * idleAmplitude;
+            idleY = Math.cos(time * dot.freqY + dot.phaseY) * idleAmplitude;
+          }
+
+          // Current position before mouse push
+          const currentX = dot.homeX + idleX + dot.pushX;
+          const currentY = dot.homeY + idleY + dot.pushY;
+
+          // 2. Mouse Proximity Scatter (Layer 2)
+          if (!prefersReducedMotion) {
+            const dx = currentX - mouseX;
+            const dy = currentY - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < repelRadius) {
+              const force = (repelRadius - dist) / repelRadius;
+              const dirX = dx / (dist || 1);
+              const dirY = dy / (dist || 1);
+              
+              dot.pushX += dirX * force * maxPushDistance;
+              dot.pushY += dirY * force * maxPushDistance;
+            }
+          }
+          
+          // 3. Spring Back for the push offset
+          dot.pushX += (0 - dot.pushX) * springBack;
+          dot.pushY += (0 - dot.pushY) * springBack;
+          
+          // 4. Final Position
+          const finalX = dot.homeX + idleX + dot.pushX;
+          const finalY = dot.homeY + idleY + dot.pushY;
+
+          // Draw
+          ctx.beginPath();
+          ctx.arc(finalX, finalY, dot.r, 0, Math.PI * 2);
+          ctx.fillStyle = currentFillStyle;
+          ctx.fill();
+        });
+        
+        if (!prefersReducedMotion) {
+          animationFrame = requestAnimationFrame(render);
+        }
+      };
+      
+      // Initial render
+      render(performance.now());
     
     // Use IntersectionObserver to pause animation when out of view
     const observer = new IntersectionObserver((entries) => {
@@ -196,6 +203,7 @@ const DottedText = ({ text = "data", className = "" }) => {
       window.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
       observer.disconnect();
+      themeObserver.disconnect();
       cancelAnimationFrame(animationFrame);
     };
   }, [text]);

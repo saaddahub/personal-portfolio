@@ -35,7 +35,6 @@ const Nav = () => {
           </nav>
           
           <div className="nav-cta">
-            <ThemeToggle />
             <ContactButton href="#contact" className="desktop-only" />
             
             <button 
@@ -46,6 +45,7 @@ const Nav = () => {
               <div className={`bar ${mobileMenuOpen ? 'open' : ''}`} />
               <div className={`bar ${mobileMenuOpen ? 'open' : ''}`} />
             </button>
+            <ThemeToggle />
           </div>
         </div>
       </header>

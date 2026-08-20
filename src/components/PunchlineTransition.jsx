@@ -5,6 +5,8 @@ import './PunchlineTransition.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+import DottedText from './DottedText';
+
 const PunchlineTransition = () => {
   const sectionRef = useRef(null);
   const outgoingRef = useRef(null);
@@ -57,7 +59,12 @@ const PunchlineTransition = () => {
       <div className="punchline-sticky-container">
         <h2 className="punchline-outgoing" ref={outgoingRef}>
           Building at the intersection of <br />
-          <span className="text-gradient">data, systems, and design.</span>
+          <span style={{ position: 'relative', display: 'inline-block' }}>
+            <DottedText text="data," />
+            <svg className="scribble-circle" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 20 50 C 20 20, 180 20, 180 50 C 180 80, 20 80, 20 50 C 20 35, 170 30, 170 50" />
+            </svg>
+          </span> systems, and design.
         </h2>
         
         <div className="punchline-incoming" ref={incomingRef}>
