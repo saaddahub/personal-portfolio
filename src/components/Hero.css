@@ -131,12 +131,13 @@
 
 .hero-name-last {
   display: inline-block;
-  font-family: var(--font-display);
-  font-style: normal;
-  font-size: 1em; /* Back to same size as Saad */
-  font-weight: 700;
-  transform: translateY(0.15em); /* Shifts Akhtar slightly down */
-  letter-spacing: -0.07em; /* Noticeably more compact tracking */
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9em; /* Slightly smaller for that compact contrast */
+  font-weight: 500;
+  transform: translateY(0.15em); /* Keeps the staggered shift down */
+  letter-spacing: -0.06em; /* Noticeably more compact tracking */
+  padding-left: 0.02em; /* italic optical adjustment */
   color: #7C3AED; /* Elegant violet */
 }
 
