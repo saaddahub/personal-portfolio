@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Nav.css';
+import ThemeToggle from './ThemeToggle';
 import ContactButton from './ContactButton';
 
 const Nav = () => {
@@ -34,6 +35,7 @@ const Nav = () => {
           </nav>
           
           <div className="nav-cta">
+            <ThemeToggle />
             <ContactButton href="#contact" className="desktop-only" />
             
             <button 

@@ -17,7 +17,26 @@
   --color-accent-pastel-a: #c9b6f7;
   --color-accent-pastel-b: #f5f0a8;
   --color-accent-signal: #22c55e;
+}
 
+[data-theme='light'] {
+  --color-bg: #f8f9fa;
+  --color-bg-raised: #ffffff;
+  --color-bg-card: #f1f3f5;
+  --color-text-primary: #121212;
+  --color-text-secondary: #495057;
+  --color-text-muted: #868e96;
+  --color-border-subtle: rgba(0,0,0,0.06);
+  --color-border-default: rgba(0,0,0,0.12);
+  
+  --color-accent-primary: #000000;
+  /* Keep pastels same or tweak slightly for contrast */
+  --color-accent-pastel-a: #c9b6f7;
+  --color-accent-pastel-b: #f5f0a8;
+  --color-accent-signal: #22c55e;
+}
+
+:root {
   /* Typography */
   --font-display: 'General Sans', system-ui, sans-serif;
   --font-scribble: 'Caveat', cursive;
