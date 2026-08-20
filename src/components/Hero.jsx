@@ -1,155 +1,114 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
-import DottedText from './DottedText';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = ({ animationReady = true }) => {
-  const containerRef = useRef(null);
-  const spotlightRef = useRef(null);
-  
-  // Spotlight tracking
-  useEffect(() => {
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let spotlightX = mouseX;
-    let spotlightY = mouseY;
-    
-    const handleMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    let animationFrame;
-    const updateSpotlight = () => {
-      // Lerp
-      spotlightX += (mouseX - spotlightX) * 0.1;
-      spotlightY += (mouseY - spotlightY) * 0.1;
-      
-      if (spotlightRef.current) {
-        spotlightRef.current.style.transform = `translate(${spotlightX}px, ${spotlightY}px) translate(-50%, -50%)`;
-      }
-      
-      animationFrame = requestAnimationFrame(updateSpotlight);
-    };
-    
-    updateSpotlight();
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrame);
-    };
-  }, []);
+  const heroRef = useRef(null);
 
-  // GSAP animations
   useEffect(() => {
     if (!animationReady) return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
     let ctx = gsap.context(() => {
+      // Intro animations
       const tl = gsap.timeline({ delay: 0.2 });
       
-      // Headline Intro
-      tl.fromTo('.hero-name-huge',
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+      tl.fromTo('.hero-text-content',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
       );
 
-      // Scroll Zoom Transition Logic
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!prefersReducedMotion) {
-        const st = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=1000', 
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
+      tl.fromTo('.parallax-layer',
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.5, stagger: 0.1, ease: 'power3.out' },
+        "-=0.5"
+      );
 
-        // "Saad Akhtar" subtly fades and moves up slightly
-        st.to('.hero-content', {
-          y: -100,
-          opacity: 0.2,
-          filter: 'blur(5px)',
-          ease: 'power1.inOut',
-        }, 0);
-
-        // "Building at the intersection..." slides up from bottom to top of Saad Akhtar
-        st.fromTo('.punchline-incoming', {
-          y: '50vh',
-          opacity: 0,
-        }, {
-          y: 0,
-          opacity: 1,
-          ease: 'power2.out',
-        }, 0);
-      }
+      // Scroll Parallax Logic
+      // Each layer moves at a different speed, up to a maximum distance.
+      const layers = gsap.utils.toArray('.parallax-layer');
       
-    }, containerRef);
+      layers.forEach((layer) => {
+        const speed = parseFloat(layer.dataset.speed);
+        // We'll move them up to maxTravel pixels
+        const maxTravel = parseFloat(layer.dataset.max) || 400;
+        
+        gsap.to(layer, {
+          y: maxTravel,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: `+=${maxTravel / speed}`, // Calculate end distance so it reaches maxTravel exactly when scroll ends
+            scrub: true,
+          }
+        });
+      });
+
+    }, heroRef);
     
     return () => ctx.revert();
   }, [animationReady]);
 
-  // Generate random particles
-  const [particles] = useState(() => {
-    return Array.from({ length: 25 }).map((_, i) => {
-      const isWord = Math.random() > 0.5;
-      const words = ['--radius-md', '--space-lg', '--color-border', 'const', '=>', '0px', 'return'];
-      return {
-        id: i,
-        top: `${Math.random() * 100}%`,
-        left: `${30 + Math.random() * 70}%`, // Focus on right side
-        text: isWord ? words[Math.floor(Math.random() * words.length)] : '+',
-        duration: 6 + Math.random() * 4,
-        delay: -Math.random() * 5
-      };
-    });
-  });
-
   return (
-    <section className="hero-section" ref={containerRef} id="home" style={{ minHeight: '100vh' }}>
-      {/* Background Effects */}
-      <div className="section-glow"></div>
-      <div className="hero-background">
-        <div className="spotlight" ref={spotlightRef}></div>
-        <div className="particle-field">
-          {particles.map((p) => (
-            <div 
-              key={p.id} 
-              className="particle"
-              style={{
-                top: p.top,
-                left: p.left,
-                animationDuration: `${p.duration}s`,
-                animationDelay: `${p.delay}s`
-              }}
-            >
-              {p.text}
-            </div>
-          ))}
+    <section className="hero-section" ref={heroRef} id="home">
+      
+      {/* LAYER 1: Background Gradient / Sky */}
+      <div className="parallax-layer parallax-sky" data-speed="0.1" data-max="100">
+        <div className="sky-gradient"></div>
+      </div>
+
+      {/* LAYER 2: Sun / Moon */}
+      <div className="parallax-layer parallax-sun" data-speed="0.15" data-max="150">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="40" fill="var(--color-accent-pastel-a)" opacity="0.8" />
+        </svg>
+      </div>
+
+      {/* LAYER 3: Distant Mountains */}
+      <div className="parallax-layer parallax-distant" data-speed="0.3" data-max="300">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 400L0 250L150 120L300 200L500 50L750 180L1000 80L1200 220L1200 400Z" fill="var(--color-bg-card)" opacity="0.4" />
+        </svg>
+      </div>
+
+      {/* LAYER 4: Midground Hills */}
+      <div className="parallax-layer parallax-mid" data-speed="0.5" data-max="450">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 400L0 300Q150 150 350 250T750 150T1200 280L1200 400Z" fill="var(--color-bg-raised)" opacity="0.7" />
+        </svg>
+      </div>
+
+      {/* TEXT CONTENT: Placed between Mid and Fore layers */}
+      <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
+        <div className="hero-text-content">
+          <div className="hero-eyebrow">
+            <span>AI UNDERGRADUATE</span>
+            <span className="separator">•</span>
+            <span>FULL-STACK DEVELOPER</span>
+          </div>
+          <h1 className="hero-headline text-gradient">
+            Saad Akhtar
+          </h1>
+          <p className="hero-desc">
+            Creative Developer based in Lahore, Pakistan.
+          </p>
         </div>
       </div>
-      
-      {/* Content */}
-      <div className="container hero-content">
-        <h1 className="hero-name-huge text-gradient" style={{ fontSize: 'clamp(4rem, 12vw, 10rem)', fontWeight: 700, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
-          Saad Akhtar
-        </h1>
+
+      {/* LAYER 5: Foreground Silhouette */}
+      <div className="parallax-layer parallax-foreground" data-speed="0.8" data-max="600">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 400L0 350Q200 250 400 320T800 280T1200 320L1200 400Z" fill="var(--color-bg)" />
+        </svg>
       </div>
 
-      <div className="punchline-incoming">
-        <h2 className="incoming-headline">
-          Building at the intersection of <br/>
-          <DottedText text="data," />
-          {' '}systems, and design.
-        </h2>
-      </div>
+      {/* Bottom Gradient Overlay (smooth transition into next section) */}
+      <div className="hero-bottom-gradient"></div>
     </section>
   );
 };

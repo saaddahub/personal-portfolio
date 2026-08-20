@@ -7,6 +7,7 @@ import 'lenis/dist/lenis.css';
 
 import Nav from './components/Nav';
 import Hero from './components/Hero';
+import PunchlineTransition from './components/PunchlineTransition';
 import SkillsGlobe from './components/SkillsGlobe';
 import Stats from './components/Stats';
 import Projects from './components/Projects';
@@ -105,6 +106,7 @@ function App() {
         <Nav />
         <main>
           <Hero animationReady={!loading} />
+          <PunchlineTransition />
           <SkillsGlobe />
           <Stats />
           <Projects />
