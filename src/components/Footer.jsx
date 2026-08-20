@@ -1,5 +1,5 @@
 import './Footer.css';
-
+import SocialMenu from './SocialMenu';
 const Footer = () => {
   return (
     <footer className="site-footer">
@@ -11,10 +11,8 @@ const Footer = () => {
           
           <div className="footer-info">
             <p className="footer-tagline">AI undergraduate and full-stack developer.</p>
-            <div className="footer-links">
-              <a href="mailto:saadsalam659@email.com" className="btn-secondary">saadsalam659@email.com</a>
-              <a href="https://linkedin.com/in/saad-akhtar-9aa695318" target="_blank" rel="noopener noreferrer" className="btn-secondary">LinkedIn</a>
-              <a href="https://github.com/saadakhtar" target="_blank" rel="noopener noreferrer" className="btn-secondary">GitHub</a>
+            <div className="footer-social-wrapper">
+              <SocialMenu />
             </div>
           </div>
           

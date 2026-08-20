@@ -1,7 +1,8 @@
 .site-footer {
   padding-top: var(--space-2xl);
   padding-bottom: var(--space-lg);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .footer-content {
@@ -43,6 +44,11 @@
 .footer-links {
   display: flex;
   gap: var(--space-md);
+}
+
+.footer-social-wrapper {
+  /* Give enough breathing room on all sides so the radial menu doesn't get clipped or cause scrolling on small screens */
+  margin: 30px; 
 }
 
 .footer-divider {
