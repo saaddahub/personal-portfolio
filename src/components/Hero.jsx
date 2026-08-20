@@ -52,24 +52,10 @@ const Hero = ({ animationReady = true }) => {
     let ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.2 });
       
-      // Eyebrows
-      tl.fromTo('.hero-eyebrow span', 
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power2.out' }
-      );
-      
-      // Headline
-      tl.fromTo(['.hero-name-huge', '.hero-headline'],
+      // Headline Intro
+      tl.fromTo('.hero-name-huge',
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.1 },
-        "-=0.2"
-      );
-      
-      // Paragraph & Button
-      tl.fromTo(['.hero-desc', '.hero-cta'],
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.45, stagger: 0.1, ease: 'power2.out' },
-        "-=0.2"
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
       );
 
       // Scroll Zoom Transition Logic
@@ -79,30 +65,30 @@ const Hero = ({ animationReady = true }) => {
           scrollTrigger: {
             trigger: containerRef.current,
             start: 'top top',
-            end: '+=1500', 
+            end: '+=1000', 
             scrub: 1,
             pin: true,
             anticipatePin: 1,
           },
         });
 
-        // Outgoing text zooming past the camera
+        // "Saad Akhtar" subtly fades and moves up slightly
         st.to('.hero-content', {
-          scale: 8,
-          opacity: 0,
-          filter: 'blur(20px)',
-          ease: 'power2.in',
+          y: -100,
+          opacity: 0.2,
+          filter: 'blur(5px)',
+          ease: 'power1.inOut',
         }, 0);
 
-        // Incoming text zooming into focus
+        // "Building at the intersection..." slides up from bottom to top of Saad Akhtar
         st.fromTo('.punchline-incoming', {
-          scale: 0.4,
+          y: '50vh',
           opacity: 0,
         }, {
-          scale: 1,
+          y: 0,
           opacity: 1,
           ease: 'power2.out',
-        }, 0.15);
+        }, 0);
       }
       
     }, containerRef);
@@ -152,40 +138,17 @@ const Hero = ({ animationReady = true }) => {
       
       {/* Content */}
       <div className="container hero-content">
-        <div className="hero-eyebrow">
-          <span>AI UNDERGRADUATE</span>
-          <span className="separator">•</span>
-          <span>FULL-STACK DEVELOPER</span>
-        </div>
-        
-        <h1 className="hero-name-huge text-gradient" style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontWeight: 700, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
+        <h1 className="hero-name-huge text-gradient" style={{ fontSize: 'clamp(4rem, 12vw, 10rem)', fontWeight: 700, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
           Saad Akhtar
         </h1>
-
-        <h2 className="hero-headline" style={{ marginTop: 'var(--space-sm)' }}>
-          Building at the intersection of <br/>
-          <DottedText text="data," />
-          {' '}systems, and design.
-        </h2>
-        
-        <p className="hero-desc">
-          I'm an AI undergraduate and full-stack developer based in Lahore, Pakistan. Open to internships, research roles, and collaborative projects.
-        </p>
-        
-        <div className="hero-cta">
-          <a href="#contact" className="btn-primary btn-icon-shift">
-            Book a call <span className="icon">→</span>
-          </a>
-        </div>
       </div>
 
       <div className="punchline-incoming">
         <h2 className="incoming-headline">
-          I help founders shape their product.
+          Building at the intersection of <br/>
+          <DottedText text="data," />
+          {' '}systems, and design.
         </h2>
-        <p className="incoming-sub">
-          Bridging the gap between AI research and scalable full-stack development.
-        </p>
       </div>
     </section>
   );
