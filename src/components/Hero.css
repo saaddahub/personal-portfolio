@@ -126,9 +126,10 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 500;
-  font-size: 0.65em; /* Makes Akhtar noticeably more compact than Saad */
-  letter-spacing: -0.02em;
-  padding-left: 0.1em; 
+  font-size: 0.9em; /* Larger, but still smaller than the sans */
+  letter-spacing: -0.06em; /* Noticeably more compact/tighter spacing */
+  padding-left: 0.02em; 
+  color: #7C3AED; /* Elegant violet that has good contrast on both black and white backgrounds */
 }
 
 .hero-desc {
