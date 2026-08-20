@@ -3,28 +3,33 @@ import './MusicPlayer.css';
 
 const TRACKS = [
   {
-    title: '2 AM Debug Loop',
-    artist: 'Open Lofi • Focus',
-    url: '/audio/2-am-debug-loop.mp3'
-  },
-  {
-    title: 'Midnight Window Glow',
-    artist: 'Open Lofi • Chillhop',
+    title: 'Unspoken Rizz',
+    artist: 'Saad • Smooth R&B',
     url: '/audio/midnight-window-glow.mp3'
   },
   {
-    title: 'Electric Puddles',
-    artist: 'Open Lofi • Dreamscape',
+    title: 'W Rizz (After Hours)',
+    artist: 'Neo Soul • Slow Jam',
     url: '/audio/electric-puddles.mp3'
   },
   {
-    title: 'Rooftop Static Dreams',
-    artist: 'Open Lofi • Ambient',
+    title: 'Eye Contact at 2 AM',
+    artist: 'Silk & Velvet • Bedroom Lo-Fi',
     url: '/audio/rooftop-static-dreams.mp3'
   },
   {
-    title: 'Rain On Glass',
-    artist: 'Ambient Soundscape',
+    title: 'Flirting with Clean Code',
+    artist: 'Design Engineer • Smooth Beats',
+    url: '/audio/2-am-debug-loop.mp3'
+  },
+  {
+    title: 'Late Night Chemistry',
+    artist: 'Cozy Fireplace • Chillhop',
+    url: '/audio/fire.mp3'
+  },
+  {
+    title: 'Rainy Window Romance',
+    artist: 'Ambient Soundscape • Romantic',
     url: '/audio/rain.mp3'
   }
 ];
