@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
@@ -7,6 +7,42 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Hero = ({ animationReady = true }) => {
   const heroRef = useRef(null);
+  const spotlightRef = useRef(null);
+  
+  // Spotlight tracking
+  useEffect(() => {
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let spotlightX = mouseX;
+    let spotlightY = mouseY;
+    
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    let animationFrame;
+    const updateSpotlight = () => {
+      // Lerp
+      spotlightX += (mouseX - spotlightX) * 0.1;
+      spotlightY += (mouseY - spotlightY) * 0.1;
+      
+      if (spotlightRef.current) {
+        spotlightRef.current.style.transform = `translate(${spotlightX}px, ${spotlightY}px) translate(-50%, -50%)`;
+      }
+      
+      animationFrame = requestAnimationFrame(updateSpotlight);
+    };
+    
+    updateSpotlight();
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrame);
+    };
+  }, []);
 
   useEffect(() => {
     if (!animationReady) return;
@@ -54,36 +90,47 @@ const Hero = ({ animationReady = true }) => {
     return () => ctx.revert();
   }, [animationReady]);
 
+  // Generate random particles
+  const [particles] = useState(() => {
+    return Array.from({ length: 25 }).map((_, i) => {
+      const isWord = Math.random() > 0.5;
+      const words = ['--radius-md', '--space-lg', '--color-border', 'const', '=>', '0px', 'return'];
+      return {
+        id: i,
+        top: `${Math.random() * 100}%`,
+        left: `${30 + Math.random() * 70}%`, // Focus on right side
+        text: isWord ? words[Math.floor(Math.random() * words.length)] : '+',
+        duration: 6 + Math.random() * 4,
+        delay: -Math.random() * 5
+      };
+    });
+  });
+
   return (
     <section className="hero-section" ref={heroRef} id="home">
       
-      {/* LAYER 1: Background Gradient / Sky */}
+      {/* BACKGROUND: Spotlight and Particles */}
       <div className="parallax-layer parallax-sky" data-speed="0.1" data-max="100">
-        <div className="sky-gradient"></div>
+        <div className="spotlight" ref={spotlightRef}></div>
+        <div className="particle-field">
+          {particles.map((p) => (
+            <div 
+              key={p.id} 
+              className="particle"
+              style={{
+                top: p.top,
+                left: p.left,
+                animationDuration: `${p.duration}s`,
+                animationDelay: `${p.delay}s`
+              }}
+            >
+              {p.text}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* LAYER 2: Sun / Moon */}
-      <div className="parallax-layer parallax-sun" data-speed="0.15" data-max="150">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="40" fill="var(--color-accent-pastel-a)" opacity="0.8" />
-        </svg>
-      </div>
-
-      {/* LAYER 3: Distant Mountains */}
-      <div className="parallax-layer parallax-distant" data-speed="0.3" data-max="300">
-        <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 400L0 250L150 120L300 200L500 50L750 180L1000 80L1200 220L1200 400Z" fill="var(--color-bg-card)" opacity="0.4" />
-        </svg>
-      </div>
-
-      {/* LAYER 4: Midground Hills */}
-      <div className="parallax-layer parallax-mid" data-speed="0.5" data-max="450">
-        <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 400L0 300Q150 150 350 250T750 150T1200 280L1200 400Z" fill="var(--color-bg-raised)" opacity="0.7" />
-        </svg>
-      </div>
-
-      {/* TEXT CONTENT: Placed between Mid and Fore layers */}
+      {/* TEXT CONTENT */}
       <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
         <div className="hero-text-content">
           <div className="hero-eyebrow">
@@ -100,7 +147,7 @@ const Hero = ({ animationReady = true }) => {
         </div>
       </div>
 
-      {/* LAYER 5: Foreground Silhouette */}
+      {/* LAYER 5: Foreground Solid Background Transition */}
       <div className="parallax-layer parallax-foreground" data-speed="0.8" data-max="600">
         <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 400L0 350Q200 250 400 320T800 280T1200 320L1200 400Z" fill="var(--color-bg)" />

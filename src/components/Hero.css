@@ -27,37 +27,41 @@
 .parallax-sky {
   z-index: 1;
 }
-.sky-gradient {
+
+/* Spotlight */
+.spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* Particle Field */
+.particle-field {
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 30%, var(--color-accent-pastel-a) 0%, transparent 60%);
   opacity: 0.15;
 }
 
-.parallax-sun {
-  z-index: 2;
-}
-.parallax-sun svg {
-  top: 15vh;
-  bottom: auto;
-  left: 50%;
-  transform: translateX(-50%);
-  width: clamp(200px, 30vw, 400px);
-  height: clamp(200px, 30vw, 400px);
+.particle {
+  position: absolute;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  animation: drift ease-in-out alternate infinite;
 }
 
-.parallax-distant {
-  z-index: 3;
-}
-.parallax-distant svg {
-  height: 50vh;
-}
-
-.parallax-mid {
-  z-index: 4;
-}
-.parallax-mid svg {
-  height: 40vh;
+@keyframes drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(15px, -15px); }
 }
 
 .parallax-text {
@@ -111,7 +115,7 @@
 
 .hero-headline {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 8vw, 8rem);
+  font-size: clamp(4rem, 12vw, 10rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
