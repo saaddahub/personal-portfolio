@@ -7,7 +7,8 @@ const Projects = () => {
       client: 'Netflix Data Visualiser (Python & Data Science)',
       outcome: 'Interactive exploratory data analysis and visualization dashboard for Netflix movies and TV shows. Analyzes genre distribution, release trends, content ratings, and international analytics.',
       image: '/images/netflix-visualiser.png',
-      url: 'netflix-data-visualiser.demo',
+      url: 'netflix-analysis-pandas.streamlit.app',
+      liveUrl: 'https://netflix-analysis-pandas.streamlit.app',
       type: 'browser',
       tags: ['Python', 'Pandas', 'Data Science', 'Streamlit']
     },
@@ -101,7 +102,18 @@ const Projects = () => {
                     <span key={tIdx} className="project-tag-pill">{tag}</span>
                   ))}
                 </div>
-                <a href="#contact" className="project-link">View case →</a>
+                {project.liveUrl ? (
+                  <a 
+                    href={project.liveUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="project-link"
+                  >
+                    Live app ↗
+                  </a>
+                ) : (
+                  <a href="#contact" className="project-link">View case →</a>
+                )}
               </div>
             </div>
           ))}
