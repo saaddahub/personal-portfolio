@@ -28,6 +28,12 @@ function App() {
 
   // Initialize Lenis
   useEffect(() => {
+    // Force scroll to top on reload to prevent GSAP parallax glitches from hash links or browser scroll restoration
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      window.history.replaceState('', document.title, window.location.pathname + window.location.search);
+    }
+
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
