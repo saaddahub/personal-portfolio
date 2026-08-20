@@ -1,0 +1,91 @@
+.punchline-transition-section {
+  position: relative;
+  width: 100%;
+  height: 300vh; /* Provides the 1500px+ scroll distance for the pin */
+  background: var(--color-bg);
+  z-index: 20;
+}
+
+.punchline-sticky-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Will be pinned by ScrollTrigger */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.punchline-outgoing,
+.punchline-incoming {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--space-xl);
+  margin: 0;
+  will-change: transform, opacity, filter;
+}
+
+.punchline-outgoing {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  /* Optional: Text shadow for a bit more depth before it scales */
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.punchline-incoming {
+  opacity: 0; /* Hidden by default until GSAP takes over */
+  transform: scale(0.4);
+}
+
+.incoming-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.incoming-sub {
+  font-size: var(--fs-body-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+/* Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .punchline-transition-section {
+    height: auto;
+    padding-block: var(--space-section);
+  }
+  
+  .punchline-sticky-container {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .punchline-outgoing {
+    position: relative;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .punchline-incoming {
+    position: relative;
+    opacity: 1;
+    transform: none;
+  }
+}

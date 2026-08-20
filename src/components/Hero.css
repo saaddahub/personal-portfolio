@@ -1,139 +1,117 @@
 .hero-section {
-  min-height: 90vh;
-  display: flex;
-  align-items: center;
   position: relative;
-  overflow: hidden; /* contain the background effects */
-  padding-block: var(--space-section);
+  width: 100%;
+  height: 180vh; /* Extra height to allow scrolling through the parallax */
+  overflow: hidden;
+  background-color: var(--color-bg);
 }
 
-.hero-background {
+.parallax-layer {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Spotlight */
-.spotlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-  mix-blend-mode: screen;
   will-change: transform;
 }
 
-/* Particle Field */
-.particle-field {
+.parallax-layer svg {
   position: absolute;
-  top: 0;
-  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60vh;
+  display: block;
+}
+
+/* Layer specific styling */
+.parallax-sky {
+  z-index: 1;
+}
+.sky-gradient {
   width: 100%;
   height: 100%;
+  background: radial-gradient(circle at 50% 30%, var(--color-accent-pastel-a) 0%, transparent 60%);
   opacity: 0.15;
 }
 
-.particle {
-  position: absolute;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-  animation: drift ease-in-out alternate infinite;
+.parallax-sun {
+  z-index: 2;
+}
+.parallax-sun svg {
+  top: 15vh;
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(200px, 30vw, 400px);
+  height: clamp(200px, 30vw, 400px);
 }
 
-@keyframes drift {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(15px, -15px); }
+.parallax-distant {
+  z-index: 3;
+}
+.parallax-distant svg {
+  height: 50vh;
 }
 
-/* Content */
-.hero-content {
-  position: relative;
-  z-index: 10;
+.parallax-mid {
+  z-index: 4;
+}
+.parallax-mid svg {
+  height: 40vh;
+}
+
+.parallax-text {
+  z-index: 5;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  align-items: center;
+  justify-content: center;
+  top: -20vh; /* Shift text up a bit */
+}
+
+.hero-text-content {
+  text-align: center;
+  padding: 0 var(--space-lg);
+}
+
+.parallax-foreground {
+  z-index: 6;
+}
+.parallax-foreground svg {
+  height: 30vh;
+}
+
+/* Bottom gradient to blend smoothly into the next solid section */
+.hero-bottom-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25vh;
+  background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .hero-eyebrow {
   display: flex;
-  gap: var(--space-xs);
   flex-wrap: wrap;
-}
-
-.pill-tag {
-  font-size: var(--fs-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--color-border-subtle);
-}
-
-.tag-a {
-  color: var(--color-accent-pastel-a);
-}
-
-.tag-b {
-  color: var(--color-accent-pastel-b);
+  gap: var(--space-sm);
+  justify-content: center;
+  margin-bottom: var(--space-md);
 }
 
 .hero-headline {
-  font-size: var(--fs-display-xl);
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 8rem);
   font-weight: 700;
-  line-height: var(--line-height-tight);
-  color: var(--color-accent-primary);
-  max-width: 20ch;
-}
-
-/* Scribble text */
-.scribble-wrapper {
-  position: relative;
-  display: inline-block;
-  font-family: var(--font-scribble);
-  font-weight: 400; /* Caveat looks better without synthetic bolding */
-  padding: 0 0.2em;
-  color: var(--color-accent-pastel-b); /* give it a slight pop */
-}
-
-.scribble-svg {
-  position: absolute;
-  top: -10%;
-  left: -5%;
-  width: 110%;
-  height: 120%;
-  pointer-events: none;
-}
-
-.scribble-svg path {
-  fill: none;
-  stroke: var(--color-accent-primary);
-  stroke-width: 3px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  /* Setup for draw animation */
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300; 
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: var(--space-md);
 }
 
 .hero-desc {
   font-size: var(--fs-body-lg);
   color: var(--color-text-secondary);
-  max-width: 44ch;
-  line-height: 1.6;
-}
-
-@media (max-width: 640px) {
-  .hero-section {
-    min-height: 80vh;
-  }
+  max-width: 600px;
+  margin: 0 auto;
 }
