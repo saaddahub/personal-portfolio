@@ -34,8 +34,9 @@ const DottedText = ({ text = "data", className = "" }) => {
 
     // Draw text to offscreen
     offCtx.fillStyle = 'white';
-    // Use the site's font if possible, or sans-serif
-    offCtx.font = '900 120px Inter, system-ui, sans-serif';
+    // Use the site's correct font, weight, and tracking
+    offCtx.font = '600 120px "General Sans", system-ui, sans-serif';
+    offCtx.letterSpacing = '-2px'; // Matches the -0.02em tracking
     offCtx.textBaseline = 'middle';
     offCtx.fillText(text, 10, height / 2);
 
@@ -212,14 +213,13 @@ const DottedText = ({ text = "data", className = "" }) => {
     <div 
       ref={containerRef} 
       className={`dotted-text-container ${className}`}
-      style={{ display: 'inline-flex', verticalAlign: 'middle' }}
+      style={{ display: 'inline-flex', verticalAlign: '-0.1em' }}
     >
       <canvas 
         ref={canvasRef} 
         style={{ 
           maxWidth: '100%', 
-          height: 'auto',
-          maxHeight: '1.2em' 
+          height: '1.4em'
         }} 
       />
     </div>
