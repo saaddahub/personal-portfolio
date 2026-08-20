@@ -17,6 +17,7 @@ import FAQ from './components/FAQ';
 import FinalCta from './components/FinalCta';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
+import MusicPlayer from './components/MusicPlayer';
 
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -114,6 +115,7 @@ function App() {
           <FinalCta />
         </main>
         <Footer />
+        <MusicPlayer />
       </div>
     </>
   );

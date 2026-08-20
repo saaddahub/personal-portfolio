@@ -1,0 +1,51 @@
+.music-sidebar-wrapper {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.music-sidebar-wrapper:not(.expanded) {
+  transform: translate(-100%, -50%);
+}
+
+.music-player-panel {
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  position: relative;
+}
+
+.music-toggle-btn {
+  position: absolute;
+  right: -36px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 64px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  transition: background 0.2s, right 0.5s;
+}
+
+.music-toggle-btn:hover {
+  background: var(--color-bg-raised);
+}
+
+/* Base styles for the Uiverse component */
+.group\/he {
+  position: relative;
+}
