@@ -1,5 +1,6 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap');
 
 :root {
   /* Base */
@@ -38,7 +39,10 @@
 
 :root {
   /* Typography */
-  --font-display: 'General Sans', system-ui, sans-serif;
+  --font-sans: 'General Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-scribble: 'Caveat', cursive;
 
   --fs-display-xl: clamp(2.75rem, 6vw, 5.5rem);

@@ -122,6 +122,14 @@
   margin-bottom: var(--space-md);
 }
 
+.hero-name-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500; /* Slightly lighter weight than the sans part gives amazing contrast */
+  letter-spacing: -0.02em;
+  padding-left: 0.05em; /* subtle optical adjustment for italics */
+}
+
 .hero-desc {
   font-size: var(--fs-body-lg);
   color: var(--color-text-secondary);
