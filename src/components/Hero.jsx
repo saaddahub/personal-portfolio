@@ -59,9 +59,9 @@ const Hero = ({ animationReady = true }) => {
       );
       
       // Headline
-      tl.fromTo('.hero-headline',
+      tl.fromTo(['.hero-name-huge', '.hero-headline'],
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' },
+        { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.1 },
         "-=0.2"
       );
       
@@ -153,18 +153,20 @@ const Hero = ({ animationReady = true }) => {
       {/* Content */}
       <div className="container hero-content">
         <div className="hero-eyebrow">
-          <span>SAAD AKHTAR</span>
-          <span className="separator">•</span>
           <span>AI UNDERGRADUATE</span>
           <span className="separator">•</span>
           <span>FULL-STACK DEVELOPER</span>
         </div>
         
-        <h1 className="hero-headline">
+        <h1 className="hero-name-huge text-gradient" style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontWeight: 700, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
+          Saad Akhtar
+        </h1>
+
+        <h2 className="hero-headline" style={{ marginTop: 'var(--space-sm)' }}>
           Building at the intersection of <br/>
           <DottedText text="data," />
           {' '}systems, and design.
-        </h1>
+        </h2>
         
         <p className="hero-desc">
           I'm an AI undergraduate and full-stack developer based in Lahore, Pakistan. Open to internships, research roles, and collaborative projects.
