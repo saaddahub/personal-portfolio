@@ -1,0 +1,139 @@
+.hero-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden; /* contain the background effects */
+  padding-block: var(--space-section);
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Spotlight */
+.spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* Particle Field */
+.particle-field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+}
+
+.particle {
+  position: absolute;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  animation: drift ease-in-out alternate infinite;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(15px, -15px); }
+}
+
+/* Content */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.hero-eyebrow {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.pill-tag {
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.tag-a {
+  color: var(--color-accent-pastel-a);
+}
+
+.tag-b {
+  color: var(--color-accent-pastel-b);
+}
+
+.hero-headline {
+  font-size: var(--fs-display-xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--color-accent-primary);
+  max-width: 20ch;
+}
+
+/* Scribble text */
+.scribble-wrapper {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-scribble);
+  font-weight: 400; /* Caveat looks better without synthetic bolding */
+  padding: 0 0.2em;
+  color: var(--color-accent-pastel-b); /* give it a slight pop */
+}
+
+.scribble-svg {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 110%;
+  height: 120%;
+  pointer-events: none;
+}
+
+.scribble-svg path {
+  fill: none;
+  stroke: var(--color-accent-primary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Setup for draw animation */
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300; 
+}
+
+.hero-desc {
+  font-size: var(--fs-body-lg);
+  color: var(--color-text-secondary);
+  max-width: 44ch;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .hero-section {
+    min-height: 80vh;
+  }
+}

@@ -1,0 +1,79 @@
+.cta-split-container {
+  display: flex;
+  width: 100vw;
+  min-height: 60vh;
+}
+
+.cta-split-half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-section) var(--space-lg);
+  color: var(--color-bg); /* Dark/black text for contrast */
+}
+
+.cta-split-content {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.cta-split-content h2 {
+  font-size: var(--fs-display-lg);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+}
+
+.cta-split-content p {
+  font-size: var(--fs-body-lg);
+  font-weight: 500;
+  opacity: 0.8;
+  margin-bottom: var(--space-md);
+}
+
+.cta-left {
+  background-color: var(--color-accent-pastel-a);
+}
+
+.cta-right {
+  background-color: var(--color-accent-pastel-b);
+}
+
+/* Custom darker buttons for each pastel half */
+.btn-split {
+  align-self: flex-start;
+  border-radius: var(--radius-full);
+  padding: 0.875rem 1.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform var(--duration-fast) var(--ease-standard);
+  color: #fff;
+}
+
+.btn-split:hover {
+  transform: scale(1.03);
+}
+
+.btn-split-left {
+  background-color: #9d81e3; /* darker lavender */
+}
+
+.btn-split-right {
+  background-color: #d1c956; /* darker yellow */
+  color: var(--color-bg); /* keep text dark for contrast */
+}
+
+@media (max-width: 768px) {
+  .cta-split-container {
+    flex-direction: column;
+  }
+  
+  .cta-split-half {
+    padding: var(--space-xl) var(--space-md);
+    min-height: 50vh;
+  }
+}

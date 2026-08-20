@@ -1,0 +1,54 @@
+.preloader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1c1c1c; /* Lighter than #0A0A0A deliberately */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-2xl);
+  pointer-events: none;
+}
+
+.preloader-skills {
+  align-self: flex-end;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.preloader-skill {
+  font-family: var(--font-sans);
+  font-size: var(--fs-heading-md);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+  opacity: 0; /* JS handles reveal */
+}
+
+.preloader-counter {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 15vw, 12rem);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 0.8;
+  /* Ensure width doesn't jiggle by using tabular numerals */
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .preloader-container {
+    padding: var(--space-xl);
+  }
+  
+  .preloader-skill {
+    font-size: var(--fs-body-lg);
+  }
+}

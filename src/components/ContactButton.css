@@ -1,0 +1,87 @@
+.contact-btn-wrapper {
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 9999px;
+  min-width: 8.5rem;
+  min-height: 2.92rem;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.8s cubic-bezier(0.510, 0.026, 0.368, 1.016);
+  box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+}
+
+.contact-btn-wrapper:hover {
+  background-color: var(--color-accent-primary);
+}
+
+.contact-btn-inner-bg {
+  position: absolute;
+  display: flex;
+  padding: 0.125rem 0.25rem;
+  justify-content: flex-start;
+  align-items: center;
+  inset: 0;
+  pointer-events: none;
+}
+
+.contact-btn-slider {
+  width: 0%;
+  transition: all 1s cubic-bezier(0.510, 0.026, 0.368, 1.016);
+}
+
+.contact-btn-wrapper:hover .contact-btn-slider {
+  width: 100%;
+}
+
+.contact-btn-icon-wrapper {
+  border-radius: 9999px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 1px -1px 3px 0 black;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-accent-primary);
+  transition: all 1s cubic-bezier(0.510, 0.026, 0.368, 1.016);
+}
+
+.contact-btn-wrapper:hover .contact-btn-icon-wrapper {
+  background-color: var(--color-bg);
+}
+
+.contact-btn-icon {
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--color-bg);
+  transition: all 1s cubic-bezier(0.510, 0.026, 0.368, 1.016);
+}
+
+.contact-btn-wrapper:hover .contact-btn-icon {
+  color: var(--color-accent-primary);
+  transform: rotate(-45deg);
+}
+
+.contact-btn-text {
+  padding-left: 3.4rem;
+  padding-right: 1.1rem;
+  color: var(--color-text-primary);
+  transition: all 1s cubic-bezier(0.510, 0.026, 0.368, 1.016);
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body-md);
+  white-space: nowrap;
+}
+
+.contact-btn-wrapper:hover .contact-btn-text {
+  padding-left: 1.1rem;
+  padding-right: 3.4rem;
+  color: var(--color-bg);
+}
