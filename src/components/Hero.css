@@ -118,27 +118,33 @@
   font-size: clamp(4rem, 12vw, 10rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.04em;
-  margin-bottom: var(--space-md);
-  text-align: center;
+  /* Removed global letter-spacing to control per-word */
+  
+  /* Reduced bottom margin by ~25% as requested */
+  margin-bottom: calc(var(--space-md) * 0.75); 
+  
+  /* Use flexbox to perfectly align baselines */
+  display: flex;
+  justify-content: center;
+  align-items: baseline; 
 }
 
 .hero-name-first {
-  display: inline-block;
-  transform: translateY(-0.15em); /* Shifts Saad slightly up */
-  margin-right: 0.05em; /* Very tight spacing before Akhtar */
+  /* Apply the negative tracking only to the bold sans word */
+  letter-spacing: -0.05em; 
+  /* No margin/transform needed, baseline alignment handles vertical */
 }
 
 .hero-name-last {
-  display: inline-block;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.9em; /* Slightly smaller for that compact contrast */
+  font-size: 0.9em;
   font-weight: 500;
-  transform: translateY(0.15em); /* Keeps the staggered shift down */
-  letter-spacing: -0.06em; /* Noticeably more compact tracking */
-  padding-left: 0.02em; /* italic optical adjustment */
-  color: #7C3AED; /* Elegant violet */
+  /* Do not apply negative tracking here, just script adjustments */
+  letter-spacing: normal; 
+  /* Pull the script word tightly into the sans word */
+  margin-left: -0.05em; 
+  color: #7C3AED;
 }
 
 .hero-desc {
