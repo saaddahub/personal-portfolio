@@ -79,6 +79,8 @@ const LiquidCursorBackground = ({
     // Mouse tracking variables
     const targetMouse = new THREE.Vector2(0, 0); // NDC coords: -1 to 1
     const currentMouse = new THREE.Vector2(0, 0);
+    
+    let handleResize, handlePointerMove, handleVisibilityChange;
 
     // Initialization wrapped in try/catch for WebGL support fallback
     try {
@@ -139,20 +141,20 @@ const LiquidCursorBackground = ({
       scene.add(points);
 
       // Event Listeners
-      const handleResize = () => {
+      handleResize = () => {
         const w = window.innerWidth;
         const h = window.innerHeight;
         renderer.setSize(w, h);
         material.uniforms.u_resolution.value.set(w, h);
       };
 
-      const handlePointerMove = (e) => {
+      handlePointerMove = (e) => {
         // Convert screen pixel coordinates to NDC (-1 to +1)
         targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
       };
 
-      const handleVisibilityChange = () => {
+      handleVisibilityChange = () => {
         isActive = !document.hidden;
       };
 
