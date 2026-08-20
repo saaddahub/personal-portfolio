@@ -24,11 +24,13 @@
   pointer-events: none;
 }
 
-.social-menu-container:hover::after {
+.social-menu-container:hover::after,
+.social-menu-container.is-expanded::after {
   pointer-events: auto;
 }
 
-.social-menu-container:hover {
+.social-menu-container:hover,
+.social-menu-container.is-expanded {
   background: #fff;
 }
 
@@ -40,7 +42,8 @@
   justify-content: center;
 }
 
-.social-menu-container:hover .main-icon {
+.social-menu-container:hover .main-icon,
+.social-menu-container.is-expanded .main-icon {
   fill: rgb(0, 0, 0);
   transition: all 0.9s;
 }
@@ -66,14 +69,16 @@
   color: #001722;
 }
 
-.social-menu-container:hover .social-item {
+.social-menu-container:hover .social-item,
+.social-menu-container.is-expanded .social-item {
   opacity: 1;
   visibility: visible;
   /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */
   transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-65px) rotate(calc(var(--angle) * -1));
 }
 
-.social-menu-container:hover .social-item:hover {
+.social-menu-container:hover .social-item:hover,
+.social-menu-container.is-expanded .social-item:hover {
   background: var(--hover-bg);
   fill: var(--hover-fill, #fff);
   color: var(--hover-fill, #fff);

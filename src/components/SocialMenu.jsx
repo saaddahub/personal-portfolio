@@ -1,8 +1,26 @@
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './SocialMenu.css';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const SocialMenu = () => {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: '#about', // The Stats section, which comes right after Hero
+        start: 'top center',
+        toggleClass: { targets: menuRef.current, className: 'is-expanded' },
+      });
+    }, menuRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="social-menu-container">
+    <div className="social-menu-container" ref={menuRef}>
       {/* Main Send Icon */}
       <span className="main-icon">
         <svg
