@@ -9,7 +9,6 @@ import Nav from './components/Nav';
 import Hero from './components/Hero';
 import PunchlineTransition from './components/PunchlineTransition';
 import SkillsGlobe from './components/SkillsGlobe';
-import LiquidCursorBackground from './components/LiquidCursorBackground/LiquidCursorBackground';
 import Stats from './components/Stats';
 import Projects from './components/Projects';
 import Process from './components/Process';
@@ -104,7 +103,6 @@ function App() {
       <Preloader onComplete={() => setLoading(false)} />
       
       <div className={`app-wrapper ${!loading ? 'is-ready' : ''}`}>
-        <LiquidCursorBackground density={70} color="#868e96" rippleStrength={1.2} />
         <Nav />
         <main>
           <Hero animationReady={!loading} />
