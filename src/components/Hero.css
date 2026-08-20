@@ -67,9 +67,10 @@
 .parallax-text {
   z-index: 5;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align to top instead of centering in 180vh */
   justify-content: center; /* Center the block horizontally */
-  top: -10vh;
+  padding-top: 35vh; /* Push it down into the center of the first 100vh */
+  top: 0;
 }
 
 .hero-text-content {
