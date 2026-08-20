@@ -299,7 +299,7 @@ const SkillsGlobe = () => {
   }, []);
 
   return (
-    <section className="skills-globe-section" data-reveal id="skills">
+    <section className="skills-globe-section" id="skills">
       <div className="container">
         <div className="skills-globe-header">
           <p className="text-caption text-muted">Tools & technologies</p>

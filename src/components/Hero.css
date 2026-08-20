@@ -68,13 +68,15 @@
   z-index: 5;
   display: flex;
   align-items: center;
-  justify-content: center;
-  top: -20vh; /* Shift text up a bit */
+  justify-content: flex-start;
+  padding-left: 10vw; /* Center left side positioning */
+  top: -15vh; /* Shift text up slightly less */
 }
 
 .hero-text-content {
-  text-align: center;
-  padding: 0 var(--space-lg);
+  text-align: left;
+  padding: 0;
+  max-width: 800px;
 }
 
 .parallax-foreground {
@@ -100,9 +102,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-bottom: var(--space-xs); /* Brought closer to headline */
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
   font-size: var(--fs-caption);
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -120,12 +123,11 @@
   line-height: 1;
   /* Removed global letter-spacing to control per-word */
   
-  /* Reduced bottom margin by ~25% as requested */
-  margin-bottom: calc(var(--space-md) * 0.75); 
+  margin-bottom: 0; 
   
   /* Use flexbox to perfectly align baselines */
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: baseline; 
 }
 
@@ -151,5 +153,5 @@
   font-size: var(--fs-body-lg);
   color: var(--color-text-secondary);
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
 }

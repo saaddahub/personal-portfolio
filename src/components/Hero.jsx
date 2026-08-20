@@ -133,14 +133,14 @@ const Hero = ({ animationReady = true }) => {
       {/* TEXT CONTENT */}
       <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
         <div className="hero-text-content">
+          <h1 className="hero-headline text-gradient">
+            <span className="hero-name-first">Saad</span><span className="hero-name-last">Akhtar</span>
+          </h1>
           <div className="hero-eyebrow">
             <span>AI UNDERGRADUATE</span>
             <span className="separator">•</span>
             <span>FULL-STACK DEVELOPER</span>
           </div>
-          <h1 className="hero-headline text-gradient">
-            <span className="hero-name-first">Saad</span><span className="hero-name-last">Akhtar</span>
-          </h1>
           <p className="hero-desc">
             Creative Developer based in Lahore, Pakistan.
           </p>
