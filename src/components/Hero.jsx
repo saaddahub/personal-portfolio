@@ -139,7 +139,8 @@ const Hero = ({ animationReady = true }) => {
             <span>FULL-STACK DEVELOPER</span>
           </div>
           <h1 className="hero-headline text-gradient">
-            Saad <span className="hero-name-serif">Akhtar</span>
+            <span className="hero-name-first">Saad</span>
+            <span className="hero-name-last">Akhtar</span>
           </h1>
           <p className="hero-desc">
             Creative Developer based in Lahore, Pakistan.

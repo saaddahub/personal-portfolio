@@ -120,16 +120,24 @@
   line-height: 1;
   letter-spacing: -0.04em;
   margin-bottom: var(--space-md);
+  text-align: center;
 }
 
-.hero-name-serif {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 0.9em; /* Larger, but still smaller than the sans */
-  letter-spacing: -0.06em; /* Noticeably more compact/tighter spacing */
-  padding-left: 0.02em; 
-  color: #7C3AED; /* Elegant violet that has good contrast on both black and white backgrounds */
+.hero-name-first {
+  display: inline-block;
+  transform: translateY(-0.15em); /* Shifts Saad slightly up */
+  margin-right: 0.05em; /* Very tight spacing before Akhtar */
+}
+
+.hero-name-last {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 1em; /* Back to same size as Saad */
+  font-weight: 700;
+  transform: translateY(0.15em); /* Shifts Akhtar slightly down */
+  letter-spacing: -0.07em; /* Noticeably more compact tracking */
+  color: #7C3AED; /* Elegant violet */
 }
 
 .hero-desc {
