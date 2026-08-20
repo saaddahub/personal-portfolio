@@ -59,8 +59,8 @@ const Hero = ({ animationReady = true }) => {
       );
 
       tl.fromTo('.parallax-layer',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.5, stagger: 0.1, ease: 'power3.out' },
+        { opacity: 0 },
+        { opacity: 1, duration: 1.5, stagger: 0.1, ease: 'power3.out' },
         "-=0.5"
       );
 
