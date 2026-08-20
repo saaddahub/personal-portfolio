@@ -36,8 +36,7 @@ const MusicPlayer = () => {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState('0:00');
   const [duration, setDuration] = useState('0:00');
-  const [volume, setVolume] = useState(0.7);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
 
   const audioRef = useRef(null);
@@ -53,8 +52,6 @@ const MusicPlayer = () => {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    audio.volume = isMuted ? 0 : volume;
 
     const handleTimeUpdate = () => {
       setCurrentTime(formatTime(audio.currentTime));
@@ -80,9 +77,9 @@ const MusicPlayer = () => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [currentTrackIndex, volume, isMuted]);
+  }, [currentTrackIndex]);
 
-  // Click outside to collapse if expanded
+  // Click outside to collapse
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target) && isExpanded) {
@@ -110,14 +107,20 @@ const MusicPlayer = () => {
   };
 
   const handleNext = () => {
-    const nextIndex = (currentTrackIndex + 1) % TRACKS.length;
-    setCurrentTrackIndex(nextIndex);
+    if (isShuffle) {
+      let randomIndex = Math.floor(Math.random() * TRACKS.length);
+      if (randomIndex === currentTrackIndex && TRACKS.length > 1) {
+        randomIndex = (randomIndex + 1) % TRACKS.length;
+      }
+      setCurrentTrackIndex(randomIndex);
+    } else {
+      setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
+    }
     setIsPlaying(true);
   };
 
   const handlePrev = () => {
-    const prevIndex = (currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
-    setCurrentTrackIndex(prevIndex);
+    setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
     setIsPlaying(true);
   };
 
@@ -141,16 +144,6 @@ const MusicPlayer = () => {
     }
   };
 
-  const handleVolumeChange = (e) => {
-    const newVol = parseFloat(e.target.value);
-    setVolume(newVol);
-    if (newVol > 0 && isMuted) setIsMuted(false);
-  };
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
   const currentTrack = TRACKS[currentTrackIndex];
 
   return (
@@ -158,7 +151,7 @@ const MusicPlayer = () => {
       className={`music-sidebar-wrapper ${isExpanded ? 'expanded' : ''}`}
       ref={wrapperRef}
     >
-      {/* Floating Side Tab / Button */}
+      {/* Floating Side Tab Button */}
       <button 
         className={`music-toggle-btn ${isPlaying ? 'is-playing' : ''}`}
         onClick={() => setIsExpanded(!isExpanded)}
@@ -182,7 +175,6 @@ const MusicPlayer = () => {
             <circle cx="18" cy="16" r="3"></circle>
           </svg>
 
-          {/* Equalizer Wave Animation */}
           {isPlaying && (
             <div className="sound-bars">
               <span className="bar bar-1"></span>
@@ -200,176 +192,196 @@ const MusicPlayer = () => {
         preload="metadata"
       />
 
-      {/* The Music Player Card Panel */}
+      {/* UIVERSE Interactive Music Player Panel */}
       <div className="music-player-panel">
-        <div className="music-card">
+        <div className="uiverse-music-container">
           
-          {/* Top Row: Vinyl Disc & Track Info */}
-          <div className="player-header">
-            {/* Spinning Vinyl Record Artwork */}
-            <div className="vinyl-wrapper" onClick={togglePlay}>
-              <div className={`vinyl-disc ${isPlaying ? 'spinning' : ''}`}>
-                <div className="vinyl-grooves"></div>
-                <div className="vinyl-label">
-                  <div className="vinyl-center-dot"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Track Info */}
-            <div className="player-track-info">
-              <div className="track-status-pill">
-                <span className={`status-dot ${isPlaying ? 'active' : ''}`}></span>
-                {isPlaying ? 'Now Playing' : 'Paused'}
-              </div>
-              <h4 className="track-title" title={currentTrack.title}>
-                {currentTrack.title}
-              </h4>
-              <p className="track-artist">{currentTrack.artist}</p>
-            </div>
-
-            {/* Playlist Toggle */}
-            <button 
-              className={`playlist-toggle-btn ${showPlaylist ? 'active' : ''}`}
-              onClick={() => setShowPlaylist(!showPlaylist)}
-              title="Playlist"
-              aria-label="Toggle playlist"
+          {/* Top Floating Vinyl Disc (peeking out) */}
+          <div className="uiverse-disc-top-wrapper">
+            <svg
+              width="128"
+              height="128"
+              viewBox="0 0 128 128"
+              className={`uiverse-vinyl-svg ${isPlaying ? 'is-spinning' : ''}`}
+              onClick={togglePlay}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-              </svg>
-            </button>
+              <rect width="128" height="128" fill="#121214"></rect>
+              <circle cx="20" cy="20" r="2" fill="white"></circle>
+              <circle cx="40" cy="30" r="2" fill="white"></circle>
+              <circle cx="60" cy="10" r="2" fill="white"></circle>
+              <circle cx="80" cy="40" r="2" fill="white"></circle>
+              <circle cx="100" cy="20" r="2" fill="white"></circle>
+              <circle cx="120" cy="50" r="2" fill="white"></circle>
+              <circle cx="90" cy="30" r="10" fill="white" fillOpacity="0.5"></circle>
+              <circle cx="90" cy="30" r="8" fill="white"></circle>
+              <path d="M0 128 Q32 64 64 128 T128 128" fill="#7C3AED" stroke="black" strokeWidth="1"></path>
+              <path d="M0 128 Q32 48 64 128 T128 128" fill="#A78BFA" stroke="black" strokeWidth="1"></path>
+              <path d="M0 128 Q32 32 64 128 T128 128" fill="#5B21B6" stroke="black" strokeWidth="1"></path>
+              <path d="M0 128 Q16 64 32 128 T64 128" fill="#7C3AED" stroke="black" strokeWidth="1"></path>
+              <path d="M64 128 Q80 64 96 128 T128 128" fill="#A78BFA" stroke="black" strokeWidth="1"></path>
+            </svg>
+            <div className="uiverse-disc-center"></div>
           </div>
 
-          {/* Scrubber Progress Bar */}
-          <div className="player-progress-section">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="0.1"
-              value={progress}
-              onChange={handleProgressChange}
-              className="player-slider"
-              aria-label="Track progress"
-            />
-            <div className="player-time-row">
-              <span>{currentTime}</span>
-              <span>{duration}</span>
+          {/* Main Card */}
+          <div className="uiverse-card">
+            
+            {/* Top Card Section: Mini Spun Disc & Song Info */}
+            <div className="uiverse-card-header">
+              <div className={`uiverse-mini-disc-wrapper ${isPlaying ? 'is-spinning' : ''}`} onClick={togglePlay}>
+                <svg
+                  width="96"
+                  height="96"
+                  viewBox="0 0 128 128"
+                  className="uiverse-mini-vinyl-svg"
+                >
+                  <rect width="128" height="128" fill="#121214"></rect>
+                  <circle cx="20" cy="20" r="2" fill="white"></circle>
+                  <circle cx="40" cy="30" r="2" fill="white"></circle>
+                  <circle cx="60" cy="10" r="2" fill="white"></circle>
+                  <circle cx="80" cy="40" r="2" fill="white"></circle>
+                  <circle cx="100" cy="20" r="2" fill="white"></circle>
+                  <circle cx="120" cy="50" r="2" fill="white"></circle>
+                  <circle cx="90" cy="30" r="10" fill="white" fillOpacity="0.5"></circle>
+                  <circle cx="90" cy="30" r="8" fill="white"></circle>
+                  <path d="M0 128 Q32 64 64 128 T128 128" fill="#7C3AED" stroke="black" strokeWidth="1"></path>
+                  <path d="M0 128 Q32 48 64 128 T128 128" fill="#A78BFA" stroke="black" strokeWidth="1"></path>
+                  <path d="M0 128 Q32 32 64 128 T128 128" fill="#5B21B6" stroke="black" strokeWidth="1"></path>
+                  <path d="M0 128 Q16 64 32 128 T64 128" fill="#7C3AED" stroke="black" strokeWidth="1"></path>
+                  <path d="M64 128 Q80 64 96 128 T128 128" fill="#A78BFA" stroke="black" strokeWidth="1"></path>
+                </svg>
+                <div className="uiverse-mini-disc-center"></div>
+              </div>
+
+              <div className="uiverse-track-text">
+                <p className="uiverse-track-title" title={currentTrack.title}>{currentTrack.title}</p>
+                <p className="uiverse-track-artist">{currentTrack.artist}</p>
+              </div>
             </div>
-          </div>
 
-          {/* Controls: Prev, Play/Pause, Next & Volume */}
-          <div className="player-controls">
-            {/* Volume Control */}
-            <div className="player-volume-group">
-              <button 
-                className="control-btn icon-btn" 
-                onClick={toggleMute}
-                title={isMuted ? 'Unmute' : 'Mute'}
-                aria-label="Toggle mute"
+            {/* Middle Section: Scrubber Progress */}
+            <div className="uiverse-progress-bar-container">
+              <span className="uiverse-time-label">{currentTime}</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="0.1"
+                value={progress}
+                onChange={handleProgressChange}
+                className="uiverse-slider"
+                aria-label="Track progress"
+              />
+              <span className="uiverse-time-label">{duration}</span>
+            </div>
+
+            {/* Bottom Controls Row */}
+            <div className="uiverse-controls-row">
+              {/* Shuffle / Repeat */}
+              <button
+                className={`uiverse-ctrl-btn uiverse-mode-btn ${isShuffle ? 'active' : ''}`}
+                onClick={() => setIsShuffle(!isShuffle)}
+                title={isShuffle ? 'Shuffle Active' : 'Repeat All'}
+                aria-label="Toggle play mode"
               >
-                {isMuted || volume === 0 ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                    <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
-                    <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
+                {isShuffle ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"></polyline>
+                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                    <polyline points="21 16 21 21 16 21"></polyline>
+                    <line x1="15" y1="15" x2="21" y2="21"></line>
+                    <line x1="4" y1="4" x2="9" y2="9"></line>
                   </svg>
                 ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="17 1 21 5 17 9"></polyline>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                    <polyline points="7 23 3 19 7 15"></polyline>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
                   </svg>
                 )}
               </button>
-              <input 
-                type="range" 
-                min="0" 
-                max="1" 
-                step="0.05" 
-                value={isMuted ? 0 : volume} 
-                onChange={handleVolumeChange} 
-                className="volume-slider"
-                aria-label="Volume"
-              />
-            </div>
 
-            {/* Playback Buttons */}
-            <div className="playback-btns">
+              {/* Prev */}
               <button 
-                className="control-btn icon-btn" 
+                className="uiverse-ctrl-btn" 
                 onClick={handlePrev}
                 title="Previous Track"
                 aria-label="Previous track"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="19 20 9 12 19 4 19 20"></polygon>
                   <line x1="5" y1="19" x2="5" y2="5"></line>
                 </svg>
               </button>
 
+              {/* Play / Pause Toggle */}
               <button 
-                className="control-btn play-btn" 
+                className="uiverse-ctrl-btn uiverse-play-toggle" 
                 onClick={togglePlay}
                 title={isPlaying ? 'Pause' : 'Play'}
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 {isPlaying ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="6" y="4" width="4" height="16" rx="1"></rect>
-                    <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
                   </svg>
                 ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                   </svg>
                 )}
               </button>
 
+              {/* Next */}
               <button 
-                className="control-btn icon-btn" 
+                className="uiverse-ctrl-btn" 
                 onClick={handleNext}
                 title="Next Track"
                 aria-label="Next track"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="5 4 15 12 5 20 5 4"></polygon>
                   <line x1="19" y1="5" x2="19" y2="19"></line>
                 </svg>
               </button>
-            </div>
-          </div>
 
-          {/* Playlist Dropdown / Drawer */}
-          {showPlaylist && (
-            <div className="player-playlist">
-              <p className="playlist-header">Select Track</p>
-              <div className="playlist-items">
+              {/* Playlist Drawer Button */}
+              <button 
+                className={`uiverse-ctrl-btn uiverse-list-btn ${showPlaylist ? 'active' : ''}`}
+                onClick={() => setShowPlaylist(!showPlaylist)}
+                title="Playlist"
+                aria-label="Toggle playlist"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            {/* Playlist dropdown inside card */}
+            {showPlaylist && (
+              <div className="uiverse-playlist-popover">
                 {TRACKS.map((track, idx) => (
                   <button
                     key={idx}
-                    className={`playlist-item ${idx === currentTrackIndex ? 'active' : ''}`}
+                    className={`uiverse-playlist-item ${idx === currentTrackIndex ? 'active' : ''}`}
                     onClick={() => selectTrack(idx)}
                   >
-                    <span className="playlist-track-idx">0{idx + 1}</span>
-                    <div className="playlist-track-meta">
-                      <span className="playlist-track-name">{track.title}</span>
-                      <span className="playlist-track-sub">{track.artist}</span>
-                    </div>
-                    {idx === currentTrackIndex && isPlaying && (
-                      <span className="playing-indicator">▶</span>
-                    )}
+                    <span className="uiverse-item-index">0{idx + 1}</span>
+                    <span className="uiverse-item-title">{track.title}</span>
                   </button>
                 ))}
               </div>
-            </div>
-          )}
+            )}
 
+          </div>
         </div>
       </div>
     </div>
