@@ -13,11 +13,35 @@
   color: var(--color-bg); /* Dark/black text for contrast */
 }
 
+.cta-left {
+  background-color: var(--color-accent-pastel-a);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 750ms var(--ease-snappy);
+}
+
+.cta-split-section.is-visible .cta-left {
+  clip-path: inset(0 0 0 0);
+}
+
+.cta-right {
+  background-color: var(--color-accent-pastel-b);
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 750ms var(--ease-snappy);
+}
+
+.cta-split-section.is-visible .cta-right {
+  clip-path: inset(0 0 0 0);
+}
+
 .cta-split-content {
   max-width: 480px;
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms var(--ease-standard), transform 600ms var(--ease-standard);
+  transition-delay: 350ms; /* wait for panel wipe to nearly finish */
 }
 
 .cta-split-content h2 {
@@ -33,12 +57,9 @@
   margin-bottom: var(--space-md);
 }
 
-.cta-left {
-  background-color: var(--color-accent-pastel-a);
-}
-
-.cta-right {
-  background-color: var(--color-accent-pastel-b);
+.cta-split-section.is-visible .cta-split-content {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Custom darker buttons for each pastel half */

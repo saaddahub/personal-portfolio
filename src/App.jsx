@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useState as useReactState } from 'react'; // just in case
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
+
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import SkillsGlobe from './components/SkillsGlobe';
@@ -20,64 +23,98 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const [loading, setLoading] = useState(true);
-  
+
+  // Initialize Lenis
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+    };
+  }, []);
+
+  // Universal Scroll Reveal & Section Glow
   useEffect(() => {
     if (loading) return;
     
-    // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let ctx = gsap.context(() => {
-      // Global Scroll Reveal for sections
-      const reveals = document.querySelectorAll('.reveal-on-scroll');
+    // 1. Universal Reveal
+    const initScrollReveal = () => {
+      const items = document.querySelectorAll('[data-reveal]');
       
-      if (!prefersReducedMotion) {
-        reveals.forEach((el) => {
-          gsap.fromTo(el, 
-            { 
-              y: 30, 
-              opacity: 0 
-            },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%', // Trigger when top of element hits 85% of viewport height
-                toggleActions: 'play none none none' // Play once
-              }
-            }
-          );
-        });
-      } else {
-        // If reduced motion is preferred, just ensure they are visible
-        reveals.forEach(el => {
-          gsap.set(el, { opacity: 1, y: 0 });
-        });
+      if (prefersReducedMotion) {
+        items.forEach(el => el.classList.add('is-visible'));
+        return;
       }
-    });
 
-    return () => ctx.revert();
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const delay = entry.target.dataset.revealDelay || 0;
+            setTimeout(() => entry.target.classList.add('is-visible'), delay);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+
+      items.forEach((el) => observer.observe(el));
+    };
+
+    // 2. Section Glow
+    const initGlowReveal = () => {
+      if (prefersReducedMotion) return;
+      
+      const glowSections = document.querySelectorAll('.section-glow');
+      const glowObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const glowEl = entry.target;
+            glowEl.classList.add('is-active');
+            setTimeout(() => glowEl.classList.remove('is-active'), 1500);
+            glowObserver.unobserve(glowEl);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      glowSections.forEach((el) => glowObserver.observe(el));
+    };
+
+    initScrollReveal();
+    initGlowReveal();
   }, [loading]);
 
   return (
     <>
-      {loading && <Preloader onComplete={() => setLoading(false)} />}
-      <Nav />
-      <main>
-        <Hero animationReady={!loading} />
-        <SkillsGlobe />
-        <Stats />
-        <Projects />
-        <Process />
-        <CtaSplit />
-        <About />
-        <FAQ />
-        <FinalCta />
-      </main>
-      <Footer />
+      <Preloader onComplete={() => setLoading(false)} />
+      
+      <div className={`app-wrapper ${!loading ? 'is-ready' : ''}`}>
+        <Nav />
+        <main>
+          <Hero animationReady={!loading} />
+          <SkillsGlobe />
+          <Stats />
+          <Projects />
+          <Process />
+          <CtaSplit />
+          <About />
+          <FAQ />
+          <FinalCta />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

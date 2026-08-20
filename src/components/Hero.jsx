@@ -95,6 +95,7 @@ const Hero = ({ animationReady = true }) => {
   return (
     <section className="hero-section" ref={containerRef} id="home">
       {/* Background Effects */}
+      <div className="section-glow"></div>
       <div className="hero-background">
         <div className="spotlight" ref={spotlightRef}></div>
         <div className="particle-field">

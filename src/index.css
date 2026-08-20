@@ -171,15 +171,31 @@ section {
   color: var(--color-text-muted);
 }
 
-/* Scroll reveal utility class */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity var(--duration-slow) var(--ease-standard), 
-              transform var(--duration-slow) var(--ease-standard);
+/* Section Glow Reveal Utility */
+.section-glow {
+  position: absolute;
+  inset: -20% -10%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06), transparent 65%);
+  opacity: 0.18;
+  transform: scale(1);
+  transition: opacity 900ms var(--ease-standard), transform 900ms var(--ease-standard);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.reveal-on-scroll.is-revealed {
+.section-glow.is-active {
+  opacity: 0.38;
+  transform: scale(1.08);
+}
+
+/* Universal Scroll Reveal Utility */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms var(--ease-standard), transform 600ms var(--ease-standard);
+}
+
+[data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
 }

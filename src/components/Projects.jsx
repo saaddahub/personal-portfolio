@@ -29,15 +29,15 @@ const Projects = () => {
   ];
 
   return (
-    <section className="projects-section reveal-on-scroll" id="work">
-      <div className="container">
+    <section className="projects-section" id="work">
+      <div className="container" data-reveal>
         <h2 className="text-caption text-muted projects-label">Selected work</h2>
       </div>
 
       <div className="projects-scroll-container">
         <div className="projects-rail">
-          {projects.map(project => (
-            <div key={project.id} className="project-card">
+          {projects.map((project, index) => (
+            <div key={project.id} className="project-card" data-reveal data-reveal-delay={index * 100}>
               {project.type === 'browser' ? (
                 <div className="project-image-wrapper browser-chrome">
                   <div className="browser-topbar">

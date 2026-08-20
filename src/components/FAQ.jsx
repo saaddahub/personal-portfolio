@@ -29,7 +29,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="faq-section reveal-on-scroll">
+    <section className="faq-section" data-reveal>
       <div className="container">
         <div className="faq-header">
           <p className="text-caption text-muted">More about me</p>

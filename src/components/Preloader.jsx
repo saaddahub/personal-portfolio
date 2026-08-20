@@ -65,8 +65,15 @@ const Preloader = ({ onComplete }) => {
         // Fade out the preloader with slight upward exit
         const exitTl = gsap.timeline({
           delay: 0.2, // Tiny pause at 100%
-          onComplete: () => {
+          onStart: () => {
+            // Signal the app to start revealing hero content *now*, before we finish fading
             onComplete();
+          },
+          onComplete: () => {
+            // Physically hide this container when done fading out
+            if (containerRef.current) {
+              containerRef.current.style.display = 'none';
+            }
           }
         });
         

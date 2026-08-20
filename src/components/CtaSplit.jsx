@@ -2,7 +2,8 @@ import './CtaSplit.css';
 
 const CtaSplit = () => {
   return (
-    <section className="cta-split-section reveal-on-scroll" style={{ paddingBlock: 0 }}>
+    <section className="cta-split-section" data-reveal style={{ paddingBlock: 0, position: 'relative' }}>
+      <div className="section-glow"></div>
       <div className="cta-split-container">
         
         <div className="cta-split-half cta-left">

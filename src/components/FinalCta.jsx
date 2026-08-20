@@ -2,7 +2,8 @@ import './FinalCta.css';
 
 const FinalCta = () => {
   return (
-    <section className="final-cta-section reveal-on-scroll" id="contact">
+    <section className="final-cta-section" data-reveal id="contact">
+      <div className="section-glow"></div>
       {/* Reusing particle texture idea for ambient background */}
       <div className="final-cta-bg"></div>
       

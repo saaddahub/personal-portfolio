@@ -53,11 +53,29 @@
 .project-image {
   flex-grow: 1;
   background: #2a2a2a; /* Placeholder color for images */
-  transition: transform 500ms var(--ease-standard);
+  transform: scale(1.06);
+  transition: transform 700ms var(--ease-standard);
 }
 
-.project-card:hover .project-image {
+.project-card.is-visible .project-image {
+  transform: scale(1);
+}
+
+.project-card.is-visible:hover .project-image {
   transform: scale(1.04);
+  transition: transform 400ms var(--ease-standard);
+}
+
+.project-details {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 500ms var(--ease-standard), transform 500ms var(--ease-standard);
+}
+
+.project-card.is-visible .project-details {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 150ms;
 }
 
 /* Browser Chrome variant */

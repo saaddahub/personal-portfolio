@@ -25,7 +25,7 @@ const Process = () => {
   ];
 
   return (
-    <section className="process-section reveal-on-scroll" id="services">
+    <section className="process-section" data-reveal id="services">
       <div className="container">
         <div className="process-header">
           <p className="text-caption text-muted">Experience</p>

@@ -14,31 +14,43 @@ const Stats = () => {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Counter animation triggered on scroll
-      gsap.fromTo('.stat-num-val', 
-        {
-          textContent: 0
-        },
-        {
-          textContent: (i, target) => target.dataset.target,
-          duration: 1.8,
-          ease: 'power3.out',
-          snap: { textContent: 1 }, // snap to whole numbers
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 80%',
-            once: true
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!prefersReducedMotion) {
+              gsap.fromTo('.stat-num-val', 
+                { textContent: 0 },
+                {
+                  textContent: (i, target) => target.dataset.target,
+                  duration: 1.8,
+                  ease: 'power3.out',
+                  snap: { textContent: 1 },
+                  stagger: 0.1,
+                }
+              );
+            } else {
+              document.querySelectorAll('.stat-num-val').forEach(el => {
+                el.textContent = el.dataset.target;
+              });
+            }
+            observer.disconnect();
           }
-        }
-      );
+        });
+      }, { threshold: 0.5 });
+      
+      if (containerRef.current) observer.observe(containerRef.current);
+      return () => observer.disconnect();
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="stats-section reveal-on-scroll" ref={containerRef} id="about">
-      {/* Optional: faint background texture reused from hero */}
+    <section className="stats-section" data-reveal ref={containerRef} id="about">
+      {/* Background Glow for value prop */}
+      <div className="section-glow"></div>
+      
       <div className="stats-bg-texture"></div>
       
       <div className="container">
