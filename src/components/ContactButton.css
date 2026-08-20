@@ -59,6 +59,9 @@
 .contact-btn-icon {
   width: 0.8rem;
   height: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-bg);
   transition: all 1s cubic-bezier(0.510, 0.026, 0.368, 1.016);
 }
