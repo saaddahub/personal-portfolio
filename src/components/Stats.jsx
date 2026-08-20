@@ -42,6 +42,10 @@ const Stats = () => {
       <div className="stats-bg-texture"></div>
       
       <div className="container">
+        <div className="stats-header">
+          <p className="text-caption text-muted">About me</p>
+          <h2 className="stats-headline">My Focus</h2>
+        </div>
         <div className="stats-value-prop">
           <p>
             I am passionate about Object-Oriented Programming, Database Design, AI Fundamentals, and Web Development. I'm currently expanding my skill set by diving deep into Machine Learning.

@@ -1,3 +1,14 @@
+.stats-header {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.stats-headline {
+  font-size: var(--fs-heading-lg);
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
 .stats-value-prop {
   max-width: 60ch;
   margin: 0 auto var(--space-2xl) auto;
