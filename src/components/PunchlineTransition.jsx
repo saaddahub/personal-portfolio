@@ -25,7 +25,7 @@ const PunchlineTransition = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=1500', // 1500px of scroll distance for the pin
+          end: '+=800', // Reduced from 1500px to remove dead space
           scrub: 1,      // buttery smooth scrub
           pin: true,
           anticipatePin: 1,

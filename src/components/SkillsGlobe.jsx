@@ -69,16 +69,28 @@ const SkillsGlobe = () => {
     // --- 2. Add Wireframe/Dot Shell ---
     const radius = 180;
     
+    // Read theme color for the dots
+    const getThemeColor = () => {
+      const colorStr = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
+      return new THREE.Color(colorStr);
+    };
+    
     // Faint dot shell
     const shellGeometry = new THREE.SphereGeometry(radius, 32, 32);
     const shellMaterial = new THREE.PointsMaterial({
-      color: 0xffffff,
+      color: getThemeColor(),
       size: 1.5,
       transparent: true,
       opacity: 0.15,
     });
     const shell = new THREE.Points(shellGeometry, shellMaterial);
     group.add(shell);
+    
+    // Observe theme changes to update color dynamically
+    const themeObserver = new MutationObserver(() => {
+      shellMaterial.color = getThemeColor();
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     
     // --- 3. Add Labels ---
     const points = fibonacciSphere(SKILLS.length, radius);
@@ -272,6 +284,7 @@ const SkillsGlobe = () => {
       window.removeEventListener('resize', handleResize);
       interactionLayer.removeEventListener('pointerdown', handlePointerDown);
       observer.disconnect();
+      themeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       
       // Dispose Three.js memory
