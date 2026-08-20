@@ -153,6 +153,8 @@ const Hero = ({ animationReady = true }) => {
       {/* Content */}
       <div className="container hero-content">
         <div className="hero-eyebrow">
+          <span>SAAD AKHTAR</span>
+          <span className="separator">•</span>
           <span>AI UNDERGRADUATE</span>
           <span className="separator">•</span>
           <span>FULL-STACK DEVELOPER</span>

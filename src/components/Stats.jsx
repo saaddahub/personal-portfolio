@@ -20,16 +20,19 @@ const Stats = () => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             if (!prefersReducedMotion) {
-              gsap.fromTo('.stat-num-val', 
-                { textContent: 0 },
-                {
-                  textContent: (i, target) => target.dataset.target,
+              document.querySelectorAll('.stat-num-val').forEach((el, index) => {
+                const targetVal = parseFloat(el.dataset.target);
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                  val: targetVal,
                   duration: 1.8,
+                  delay: index * 0.1,
                   ease: 'power3.out',
-                  snap: { textContent: 1 },
-                  stagger: 0.1,
-                }
-              );
+                  onUpdate: () => {
+                    el.textContent = Math.floor(obj.val);
+                  }
+                });
+              });
             } else {
               document.querySelectorAll('.stat-num-val').forEach(el => {
                 el.textContent = el.dataset.target;
