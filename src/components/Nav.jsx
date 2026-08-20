@@ -24,7 +24,7 @@ const Nav = () => {
       <header className={`site-nav ${isScrolled ? 'is-scrolled' : ''}`}>
         <div className="nav-inner">
           <div className="nav-logo">
-            <a href="#" style={{ fontWeight: 700, fontSize: '1.2rem', letterSpacing: '-0.02em' }}>Saad Akhtar</a>
+            <a href="#">Saad Akhtar</a>
           </div>
           
           <nav className="nav-links desktop-only">

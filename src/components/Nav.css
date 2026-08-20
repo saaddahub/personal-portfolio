@@ -29,10 +29,14 @@
 
 .nav-logo {
   justify-self: flex-start;
+}
+
+.nav-logo a {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.125rem;
   letter-spacing: -0.01em;
+  color: var(--color-text-primary);
 }
 
 .nav-links {
