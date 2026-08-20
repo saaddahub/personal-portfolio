@@ -125,9 +125,10 @@
 .hero-name-serif {
   font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 500; /* Slightly lighter weight than the sans part gives amazing contrast */
+  font-weight: 500;
+  font-size: 0.65em; /* Makes Akhtar noticeably more compact than Saad */
   letter-spacing: -0.02em;
-  padding-left: 0.05em; /* subtle optical adjustment for italics */
+  padding-left: 0.1em; 
 }
 
 .hero-desc {
