@@ -81,8 +81,8 @@ const SocialMenu = () => {
         </svg>
       </MagneticIcon>
 
-      {/* Instagram (-90deg or top) */}
-      <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
+      {/* Instagram (360deg or Up) */}
+      <div className="social-item-wrapper" style={{ '--angle': '360deg' }}>
         <MagneticIcon
           href="https://instagram.com/saaddagram"
           className="social-item"
@@ -94,8 +94,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* GitHub (342deg or top-right) */}
-      <div className="social-item-wrapper" style={{ '--angle': '342deg' }}>
+      {/* GitHub (337.5deg) */}
+      <div className="social-item-wrapper" style={{ '--angle': '337.5deg' }}>
         <MagneticIcon
           href="https://github.com/saaddahub"
           className="social-item"
@@ -107,8 +107,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* Discord (54deg or bottom-right) */}
-      <div className="social-item-wrapper" style={{ '--angle': '54deg' }}>
+      {/* Discord (315deg or Top-Left) */}
+      <div className="social-item-wrapper" style={{ '--angle': '315deg' }}>
         <MagneticIcon
           href="https://discord.com/saaddacord"
           className="social-item"
@@ -120,8 +120,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* WhatsApp (126deg or bottom-left) */}
-      <div className="social-item-wrapper" style={{ '--angle': '126deg' }}>
+      {/* WhatsApp (292.5deg) */}
+      <div className="social-item-wrapper" style={{ '--angle': '292.5deg' }}>
         <MagneticIcon
           href="https://wa.me/923706599919"
           className="social-item"
@@ -133,8 +133,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* Email (198deg or top-left) */}
-      <div className="social-item-wrapper" style={{ '--angle': '198deg' }}>
+      {/* Email (270deg or Left) */}
+      <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
         <MagneticIcon
           href="mailto:saadsalam659@gmail.com"
           className="social-item"

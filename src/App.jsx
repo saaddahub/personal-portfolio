@@ -21,6 +21,7 @@ import Footer from './components/Footer';
 import Preloader from './components/Preloader';
 import CustomCursor from './components/CustomCursor';
 import MusicPlayer from './components/MusicPlayer';
+import SocialMenu from './components/SocialMenu';
 
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -128,6 +129,7 @@ function App() {
         </main>
         <Footer />
         <MusicPlayer />
+        <SocialMenu />
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './Footer.css';
-import SocialMenu from './SocialMenu';
 
 const Footer = () => {
   const footerRef = useRef(null);
@@ -32,7 +31,7 @@ const Footer = () => {
           <div className="footer-info">
             <p className="footer-tagline">AI undergraduate and full-stack developer.</p>
             <div className="footer-social-wrapper">
-              <SocialMenu />
+              
             </div>
           </div>
           
