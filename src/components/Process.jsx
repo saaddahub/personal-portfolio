@@ -16,11 +16,6 @@ const Process = () => {
     },
     {
       id: '03',
-      title: 'Clothing Brand Founder',
-      description: 'Launched and managed an aesthetic clothing brand with a curated Instagram presence and handled end-to-end brand operations.'
-    },
-    {
-      id: '04',
       title: 'AI Enthusiast',
       description: 'Applied prompt engineering to build and fine-tune AI-driven features and workflows across multiple projects.'
     }

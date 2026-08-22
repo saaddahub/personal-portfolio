@@ -53,16 +53,6 @@ const Experience = () => {
           </ul>
         </div>
 
-        <div className="exp-item" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '3rem', position: 'relative' }}>
-          <div style={{ position: 'absolute', left: '-5px', top: '0', width: '9px', height: '9px', background: 'var(--text-secondary)', borderRadius: '50%' }} />
-          <p className="mono-text" style={{ color: 'var(--text-secondary)' }}>2025 — Present</p>
-          <h3 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-display)', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Clothing Brand Founder</h3>
-          <p className="serif-text" style={{ marginBottom: '1.5rem', opacity: 0.7, fontStyle: 'italic' }}>Pakistani Women's Brand · Lahore</p>
-          <ul className="serif-text" style={{ listStyleType: 'none' }}>
-            <li style={{ marginBottom: '0.75rem' }}>— Founded and scaled a premium aesthetic clothing brand, commanding product direction and brand identity.</li>
-            <li style={{ marginBottom: '0.75rem' }}>— Orchestrated end-to-end brand operations spanning content production, social strategy, and market positioning.</li>
-          </ul>
-        </div>
 
       </div>
     </section>
