@@ -19,6 +19,7 @@ import FAQ from './components/FAQ';
 import FinalCta from './components/FinalCta';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
+import CustomCursor from './components/CustomCursor';
 import MusicPlayer from './components/MusicPlayer';
 
 // Register ScrollTrigger
@@ -108,6 +109,7 @@ function App() {
   return (
     <>
       <Preloader onComplete={() => setLoading(false)} />
+      <CustomCursor />
       
       <div className={`app-wrapper ${!loading ? 'is-ready' : ''}`}>
         <Nav />
