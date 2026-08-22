@@ -1,12 +1,32 @@
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import './Footer.css';
 import SocialMenu from './SocialMenu';
+
 const Footer = () => {
+  const footerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end end"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [-100, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.5, 1]);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" ref={footerRef}>
       <div className="container">
         <div className="footer-content">
           <div className="footer-big-text-wrapper">
-            <h1 className="footer-ghost-name">SAAD AKHTAR</h1>
+            <motion.h1 
+              className="footer-ghost-name"
+              style={prefersReducedMotion ? {} : { y, opacity }}
+            >
+              SAAD AKHTAR
+            </motion.h1>
           </div>
           
           <div className="footer-info">
