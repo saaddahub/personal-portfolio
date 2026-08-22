@@ -26,11 +26,13 @@
   pointer-events: none;
 }
 
-.social-menu-container.is-open::after {
+.social-menu-container.is-open::after,
+.social-menu-container:hover::after {
   pointer-events: auto;
 }
 
-.social-menu-container.is-open {
+.social-menu-container.is-open,
+.social-menu-container:hover {
   background: #fff;
 }
 
@@ -42,7 +44,8 @@
   justify-content: center;
 }
 
-.social-menu-container.is-open .main-icon {
+.social-menu-container.is-open .main-icon,
+.social-menu-container:hover .main-icon {
   fill: rgb(0, 0, 0);
   transition: all 0.9s;
 }
@@ -58,7 +61,8 @@
   z-index: 1;
 }
 
-.social-menu-container.is-open .social-item-wrapper {
+.social-menu-container.is-open .social-item-wrapper,
+.social-menu-container:hover .social-item-wrapper {
   opacity: 1;
   visibility: visible;
   /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */
