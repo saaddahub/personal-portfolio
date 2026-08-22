@@ -1,0 +1,47 @@
+.github-section {
+  padding: var(--space-section) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.github-calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: var(--space-xl) var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  margin: 0 auto;
+  max-width: fit-content;
+  overflow-x: auto; /* Handle overflow on smaller screens */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.github-calendar-container article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Ensure text in calendar is themed properly */
+.react-activity-calendar {
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+}
+
+.react-activity-calendar text {
+  fill: var(--color-text-muted) !important;
+  font-size: var(--fs-caption) !important;
+}
+
+/* For smaller screens, allow scroll instead of squeeze */
+@media (max-width: 768px) {
+  .github-calendar-container {
+    padding: var(--space-md);
+    display: block;
+    width: 100%;
+  }
+}

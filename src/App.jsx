@@ -10,6 +10,7 @@ import Hero from './components/Hero';
 import PunchlineTransition from './components/PunchlineTransition';
 import SkillsGlobe from './components/SkillsGlobe';
 import Stats from './components/Stats';
+import GitHubActivity from './components/GitHubActivity';
 import Projects from './components/Projects';
 import Process from './components/Process';
 import CtaSplit from './components/CtaSplit';
@@ -115,6 +116,7 @@ function App() {
           <PunchlineTransition />
           <SkillsGlobe />
           <Stats />
+          <GitHubActivity />
           <Projects />
           <Process />
           <CtaSplit />
