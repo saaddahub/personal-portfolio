@@ -48,13 +48,26 @@
   transition: all 0.9s;
 }
 
-.social-item {
+.social-item-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.6s, visibility 0.6s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1;
+}
+
+.social-menu-container:hover .social-item-wrapper,
+.social-menu-container.is-expanded .social-item-wrapper {
+  opacity: 1;
+  visibility: visible;
+  /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-65px) rotate(calc(var(--angle) * -1));
+}
+
+.social-item {
   background: #fff;
   fill: #001722;
   width: 40px;
@@ -63,18 +76,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.6s, visibility 0.6s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s, fill 0.3s;
-  z-index: 1;
+  transition: background 0.3s, fill 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   color: #001722;
-}
-
-.social-menu-container:hover .social-item,
-.social-menu-container.is-expanded .social-item {
-  opacity: 1;
-  visibility: visible;
-  /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */
-  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-65px) rotate(calc(var(--angle) * -1));
+  text-decoration: none;
 }
 
 .social-menu-container:hover .social-item:hover,
