@@ -1,8 +1,8 @@
 .social-menu-container {
   background: linear-gradient(138deg, rgb(0, 0, 0) 15%, rgb(0, 31, 46) 65%);
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 5.5rem;
+  right: 5.5rem;
   cursor: pointer;
   width: 50px;
   height: 50px;
@@ -26,13 +26,11 @@
   pointer-events: none;
 }
 
-.social-menu-container:hover::after,
-.social-menu-container.is-expanded::after {
+.social-menu-container.is-open::after {
   pointer-events: auto;
 }
 
-.social-menu-container:hover,
-.social-menu-container.is-expanded {
+.social-menu-container.is-open {
   background: #fff;
 }
 
@@ -44,8 +42,7 @@
   justify-content: center;
 }
 
-.social-menu-container:hover .main-icon,
-.social-menu-container.is-expanded .main-icon {
+.social-menu-container.is-open .main-icon {
   fill: rgb(0, 0, 0);
   transition: all 0.9s;
 }
@@ -61,8 +58,7 @@
   z-index: 1;
 }
 
-.social-menu-container:hover .social-item-wrapper,
-.social-menu-container.is-expanded .social-item-wrapper {
+.social-menu-container.is-open .social-item-wrapper {
   opacity: 1;
   visibility: visible;
   /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */

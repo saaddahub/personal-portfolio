@@ -1,10 +1,6 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import './SocialMenu.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const MagneticIcon = ({ children, className, style, href }) => {
   const ref = useRef(null);
@@ -53,23 +49,12 @@ const MagneticIcon = ({ children, className, style, href }) => {
 };
 
 const SocialMenu = () => {
-  const menuRef = useRef(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: '#about', // The Stats section, which comes right after Hero
-        start: 'top center',
-        toggleClass: { targets: menuRef.current, className: 'is-expanded' },
-      });
-    }, menuRef);
-    return () => ctx.revert();
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="social-menu-container" ref={menuRef}>
+    <div className={`social-menu-container ${isOpen ? 'is-open' : ''}`}>
       {/* Main Send Icon */}
-      <MagneticIcon className="main-icon">
+      <MagneticIcon className="main-icon" onClick={() => setIsOpen(!isOpen)}>
         <svg
           viewBox="0 0 16 16"
           className="bi bi-send-fill"
@@ -81,8 +66,8 @@ const SocialMenu = () => {
         </svg>
       </MagneticIcon>
 
-      {/* Instagram (360deg or Up) */}
-      <div className="social-item-wrapper" style={{ '--angle': '360deg' }}>
+      {/* Instagram (-90deg or top) */}
+      <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
         <MagneticIcon
           href="https://instagram.com/saaddagram"
           className="social-item"
@@ -94,8 +79,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* GitHub (337.5deg) */}
-      <div className="social-item-wrapper" style={{ '--angle': '337.5deg' }}>
+      {/* GitHub (342deg or top-right) */}
+      <div className="social-item-wrapper" style={{ '--angle': '342deg' }}>
         <MagneticIcon
           href="https://github.com/saaddahub"
           className="social-item"
@@ -107,8 +92,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* Discord (315deg or Top-Left) */}
-      <div className="social-item-wrapper" style={{ '--angle': '315deg' }}>
+      {/* Discord (54deg or bottom-right) */}
+      <div className="social-item-wrapper" style={{ '--angle': '54deg' }}>
         <MagneticIcon
           href="https://discord.com/saaddacord"
           className="social-item"
@@ -120,8 +105,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* WhatsApp (292.5deg) */}
-      <div className="social-item-wrapper" style={{ '--angle': '292.5deg' }}>
+      {/* WhatsApp (126deg or bottom-left) */}
+      <div className="social-item-wrapper" style={{ '--angle': '126deg' }}>
         <MagneticIcon
           href="https://wa.me/923706599919"
           className="social-item"
@@ -133,8 +118,8 @@ const SocialMenu = () => {
         </MagneticIcon>
       </div>
 
-      {/* Email (270deg or Left) */}
-      <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
+      {/* Email (198deg or top-left) */}
+      <div className="social-item-wrapper" style={{ '--angle': '198deg' }}>
         <MagneticIcon
           href="mailto:saadsalam659@gmail.com"
           className="social-item"
