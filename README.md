@@ -207,7 +207,6 @@ We are committed to modern ethical web standards and visitor privacy:
 - **Developer:** Saad Akhtar
 - **Location:** Lahore, Pakistan
 - **GitHub:** [@saaddahub](https://github.com/saaddahub)
-- **Netflix Visualizer Live App:** [netflix-analysis-pandas.streamlit.app](https://netflix-analysis-pandas.streamlit.app)
 
 ---
 
