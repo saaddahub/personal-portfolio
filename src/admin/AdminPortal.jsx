@@ -21,8 +21,13 @@ import {
   ExternalLink,
   Layers,
   Code,
-  Layout
+  Layout,
+  Lock,
+  KeyRound
 } from 'lucide-react';
+import AdminLogin from './AdminLogin';
+import ChangePasswordModal from './ChangePasswordModal';
+import { isAuthenticated, logout } from './adminAuth';
 
 // Error Boundary to prevent white/black screens
 class AdminErrorBoundary extends Component {
@@ -74,7 +79,7 @@ class AdminErrorBoundary extends Component {
   }
 }
 
-const AdminPortalInner = ({ onExit }) => {
+const AdminPortalInner = ({ onExit, onLogout }) => {
   const {
     data,
     updateHero,
@@ -93,6 +98,7 @@ const AdminPortalInner = ({ onExit }) => {
   const [toastMessage, setToastMessage] = useState('');
   const [showAddProject, setShowAddProject] = useState(false);
   const [showSplitPreview, setShowSplitPreview] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   // New project local form state
   const [newProject, setNewProject] = useState({
@@ -252,6 +258,27 @@ const AdminPortalInner = ({ onExit }) => {
             >
               <RotateCcw size={14} />
               Reset
+            </button>
+
+            <button
+              className="admin-btn"
+              onClick={() => setShowChangePassword(true)}
+              title="Change master admin passcode"
+            >
+              <KeyRound size={14} />
+              Password
+            </button>
+
+            <button
+              className="admin-btn"
+              onClick={() => {
+                if (onLogout) onLogout();
+              }}
+              title="Lock studio and log out"
+              style={{ color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.25)' }}
+            >
+              <Lock size={14} />
+              Lock Studio
             </button>
 
             <button
@@ -1570,6 +1597,13 @@ const AdminPortalInner = ({ onExit }) => {
         )}
       </div>
 
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        onSuccess={(msg) => showToast(msg)}
+      />
+
       {/* Floating Save Toast */}
       {toastMessage && (
         <div className="admin-toast">
@@ -1581,10 +1615,26 @@ const AdminPortalInner = ({ onExit }) => {
   );
 };
 
-const AdminPortal = (props) => (
-  <AdminErrorBoundary>
-    <AdminPortalInner {...props} />
-  </AdminErrorBoundary>
-);
+const AdminPortal = (props) => {
+  const [authenticated, setAuthenticated] = useState(() => isAuthenticated());
+
+  const handleLogout = () => {
+    logout();
+    setAuthenticated(false);
+  };
+
+  return (
+    <AdminErrorBoundary>
+      {authenticated ? (
+        <AdminPortalInner {...props} onLogout={handleLogout} />
+      ) : (
+        <AdminLogin
+          onLoginSuccess={() => setAuthenticated(true)}
+          onCancel={props.onExit}
+        />
+      )}
+    </AdminErrorBoundary>
+  );
+};
 
 export default AdminPortal;
