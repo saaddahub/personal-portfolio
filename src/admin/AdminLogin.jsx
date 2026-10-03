@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle, ArrowLeft, KeyRound, Sparkles } from 'lucide-react';
-import { login, DEFAULT_PASSWORDS } from './adminAuth';
+import { Eye, EyeOff, ArrowLeft, ArrowRight } from 'lucide-react';
+import { login } from './adminAuth';
 import './AdminLogin.css';
 
 const AdminLogin = ({ onLoginSuccess, onCancel }) => {
@@ -10,18 +10,15 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [capsLockActive, setCapsLockActive] = useState(false);
-  const [shake, setShake] = useState(false);
 
   const inputRef = useRef(null);
 
-  // Auto focus input on mount
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, []);
 
-  // Monitor CapsLock state
   const handleKeyDown = (e) => {
     if (e.getModifierState) {
       setCapsLockActive(e.getModifierState('CapsLock'));
@@ -31,8 +28,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!password.trim()) {
-      setError('Please enter your admin passcode.');
-      triggerShake();
+      setError('// Passcode required');
       return;
     }
 
@@ -40,10 +36,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
     setIsLoading(true);
 
     try {
-      // Small debounce for polished feel
-      await new Promise((resolve) => setTimeout(resolve, 350));
       const success = await login(password.trim(), rememberMe);
-
       if (success) {
         setIsLoading(false);
         if (onLoginSuccess) {
@@ -51,76 +44,56 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
         }
       } else {
         setIsLoading(false);
-        setError('Incorrect passcode. Access denied.');
-        triggerShake();
+        setError('// Access denied: invalid passcode');
         if (inputRef.current) {
           inputRef.current.select();
         }
       }
-    } catch (err) {
+    } catch {
       setIsLoading(false);
-      setError('Authentication error. Please try again.');
-      triggerShake();
-    }
-  };
-
-  const triggerShake = () => {
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
-  };
-
-  const fillDefaultPasscode = () => {
-    setPassword(DEFAULT_PASSWORDS[0]);
-    setError('');
-    if (inputRef.current) {
-      inputRef.current.focus();
+      setError('// Authentication error: verification failed');
     }
   };
 
   return (
-    <div className="admin-login-wrapper">
-      {/* Dynamic Ambient Background */}
-      <div className="admin-login-bg">
-        <div className="admin-login-glow-1"></div>
-        <div className="admin-login-glow-2"></div>
-        <div className="admin-login-grid"></div>
-      </div>
+    <div className="admin-gate-page">
+      {/* Top Header Strip */}
+      <header className="admin-gate-nav">
+        <div className="admin-gate-brand">
+          <span>Saad Akhtar</span>
+          <span className="admin-gate-tag">/ Studio Management</span>
+        </div>
+        <div className="admin-gate-status">
+          <span className="admin-gate-status-bracket">[</span>
+          <span>Access Restricted</span>
+          <span className="admin-gate-status-bracket">]</span>
+        </div>
+      </header>
 
-      <div className={`admin-login-card ${shake ? 'has-error' : ''}`}>
-        {/* Header Icon & Title */}
-        <div className="admin-login-header">
-          <div className="admin-login-icon-badge">
-            <div className="admin-login-shield-ring"></div>
-            <Lock size={26} strokeWidth={2.2} />
-          </div>
-
-          <div className="admin-login-pill">
-            <span className="admin-login-pill-dot"></span>
-            Restricted Admin Area
-          </div>
-
-          <h2 className="admin-login-title">Saad's Studio</h2>
-          <p className="admin-login-subtitle">
-            Enter your master passcode to manage projects, sections, and portfolio content.
+      {/* Main Form Center */}
+      <main className="admin-gate-main">
+        <div className="admin-gate-header">
+          <span className="admin-gate-eyebrow">Authentication Required</span>
+          <h1 className="admin-gate-title">Enter Passcode</h1>
+          <p className="admin-gate-desc">
+            Provide the master studio password to manage project details, sections, and portfolio content.
           </p>
         </div>
 
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="admin-login-form">
-          <div className="admin-login-field">
-            <label className="admin-login-label" htmlFor="admin-pass-input">
-              Admin Passcode
-            </label>
-            <div className="admin-login-input-box">
-              <span className="admin-login-input-icon">
-                <KeyRound size={17} />
-              </span>
+        <form onSubmit={handleSubmit} className="admin-gate-form">
+          <div className="admin-gate-field">
+            <div className="admin-gate-label-row">
+              <label htmlFor="admin-passcode">Master Passcode</label>
+              {capsLockActive && <span className="admin-gate-caps">Caps Lock On</span>}
+            </div>
+
+            <div className="admin-gate-input-box">
               <input
                 ref={inputRef}
-                id="admin-pass-input"
+                id="admin-passcode"
                 type={showPassword ? 'text' : 'password'}
-                className="admin-login-input"
-                placeholder="Enter password..."
+                className="admin-gate-input"
+                placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -133,7 +106,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
               />
               <button
                 type="button"
-                className="admin-login-toggle-btn"
+                className="admin-gate-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
                 title={showPassword ? 'Hide passcode' : 'Show passcode'}
@@ -142,84 +115,47 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
               </button>
             </div>
 
-            {/* Caps Lock warning */}
-            {capsLockActive && (
-              <div className="admin-caps-warning">
-                <AlertCircle size={14} />
-                <span>Caps Lock is ON</span>
-              </div>
-            )}
+            {error && <div className="admin-gate-error">{error}</div>}
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="admin-login-error">
-              <AlertCircle size={15} />
-              <span>{error}</span>
-            </div>
-          )}
+          <label className="admin-gate-remember">
+            <input
+              type="checkbox"
+              className="admin-gate-checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <span>Remember this device</span>
+          </label>
 
-          {/* Form Options */}
-          <div className="admin-login-options">
-            <label className="admin-login-checkbox-label">
-              <input
-                type="checkbox"
-                className="admin-login-checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              <span>Keep me signed in</span>
-            </label>
-          </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
-            className="admin-login-submit-btn"
+            className="admin-gate-btn"
             disabled={isLoading || !password.trim()}
           >
-            {isLoading ? (
-              <>
-                <span className="admin-login-spinner"></span>
-                Verifying...
-              </>
-            ) : (
-              <>
-                <ShieldCheck size={18} />
-                Unlock Dashboard
-              </>
-            )}
+            <span>{isLoading ? 'Verifying...' : 'Authenticate'}</span>
+            <span className="admin-gate-btn-arrow">
+              <ArrowRight size={18} />
+            </span>
           </button>
         </form>
+      </main>
 
-        {/* Helpful Default Hint */}
-        <div className="admin-login-hint-box">
-          <span>Initial default passcode:</span>
-          <button
-            type="button"
-            className="admin-login-hint-code"
-            onClick={fillDefaultPasscode}
-            title="Click to auto-fill default password"
-          >
-            saad2026
-          </button>
-        </div>
-
-        {/* Return link */}
-        <div className="admin-login-footer">
-          <button
-            type="button"
-            className="admin-login-back-btn"
-            onClick={() => {
-              if (onCancel) onCancel();
-              else window.location.href = '/';
-            }}
-          >
-            <ArrowLeft size={15} />
-            Back to Public Portfolio
-          </button>
-        </div>
-      </div>
+      {/* Bottom Footer Strip */}
+      <footer className="admin-gate-footer">
+        <button
+          type="button"
+          className="admin-gate-back-link"
+          onClick={() => {
+            if (onCancel) onCancel();
+            else window.location.href = '/';
+          }}
+        >
+          <ArrowLeft size={14} />
+          <span>Return to public website</span>
+        </button>
+        <span>Saad Akhtar © {new Date().getFullYear()}</span>
+      </footer>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, KeyRound, Check, X, AlertCircle } from 'lucide-react';
+import { X } from 'lucide-react';
 import { changePassword } from './adminAuth';
 
 const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
@@ -16,15 +16,15 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
     setError('');
 
     if (!currentPassword) {
-      setError('Please enter your current password.');
+      setError('// Current password required');
       return;
     }
     if (!newPassword || newPassword.length < 4) {
-      setError('New password must be at least 4 characters long.');
+      setError('// New password must be at least 4 characters');
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match.');
+      setError('// Passwords do not match');
       return;
     }
 
@@ -32,217 +32,90 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
     try {
       await changePassword(currentPassword, newPassword);
       setIsLoading(false);
-      if (onSuccess) onSuccess('Admin passcode changed successfully!');
+      if (onSuccess) onSuccess('Admin passcode changed successfully');
       onClose();
     } catch (err) {
       setIsLoading(false);
-      setError(err.message || 'Failed to update passcode.');
+      setError(`// ${err.message || 'Failed to update passcode'}`);
     }
   };
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        background: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1.5rem'
-      }}
+      className="admin-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '440px',
-          background: '#141416',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          borderRadius: '20px',
-          padding: '2rem',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
-          color: '#ffffff',
-          position: 'relative'
-        }}
-      >
+      <div className="admin-modal-card">
         <button
+          className="admin-modal-close"
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '1.25rem',
-            right: '1.25rem',
-            background: 'rgba(255, 255, 255, 0.06)',
-            border: 'none',
-            color: '#a1a1aa',
-            borderRadius: '50%',
-            width: '32px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer'
-          }}
+          type="button"
+          aria-label="Close modal"
         >
-          <X size={16} />
+          <X size={18} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          <div
-            style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '12px',
-              background: 'rgba(201, 182, 247, 0.15)',
-              border: '1px solid rgba(201, 182, 247, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#c9b6f7'
-            }}
-          >
-            <KeyRound size={20} />
-          </div>
-          <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 600, margin: 0 }}>Change Passcode</h3>
-            <p style={{ fontSize: '0.8rem', color: '#a1a1aa', margin: 0, marginTop: '0.2rem' }}>
-              Update your master password to secure the portal.
-            </p>
-          </div>
+        <div className="admin-modal-header">
+          <span className="admin-modal-eyebrow">Security Credentials</span>
+          <h3 className="admin-modal-title">Change Master Passcode</h3>
         </div>
 
-        {error && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#f87171',
-              padding: '0.6rem 0.85rem',
-              borderRadius: '10px',
-              fontSize: '0.82rem',
-              marginBottom: '1rem'
-            }}
-          >
-            <AlertCircle size={15} />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', textTransform: 'uppercase', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 600 }}>
-              Current Password
-            </label>
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <div className="admin-modal-field">
+            <label className="admin-modal-label">Current Passcode</label>
             <input
               type="password"
+              className="admin-modal-input"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder="Enter current password..."
-              style={{
-                width: '100%',
-                background: '#0d0d0f',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '10px',
-                padding: '0.75rem 1rem',
-                color: '#fff',
-                fontSize: '0.9rem',
-                outline: 'none'
-              }}
+              placeholder="••••••••••••"
+              autoFocus
               required
             />
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', textTransform: 'uppercase', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 600 }}>
-              New Password
-            </label>
+          <div className="admin-modal-field">
+            <label className="admin-modal-label">New Passcode</label>
             <input
               type="password"
+              className="admin-modal-input"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password (min 4 chars)..."
-              style={{
-                width: '100%',
-                background: '#0d0d0f',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '10px',
-                padding: '0.75rem 1rem',
-                color: '#fff',
-                fontSize: '0.9rem',
-                outline: 'none'
-              }}
+              placeholder="Min. 4 characters"
               required
             />
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', textTransform: 'uppercase', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 600 }}>
-              Confirm New Password
-            </label>
+          <div className="admin-modal-field">
+            <label className="admin-modal-label">Confirm New Passcode</label>
             <input
               type="password"
+              className="admin-modal-input"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password..."
-              style={{
-                width: '100%',
-                background: '#0d0d0f',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '10px',
-                padding: '0.75rem 1rem',
-                color: '#fff',
-                fontSize: '0.9rem',
-                outline: 'none'
-              }}
+              placeholder="••••••••••••"
               required
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
+          {error && <div className="admin-modal-error">{error}</div>}
+
+          <div className="admin-modal-actions">
             <button
               type="button"
+              className="admin-modal-cancel"
               onClick={onClose}
-              style={{
-                flex: 1,
-                padding: '0.8rem',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '10px',
-                color: '#ffffff',
-                cursor: 'pointer',
-                fontWeight: 500
-              }}
             >
               Cancel
             </button>
             <button
               type="submit"
+              className="admin-modal-submit"
               disabled={isLoading}
-              style={{
-                flex: 1,
-                padding: '0.8rem',
-                background: '#ffffff',
-                border: 'none',
-                borderRadius: '10px',
-                color: '#000000',
-                cursor: 'pointer',
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.4rem'
-              }}
             >
-              <Check size={16} />
-              {isLoading ? 'Saving...' : 'Update Password'}
+              {isLoading ? 'Updating...' : 'Update Passcode'}
             </button>
           </div>
         </form>
