@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { usePortfolio } from '../context/PortfolioContext';
 import './PunchlineTransition.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -8,6 +9,9 @@ gsap.registerPlugin(ScrollTrigger);
 import DottedText from './DottedText';
 
 const PunchlineTransition = () => {
+  const { data } = usePortfolio();
+  const punchlineData = data.punchline;
+
   const sectionRef = useRef(null);
   const outgoingRef = useRef(null);
   const incomingRef = useRef(null);
@@ -58,17 +62,17 @@ const PunchlineTransition = () => {
     <section className="punchline-transition-section" ref={sectionRef}>
       <div className="punchline-sticky-container">
         <h2 className="punchline-outgoing" ref={outgoingRef}>
-          Building at the intersection of <br/>
-          <DottedText text="data," />
-          {' '}systems, and design.
+          {punchlineData.outgoingPrefix} <br/>
+          <DottedText text={punchlineData.outgoingHighlight || 'data,'} />
+          {punchlineData.outgoingSuffix}
         </h2>
         
         <div className="punchline-incoming" ref={incomingRef}>
           <h2 className="incoming-headline">
-            I help founders shape their product.
+            {punchlineData.incomingHeadline}
           </h2>
           <p className="incoming-sub">
-            Bridging the gap between AI research and scalable full-stack development.
+            {punchlineData.incomingSub}
           </p>
         </div>
       </div>

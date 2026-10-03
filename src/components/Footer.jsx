@@ -1,8 +1,11 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { usePortfolio } from '../context/PortfolioContext';
 import './Footer.css';
 
 const Footer = () => {
+  const { data } = usePortfolio();
+  const footerData = data.footer;
   const footerRef = useRef(null);
   
   const { scrollYProgress } = useScroll({
@@ -24,12 +27,12 @@ const Footer = () => {
               className="footer-ghost-name"
               style={prefersReducedMotion ? {} : { y, opacity }}
             >
-              SAAD AKHTAR
+              {footerData.ghostName || 'SAAD AKHTAR'}
             </motion.h1>
           </div>
           
           <div className="footer-info">
-            <p className="footer-tagline">AI undergraduate and full-stack developer.</p>
+            <p className="footer-tagline">{footerData.tagline || 'AI undergraduate and full-stack developer.'}</p>
             <div className="footer-social-wrapper">
               
             </div>
@@ -38,8 +41,8 @@ const Footer = () => {
           <div className="footer-divider"></div>
           
           <div className="footer-bottom">
-            <p className="text-caption text-muted">© {new Date().getFullYear()} Saad Akhtar. All rights reserved.</p>
-            <p className="text-caption text-muted">Lahore, Pakistan</p>
+            <p className="text-caption text-muted">© {new Date().getFullYear()} {footerData.copyrightName || 'Saad Akhtar'}. All rights reserved.</p>
+            <p className="text-caption text-muted">{footerData.location || 'Lahore, Pakistan'}</p>
           </div>
         </div>
       </div>

@@ -1,25 +1,12 @@
 import { motion } from 'framer-motion';
+import { usePortfolio } from '../context/PortfolioContext';
 import TiltCard from './TiltCard';
 import './Process.css';
 
 const Process = () => {
-  const steps = [
-    {
-      id: '01',
-      title: 'Private Tutor',
-      description: 'Tutoring students in English language, fluency, and vocabulary development with structured lesson plans.'
-    },
-    {
-      id: '02',
-      title: 'Freelance Developer',
-      description: 'Full-stack development using the MERN stack. Delivered 10+ freelance projects including AI-powered tools.'
-    },
-    {
-      id: '03',
-      title: 'AI Enthusiast',
-      description: 'Applied prompt engineering to build and fine-tune AI-driven features and workflows across multiple projects.'
-    }
-  ];
+  const { data } = usePortfolio();
+  const processData = data.process;
+  const steps = processData.steps || [];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -55,10 +42,9 @@ const Process = () => {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
         >
-          <p className="text-caption text-muted">Experience</p>
-          <h2 className="process-headline">
-            My professional journey<br />
-            and entrepreneurial ventures.
+          <p className="text-caption text-muted">{processData.caption || 'Experience'}</p>
+          <h2 className="process-headline" style={{ whiteSpace: 'pre-line' }}>
+            {processData.headline}
           </h2>
         </motion.div>
 

@@ -1,48 +1,9 @@
+import { usePortfolio } from '../context/PortfolioContext';
 import './Projects.css';
 
 const Projects = () => {
-  const projects = [
-    {
-      id: 1,
-      client: 'Netflix Data Visualiser (Python & Data Science)',
-      outcome: 'Interactive exploratory data analysis and visualization dashboard for Netflix movies and TV shows. Analyzes genre distribution, release trends, content ratings, and international analytics.',
-      image: '/images/netflix-visualiser.png',
-      url: 'netflix-analysis-pandas.streamlit.app',
-      liveUrl: 'https://netflix-analysis-pandas.streamlit.app',
-      type: 'browser',
-      tags: ['Python', 'Pandas', 'Data Science', 'Streamlit']
-    },
-    {
-      id: 2,
-      client: 'Hotel Management System (C++)',
-      outcome: 'Modular C++ project with separate headers for rooms, bookings, customers, and services. Implemented OOP principles including inheritance, encapsulation, and file I/O operations.',
-      type: 'standard',
-      tags: ['C++', 'OOP', 'Data Structures']
-    },
-    {
-      id: 3,
-      client: 'Hospital Management System DB (MySQL)',
-      outcome: 'Designed complete relational schema with ERD covering patients, staff, appointments, and billing. Applied normalization principles and wrote complex multi-join queries.',
-      url: 'hospital-db.mysql',
-      type: 'browser',
-      tags: ['MySQL', 'Relational DB', 'ERD']
-    },
-    {
-      id: 4,
-      client: 'AI Interviewer (Python)',
-      outcome: 'Built an AI-driven interviewer that generates role-specific questions and evaluates candidate responses using prompt engineering for dynamic flows.',
-      type: 'standard',
-      tags: ['Python', 'AI/LLM', 'Prompt Eng']
-    },
-    {
-      id: 5,
-      client: 'Demo Website / Portfolio (MERN)',
-      outcome: 'Built and deployed a full-stack demo site integrating a React frontend with a Node.js/Express backend connected to MongoDB.',
-      url: 'mern-portfolio.demo',
-      type: 'browser',
-      tags: ['React', 'Node.js', 'MongoDB']
-    }
-  ];
+  const { data } = usePortfolio();
+  const projects = data.projects.filter(p => p.visible !== false);
 
   return (
     <section className="projects-section" id="work">

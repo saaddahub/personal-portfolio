@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { usePortfolio } from '../context/PortfolioContext';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = ({ animationReady = true }) => {
+  const { data } = usePortfolio();
+  const heroData = data.hero;
+
   const heroRef = useRef(null);
   const spotlightRef = useRef(null);
   
@@ -65,12 +69,10 @@ const Hero = ({ animationReady = true }) => {
       );
 
       // Scroll Parallax Logic
-      // Each layer moves at a different speed, up to a maximum distance.
       const layers = gsap.utils.toArray('.parallax-layer');
       
       layers.forEach((layer) => {
         const speed = parseFloat(layer.dataset.speed);
-        // We'll move them up to maxTravel pixels
         const maxTravel = parseFloat(layer.dataset.max) || 400;
         
         gsap.to(layer, {
@@ -79,7 +81,7 @@ const Hero = ({ animationReady = true }) => {
           scrollTrigger: {
             trigger: heroRef.current,
             start: 'top top',
-            end: `+=${maxTravel / speed}`, // Calculate end distance so it reaches maxTravel exactly when scroll ends
+            end: `+=${maxTravel / speed}`,
             scrub: true,
           }
         });
@@ -106,43 +108,66 @@ const Hero = ({ animationReady = true }) => {
     });
   });
 
+  const getAlignmentStyle = () => {
+    const align = heroData.alignment || 'left';
+    const offset = heroData.dragOffsetPercent || 0;
+    
+    return {
+      textAlign: align,
+      alignItems: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start',
+      transform: `translateX(${offset * 4}px)`,
+      transition: 'transform 0.25s ease-out, align-items 0.25s ease-out'
+    };
+  };
+
   return (
     <section className="hero-section" ref={heroRef} id="home">
       
       {/* BACKGROUND: Spotlight and Particles */}
       <div className="parallax-layer parallax-sky" data-speed="0.1" data-max="100">
-        <div className="spotlight" ref={spotlightRef}></div>
-        <div className="particle-field">
-          {particles.map((p) => (
-            <div 
-              key={p.id} 
-              className="particle"
-              style={{
-                top: p.top,
-                left: p.left,
-                animationDuration: `${p.duration}s`,
-                animationDelay: `${p.delay}s`
-              }}
-            >
-              {p.text}
-            </div>
-          ))}
-        </div>
+        {heroData.showSpotlight !== false && <div className="spotlight" ref={spotlightRef}></div>}
+        {heroData.showParticles !== false && (
+          <div className="particle-field">
+            {particles.map((p) => (
+              <div 
+                key={p.id} 
+                className="particle"
+                style={{
+                  top: p.top,
+                  left: p.left,
+                  animationDuration: `${p.duration}s`,
+                  animationDelay: `${p.delay}s`
+                }}
+              >
+                {p.text}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* TEXT CONTENT */}
       <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
-        <div className="hero-text-content">
+        <div className="hero-text-content" style={getAlignmentStyle()}>
           <h1 className="hero-headline text-gradient">
-            <span className="hero-name-first">Saad</span><span className="hero-name-last">Akhtar</span>
+            <span className="hero-name-first">{heroData.nameFirst}</span>
+            <span className="hero-name-last">{heroData.nameLast}</span>
           </h1>
-          <div className="hero-eyebrow">
-            <span>AI UNDERGRADUATE</span>
-            <span className="separator">•</span>
-            <span>FULL-STACK DEVELOPER</span>
+          <div 
+            className="hero-eyebrow"
+            style={{ 
+              justifyContent: heroData.alignment === 'center' ? 'center' : heroData.alignment === 'right' ? 'flex-end' : 'flex-start' 
+            }}
+          >
+            {heroData.eyebrows && heroData.eyebrows.map((tag, idx) => (
+              <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>{tag}</span>
+                {idx < heroData.eyebrows.length - 1 && <span className="separator">•</span>}
+              </span>
+            ))}
           </div>
           <p className="hero-desc">
-            Creative Developer based in Lahore, Pakistan.
+            {heroData.desc}
           </p>
         </div>
       </div>
@@ -161,3 +186,4 @@ const Hero = ({ animationReady = true }) => {
 };
 
 export default Hero;
+

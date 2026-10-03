@@ -33,13 +33,12 @@ const StatCounter = ({ value, suffix }) => {
   );
 };
 
+import { usePortfolio } from '../context/PortfolioContext';
+
 const Stats = () => {
-  const stats = [
-    { value: 10, suffix: '+', label: 'Projects Completed' },
-    { value: 5, suffix: '+', label: 'Frameworks Mastered' },
-    { value: 4, suffix: '', label: 'Languages' },
-    { value: 2028, suffix: '', label: 'Graduation Year' }
-  ];
+  const { data } = usePortfolio();
+  const statsData = data.stats;
+  const stats = statsData.items || [];
 
   return (
     <section className="stats-section" id="about">
@@ -49,8 +48,8 @@ const Stats = () => {
       
       <div className="container">
         <div className="stats-header">
-          <p className="text-caption text-muted">About me</p>
-          <h2 className="stats-headline">My Focus</h2>
+          <p className="text-caption text-muted">{statsData.caption || 'About me'}</p>
+          <h2 className="stats-headline">{statsData.headline || 'My Focus'}</h2>
         </div>
         
         <motion.div 
@@ -61,14 +60,14 @@ const Stats = () => {
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
         >
           <p>
-            I am passionate about Object-Oriented Programming, Database Design, AI Fundamentals, and Web Development. I'm currently expanding my skill set by diving deep into Machine Learning.
+            {statsData.valueProp}
           </p>
         </motion.div>
         
         <div className="stats-grid">
           {stats.map((stat, i) => (
             <motion.div 
-              key={i} 
+              key={stat.id || i} 
               className="stat-card"
               initial={{ opacity: 0, filter: "blur(6px)", y: 20 }}
               whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}

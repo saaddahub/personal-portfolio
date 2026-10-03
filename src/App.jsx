@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { useState as useReactState } from 'react'; // just in case
+import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
+
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
+import AdminPortal from './admin/AdminPortal';
 
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -26,14 +28,15 @@ import SocialMenu from './components/SocialMenu';
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-function App() {
+function PortfolioMain() {
   const [loading, setLoading] = useState(true);
+  const { data } = usePortfolio();
+  const visibility = data.sectionVisibility || {};
 
-  // Initialize Lenis
+  // Initialize Lenis for smooth scroll on portfolio
   useEffect(() => {
-    // Force scroll to top on reload to prevent GSAP parallax glitches from hash links or browser scroll restoration
     window.scrollTo(0, 0);
-    if (window.location.hash) {
+    if (window.location.hash && window.location.hash !== '#admin') {
       window.history.replaceState('', document.title, window.location.pathname + window.location.search);
     }
 
@@ -45,14 +48,15 @@ function App() {
     });
 
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
+    const tickerCallback = (time) => {
       lenis.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(tickerCallback);
     };
   }, []);
 
@@ -115,23 +119,62 @@ function App() {
       <div className={`app-wrapper ${!loading ? 'is-ready' : ''}`}>
         <Nav />
         <main>
-          <Hero animationReady={!loading} />
-          <PunchlineTransition />
-          <SkillsGlobe />
-          <Stats />
-          <GitHubActivity />
-          <Projects />
-          <Process />
-          <CtaSplit />
-          <About />
-          <FAQ />
-          <FinalCta />
+          {visibility.hero !== false && <Hero animationReady={!loading} />}
+          {visibility.punchline !== false && <PunchlineTransition />}
+          {visibility.skillsGlobe !== false && <SkillsGlobe />}
+          {visibility.stats !== false && <Stats />}
+          {visibility.githubActivity !== false && <GitHubActivity />}
+          {visibility.projects !== false && <Projects />}
+          {visibility.process !== false && <Process />}
+          {visibility.ctaSplit !== false && <CtaSplit />}
+          {visibility.about !== false && <About />}
+          {visibility.faq !== false && <FAQ />}
+          {visibility.finalCta !== false && <FinalCta />}
         </main>
         <Footer />
         <MusicPlayer />
         <SocialMenu />
       </div>
     </>
+  );
+}
+
+function App() {
+  const checkIsAdmin = () => {
+    const path = window.location.pathname.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+    return path.startsWith('/admin') || hash === '#admin';
+  };
+
+  const [isAdmin, setIsAdmin] = useState(checkIsAdmin);
+
+  useEffect(() => {
+    const onLocationChange = () => {
+      setIsAdmin(checkIsAdmin());
+    };
+
+    window.addEventListener('popstate', onLocationChange);
+    window.addEventListener('hashchange', onLocationChange);
+
+    return () => {
+      window.removeEventListener('popstate', onLocationChange);
+      window.removeEventListener('hashchange', onLocationChange);
+    };
+  }, []);
+
+  return (
+    <PortfolioProvider>
+      {isAdmin ? (
+        <AdminPortal
+          onExit={() => {
+            window.history.pushState({}, '', '/');
+            setIsAdmin(false);
+          }}
+        />
+      ) : (
+        <PortfolioMain />
+      )}
+    </PortfolioProvider>
   );
 }
 

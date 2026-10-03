@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { usePortfolio } from '../context/PortfolioContext';
 import './SocialMenu.css';
 
-const MagneticIcon = ({ children, className, style, href }) => {
+const MagneticIcon = ({ children, className, style, href, onClick }) => {
   const ref = useRef(null);
   
   const x = useMotionValue(0);
@@ -32,7 +33,7 @@ const MagneticIcon = ({ children, className, style, href }) => {
   };
   
   const Component = href ? motion.a : motion.span;
-  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : {};
+  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : { onClick };
 
   return (
     <Component
@@ -50,6 +51,8 @@ const MagneticIcon = ({ children, className, style, href }) => {
 
 const SocialMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = usePortfolio();
+  const socials = data.socials || {};
 
   return (
     <div className={`social-menu-container ${isOpen ? 'is-open' : ''}`}>
@@ -69,7 +72,7 @@ const SocialMenu = () => {
       {/* Instagram (-90deg or top) */}
       <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
         <MagneticIcon
-          href="https://instagram.com/saaddagram"
+          href={socials.instagram || 'https://instagram.com/saaddagram'}
           className="social-item"
           style={{ '--hover-bg': '#E1306C', '--hover-fill': '#fff' }}
         >
@@ -82,7 +85,7 @@ const SocialMenu = () => {
       {/* GitHub (342deg or top-right) */}
       <div className="social-item-wrapper" style={{ '--angle': '342deg' }}>
         <MagneticIcon
-          href="https://github.com/saaddahub"
+          href={socials.github || 'https://github.com/saaddahub'}
           className="social-item"
           style={{ '--hover-bg': '#000', '--hover-fill': '#fff' }}
         >
@@ -95,7 +98,7 @@ const SocialMenu = () => {
       {/* Discord (54deg or bottom-right) */}
       <div className="social-item-wrapper" style={{ '--angle': '54deg' }}>
         <MagneticIcon
-          href="https://discord.com/saaddacord"
+          href={socials.discord || 'https://discord.com/saaddacord'}
           className="social-item"
           style={{ '--hover-bg': '#8c9eff', '--hover-fill': '#fff' }}
         >
@@ -108,7 +111,7 @@ const SocialMenu = () => {
       {/* WhatsApp (126deg or bottom-left) */}
       <div className="social-item-wrapper" style={{ '--angle': '126deg' }}>
         <MagneticIcon
-          href="https://wa.me/923706599919"
+          href={socials.whatsapp || 'https://wa.me/923706599919'}
           className="social-item"
           style={{ '--hover-bg': '#1db954', '--hover-fill': '#000' }}
         >
@@ -121,7 +124,7 @@ const SocialMenu = () => {
       {/* Email (198deg or top-left) */}
       <div className="social-item-wrapper" style={{ '--angle': '198deg' }}>
         <MagneticIcon
-          href="mailto:saadsalam659@gmail.com"
+          href={`mailto:${socials.email || 'saadsalam659@gmail.com'}`}
           className="social-item"
           style={{ '--hover-bg': '#EA4335', '--hover-fill': '#fff' }}
         >
