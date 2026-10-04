@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
 import gsap from 'gsap';
 import './GitHubActivity.css';
@@ -39,21 +39,6 @@ const GitHubActivity = () => {
     return () => ctx.revert();
   }, []);
 
-  const selectLastHalfYear = contributions => {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const shownMonths = 12;
-    
-    return contributions.filter(activity => {
-      const date = new Date(activity.date);
-      const monthOfDay = date.getMonth();
-      const year = date.getFullYear();
-
-      // Show full year for better visual in portfolio
-      return true;
-    });
-  };
-
   return (
     <section className="github-section" ref={containerRef} id="github-activity">
       <div className="container">
@@ -66,7 +51,6 @@ const GitHubActivity = () => {
           <GitHubCalendar 
             username={username} 
             colorScheme="dark"
-            transformData={selectLastHalfYear}
             hideTotalCount={false}
             hideColorLegend={false}
             labels={{

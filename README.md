@@ -99,14 +99,12 @@ saad-portfolio/
 │   │   └── rooftop-static-dreams.mp3
 │   ├── images/                 # Project screenshots & showcases
 │   │   └── netflix-visualiser.png
-│   ├── favicon.svg             # Vector site favicon
-│   └── icons.svg               # SVG icons sprite
+│   └── favicon.svg             # Vector site favicon
 ├── src/
-│   ├── assets/                 # Static graphical assets
 │   ├── components/
 │   │   ├── About.jsx & .css
-│   │   ├── Contact.jsx & .css
-│   │   ├── DottedText.jsx & .css
+│   │   ├── ContactButton.jsx & .css
+│   │   ├── DottedText.jsx
 │   │   ├── Hero.jsx & .css     # Parallax spotlight & hero copy
 │   │   ├── MusicPlayer.jsx & .css # Vinyl player drawer & audio engine
 │   │   ├── Nav.jsx & .css      # Dynamic header & theme switch

@@ -26,17 +26,20 @@
   pointer-events: none;
 }
 
-.social-menu-container.is-open::after,
-.social-menu-container:hover::after {
+.social-menu-container.is-open::after {
   pointer-events: auto;
 }
 
-.social-menu-container.is-open,
-.social-menu-container:hover {
+.social-menu-container.is-open {
   background: #fff;
 }
 
 .social-menu-container .main-icon {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   fill: #fff;
   transition: all 0.2s;
   display: flex;
@@ -44,8 +47,7 @@
   justify-content: center;
 }
 
-.social-menu-container.is-open .main-icon,
-.social-menu-container:hover .main-icon {
+.social-menu-container.is-open .main-icon {
   fill: rgb(0, 0, 0);
   transition: all 0.9s;
 }
@@ -61,8 +63,7 @@
   z-index: 1;
 }
 
-.social-menu-container.is-open .social-item-wrapper,
-.social-menu-container:hover .social-item-wrapper {
+.social-menu-container.is-open .social-item-wrapper {
   opacity: 1;
   visibility: visible;
   /* Math magic: translate to center, rotate out to the specific angle, translate away by radius, then rotate back to stay upright */
@@ -84,9 +85,30 @@
   text-decoration: none;
 }
 
-.social-menu-container:hover .social-item:hover,
-.social-menu-container.is-expanded .social-item:hover {
+.social-menu-container.is-open .social-item:hover {
   background: var(--hover-bg);
   fill: var(--hover-fill, #fff);
   color: var(--hover-fill, #fff);
+}
+
+.social-menu-container a:focus-visible,
+.social-menu-container button:focus-visible {
+  outline: 2px solid var(--color-accent-pastel-a);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .social-menu-container:hover::after { pointer-events: auto; }
+  .social-menu-container:hover { background: #fff; }
+  .social-menu-container:hover .main-icon { fill: #000; }
+  .social-menu-container:hover .social-item-wrapper {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-65px) rotate(calc(var(--angle) * -1));
+  }
+  .social-menu-container:hover .social-item:hover {
+    background: var(--hover-bg);
+    fill: var(--hover-fill, #fff);
+    color: var(--hover-fill, #fff);
+  }
 }

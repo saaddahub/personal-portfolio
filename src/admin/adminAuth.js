@@ -86,11 +86,3 @@ export async function changePassword(currentPassword, newPassword) {
   localStorage.setItem(PASS_HASH_KEY, newHash);
   return true;
 }
-
-export function hasCustomPassword() {
-  return !!localStorage.getItem(PASS_HASH_KEY);
-}
-
-export function resetPasswordToDefault() {
-  localStorage.removeItem(PASS_HASH_KEY);
-}

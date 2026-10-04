@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { motion, useInView, useMotionValue, useSpring, useTransform, animate } from 'framer-motion';
+import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import './Stats.css';
 
 const StatCounter = ({ value, suffix }) => {
@@ -44,7 +44,6 @@ const Stats = () => {
     <section className="stats-section" id="about">
       {/* Background Glow for value prop */}
       <div className="section-glow"></div>
-      <div className="stats-bg-texture"></div>
       
       <div className="container">
         <div className="stats-header">

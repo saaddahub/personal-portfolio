@@ -223,7 +223,7 @@ export const PortfolioProvider = ({ children }) => {
     return DEFAULT_PORTFOLIO_DATA;
   });
 
-  const [lastSaved, setLastSaved] = useState(Date.now());
+  const [lastSaved, setLastSaved] = useState(() => Date.now());
 
   // Automatically save changes to localStorage
   useEffect(() => {

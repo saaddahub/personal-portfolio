@@ -7,9 +7,10 @@
 }
 
 .projects-scroll-container {
-  width: 100vw;
+  width: 100%;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-lg);
   scrollbar-width: none; /* Firefox */
   padding-bottom: var(--space-xl);
 }
@@ -139,16 +140,18 @@
 .dot.green { background-color: #27c93f; }
 
 .browser-url {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: auto;
+  max-width: calc(100% - 64px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   background: #09090b;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   padding: 2px 10px;
   font-size: 0.7rem;
   font-family: var(--font-mono, monospace);
-  color: var(--color-text-muted);
+  color: #a3a3a0;
 }
 
 .project-title {
@@ -178,7 +181,7 @@
 .project-link {
   margin-top: var(--space-xs);
   font-size: var(--fs-body-md);
-  color: var(--color-accent);
+  color: var(--color-accent-primary);
   font-weight: 500;
   transition: color var(--duration-fast), transform var(--duration-fast);
   display: inline-flex;
@@ -192,8 +195,16 @@
 }
 
 @media (max-width: 640px) {
+  .projects-scroll-container {
+    scroll-padding-inline: var(--space-md);
+  }
+
+  .projects-rail {
+    padding-inline: var(--space-md);
+    gap: var(--space-md);
+  }
+
   .project-card {
     width: 85vw; /* Ensure one card + a peek of the next is visible */
   }
 }
-

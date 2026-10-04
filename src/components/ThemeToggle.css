@@ -19,7 +19,11 @@
   --back-clouds-color: #bacfe0;
   --transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
   --circle-transition: 0.3s cubic-bezier(0, -0.02, 0.35, 1.17);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  min-height: 44px;
   vertical-align: middle;
 }
 
@@ -71,7 +75,16 @@
 }
 
 .theme-switch__checkbox {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+
+.theme-switch__checkbox:focus-visible + .theme-switch__container {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 6px;
 }
 
 .theme-switch__circle-container {

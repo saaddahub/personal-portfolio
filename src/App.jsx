@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -32,6 +32,12 @@ function PortfolioMain() {
   const [loading, setLoading] = useState(true);
   const { data } = usePortfolio();
   const visibility = data.sectionVisibility || {};
+  const lenisRef = useRef(null);
+  const finishLoading = useCallback(() => setLoading(false), []);
+  const handleMenuChange = useCallback((isOpen) => {
+    if (isOpen) lenisRef.current?.stop();
+    else lenisRef.current?.start();
+  }, []);
 
   // Initialize Lenis for smooth scroll on portfolio
   useEffect(() => {
@@ -44,8 +50,8 @@ function PortfolioMain() {
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: false,
     });
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
     const tickerCallback = (time) => {
@@ -56,6 +62,7 @@ function PortfolioMain() {
 
     return () => {
       lenis.destroy();
+      lenisRef.current = null;
       gsap.ticker.remove(tickerCallback);
     };
   }, []);
@@ -113,15 +120,20 @@ function PortfolioMain() {
 
   return (
     <>
-      <Preloader onComplete={() => setLoading(false)} />
+      <Preloader onComplete={finishLoading} />
       <CustomCursor />
       
-      <div className={`app-wrapper ${!loading ? 'is-ready' : ''}`}>
-        <Nav />
+      <div>
+        <Nav onMenuChange={handleMenuChange} />
         <main>
           {visibility.hero !== false && <Hero animationReady={!loading} />}
-          {visibility.punchline !== false && <PunchlineTransition />}
-          {visibility.skillsGlobe !== false && <SkillsGlobe />}
+          {visibility.punchline !== false && (
+            <PunchlineTransition
+              animationReady={!loading}
+              showGlobe={visibility.skillsGlobe !== false}
+            />
+          )}
+          {visibility.punchline === false && visibility.skillsGlobe !== false && <SkillsGlobe />}
           {visibility.stats !== false && <Stats />}
           {visibility.githubActivity !== false && <GitHubActivity />}
           {visibility.projects !== false && <Projects />}

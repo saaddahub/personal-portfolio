@@ -246,12 +246,6 @@
 }
 
 /* Live Preview Side Panel (when split mode is on) */
-.admin-split-container {
-  display: flex;
-  flex: 1;
-  width: 100%;
-}
-
 .admin-preview-pane {
   flex: 1;
   border-left: 1px solid var(--color-border-subtle);
@@ -598,6 +592,12 @@
 }
 
 /* Tag chips */
+.tags-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .tags-manager-row {
   display: flex;
   flex-wrap: wrap;

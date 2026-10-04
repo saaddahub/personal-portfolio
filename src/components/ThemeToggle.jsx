@@ -25,10 +25,11 @@ const ThemeToggle = () => {
         </defs>
       </svg>
 
-      <label className="theme-switch" style={{ margin: '0 1rem' }}>
+      <label className="theme-switch">
         <input 
           className="theme-switch__checkbox" 
           type="checkbox" 
+          aria-label="Dark theme"
           checked={isDark}
           onChange={() => setIsDark(!isDark)}
         />

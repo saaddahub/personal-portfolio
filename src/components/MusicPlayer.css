@@ -43,8 +43,8 @@
 
 .music-toggle-btn:hover {
   background: var(--color-bg-raised);
-  border-color: var(--color-border-hover);
-  color: var(--color-accent);
+  border-color: var(--color-border-default);
+  color: var(--color-accent-primary);
 }
 
 .music-tab-content {
@@ -72,7 +72,7 @@
 
 .sound-bars .bar {
   width: 2px;
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-primary);
   border-radius: 1px;
   animation: barEqualize 1s infinite ease-in-out alternate;
 }
@@ -303,7 +303,7 @@
   flex-grow: 1;
   height: 4px;
   margin: auto 0.5rem;
-  background: var(--color-border-hover);
+  background: var(--color-border-default);
   border-radius: 9999px;
   -webkit-appearance: none;
   appearance: none;
@@ -331,7 +331,7 @@
 
 .uiverse-slider:hover::-webkit-slider-thumb {
   transform: scale(1.25);
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-primary);
 }
 
 /* Controls Row */
@@ -369,7 +369,7 @@
 }
 
 .uiverse-play-toggle:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-primary);
 }
 
 /* Repeat / Shuffle expandable button */
@@ -384,7 +384,7 @@
 }
 
 .uiverse-mode-btn.active {
-  color: var(--color-accent);
+  color: var(--color-accent-primary);
 }
 
 /* Playlist expandable button */
@@ -399,7 +399,7 @@
 }
 
 .uiverse-list-btn.active {
-  color: var(--color-accent);
+  color: var(--color-accent-primary);
 }
 
 /* Playlist Popover */
@@ -445,7 +445,7 @@
 
 .uiverse-playlist-item.active {
   background: rgba(124, 58, 237, 0.15);
-  color: var(--color-accent);
+  color: var(--color-accent-primary);
   font-weight: 600;
 }
 
@@ -467,7 +467,7 @@
 @media (max-width: 768px), (hover: none) {
   .music-sidebar-wrapper {
     top: auto;
-    bottom: 24px;
+    bottom: max(24px, env(safe-area-inset-bottom));
     transform: translateY(0);
   }
 
@@ -495,7 +495,7 @@
   }
 
   .uiverse-card {
-    width: 270px !important;
+    width: min(270px, calc(100vw - 80px)) !important;
     height: 154px !important;
   }
 
@@ -550,6 +550,7 @@
 
   .uiverse-slider {
     width: 100% !important;
+    min-width: 0;
   }
 
   .uiverse-controls-row {
@@ -571,4 +572,3 @@
     top: auto;
   }
 }
-

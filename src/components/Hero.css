@@ -158,3 +158,16 @@
   max-width: 600px;
   margin: 0;
 }
+
+@media (max-width: 640px) {
+  .hero-text-content {
+    width: 100%;
+    padding-inline: var(--space-md);
+  }
+
+  .hero-headline {
+    flex-wrap: wrap;
+    column-gap: 0.15em;
+    font-size: clamp(2.75rem, 11vw, 4rem);
+  }
+}

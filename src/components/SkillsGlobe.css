@@ -11,9 +11,27 @@
 }
 
 .skills-globe-headline {
-  font-size: var(--fs-heading-lg);
+  font-size: clamp(2rem, 4vw, 3.25rem);
   color: var(--color-text-primary);
   margin-top: var(--space-xs);
+}
+
+.skills-globe-embedded {
+  width: 100%;
+  border-top: 0;
+  padding-block: 0;
+}
+
+.skills-globe-embedded .skills-globe-header {
+  margin-bottom: clamp(0.75rem, 2vh, 1.5rem);
+}
+
+.skills-globe-embedded .skills-globe-canvas-wrapper {
+  height: clamp(240px, 56svh, 600px);
+}
+
+.skills-globe-embedded > .container {
+  padding-top: 80px;
 }
 
 .skills-globe-canvas-wrapper {

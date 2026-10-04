@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import './MusicPlayer.css';
 
 const TRACKS = [
@@ -34,6 +34,13 @@ const TRACKS = [
   }
 ];
 
+const formatTime = (timeInSeconds) => {
+  if (!Number.isFinite(timeInSeconds)) return '0:00';
+  const m = Math.floor(timeInSeconds / 60);
+  const s = Math.floor(timeInSeconds % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+};
+
 const MusicPlayer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -47,12 +54,15 @@ const MusicPlayer = () => {
   const audioRef = useRef(null);
   const wrapperRef = useRef(null);
 
-  const formatTime = (timeInSeconds) => {
-    if (isNaN(timeInSeconds) || timeInSeconds === Infinity) return '0:00';
-    const m = Math.floor(timeInSeconds / 60);
-    const s = Math.floor(timeInSeconds % 60);
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
+  const handleNext = useCallback(() => {
+    setCurrentTrackIndex((previous) => {
+      if (!isShuffle) return (previous + 1) % TRACKS.length;
+      let next = Math.floor(Math.random() * TRACKS.length);
+      if (next === previous && TRACKS.length > 1) next = (next + 1) % TRACKS.length;
+      return next;
+    });
+    setIsPlaying(true);
+  }, [isShuffle]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -69,32 +79,38 @@ const MusicPlayer = () => {
       setDuration(formatTime(audio.duration));
     };
 
-    const handleEnded = () => {
-      handleNext();
-    };
-
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('ended', handleNext);
 
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('ended', handleNext);
     };
-  }, [currentTrackIndex]);
+  }, [handleNext]);
 
   // Click outside to collapse
   useEffect(() => {
+    if (!isExpanded) return;
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target) && isExpanded) {
         setIsExpanded(false);
         setShowPlaylist(false);
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsExpanded(false);
+        setShowPlaylist(false);
+      }
+    };
+    document.addEventListener('pointerdown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isExpanded]);
 
   const togglePlay = () => {
@@ -109,19 +125,6 @@ const MusicPlayer = () => {
         console.warn('Playback prevented:', err);
       });
     }
-  };
-
-  const handleNext = () => {
-    if (isShuffle) {
-      let randomIndex = Math.floor(Math.random() * TRACKS.length);
-      if (randomIndex === currentTrackIndex && TRACKS.length > 1) {
-        randomIndex = (randomIndex + 1) % TRACKS.length;
-      }
-      setCurrentTrackIndex(randomIndex);
-    } else {
-      setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
-    }
-    setIsPlaying(true);
   };
 
   const handlePrev = () => {
@@ -139,7 +142,7 @@ const MusicPlayer = () => {
     if (audioRef.current && isPlaying) {
       audioRef.current.play().catch(e => console.log('Autoplay handled:', e));
     }
-  }, [currentTrackIndex]);
+  }, [currentTrackIndex, isPlaying]);
 
   const handleProgressChange = (e) => {
     const newProgress = parseFloat(e.target.value);
@@ -161,6 +164,8 @@ const MusicPlayer = () => {
         className={`music-toggle-btn ${isPlaying ? 'is-playing' : ''}`}
         onClick={() => setIsExpanded(!isExpanded)}
         aria-label={isExpanded ? 'Collapse Music Player' : 'Open Music Player'}
+        aria-expanded={isExpanded}
+        aria-controls="music-player-panel"
         title="Background Music"
       >
         <div className="music-tab-content">
@@ -198,7 +203,7 @@ const MusicPlayer = () => {
       />
 
       {/* UIVERSE Interactive Music Player Panel */}
-      <div className="music-player-panel">
+      <div className="music-player-panel" id="music-player-panel" inert={!isExpanded} aria-hidden={!isExpanded}>
         <div className="uiverse-music-container">
           
           {/* Top Floating Vinyl Disc (peeking out) */}

@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { usePortfolio } from '../context/PortfolioContext';
 import './SocialMenu.css';
 
-const MagneticIcon = ({ children, className, style, href, onClick }) => {
+const MagneticIcon = ({ children, className, style, href, onClick, ...attributes }) => {
   const ref = useRef(null);
   
   const x = useMotionValue(0);
@@ -32,12 +32,13 @@ const MagneticIcon = ({ children, className, style, href, onClick }) => {
     y.set(0);
   };
   
-  const Component = href ? motion.a : motion.span;
-  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : { onClick };
+  const Component = href ? motion.a : motion.button;
+  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : { onClick, type: 'button' };
 
   return (
     <Component
       {...props}
+      {...attributes}
       ref={ref}
       className={className}
       style={{ ...style, x: springX, y: springY }}
@@ -53,11 +54,28 @@ const SocialMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { data } = usePortfolio();
   const socials = data.socials || {};
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOutside = (event) => {
+      if (!menuRef.current.contains(event.target)) setIsOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isOpen]);
 
   return (
-    <div className={`social-menu-container ${isOpen ? 'is-open' : ''}`}>
+    <div ref={menuRef} className={`social-menu-container ${isOpen ? 'is-open' : ''}`}>
       {/* Main Send Icon */}
-      <MagneticIcon className="main-icon" onClick={() => setIsOpen(!isOpen)}>
+      <MagneticIcon className="main-icon" onClick={() => setIsOpen(!isOpen)} aria-label={isOpen ? 'Close social links' : 'Open social links'} aria-expanded={isOpen}>
         <svg
           viewBox="0 0 16 16"
           className="bi bi-send-fill"
@@ -73,6 +91,7 @@ const SocialMenu = () => {
       <div className="social-item-wrapper" style={{ '--angle': '270deg' }}>
         <MagneticIcon
           href={socials.instagram || 'https://instagram.com/saaddagram'}
+          aria-label="Instagram"
           className="social-item"
           style={{ '--hover-bg': '#E1306C', '--hover-fill': '#fff' }}
         >
@@ -86,6 +105,7 @@ const SocialMenu = () => {
       <div className="social-item-wrapper" style={{ '--angle': '342deg' }}>
         <MagneticIcon
           href={socials.github || 'https://github.com/saaddahub'}
+          aria-label="GitHub"
           className="social-item"
           style={{ '--hover-bg': '#000', '--hover-fill': '#fff' }}
         >
@@ -99,6 +119,7 @@ const SocialMenu = () => {
       <div className="social-item-wrapper" style={{ '--angle': '54deg' }}>
         <MagneticIcon
           href={socials.discord || 'https://discord.com/saaddacord'}
+          aria-label="Discord"
           className="social-item"
           style={{ '--hover-bg': '#8c9eff', '--hover-fill': '#fff' }}
         >
@@ -112,6 +133,7 @@ const SocialMenu = () => {
       <div className="social-item-wrapper" style={{ '--angle': '126deg' }}>
         <MagneticIcon
           href={socials.whatsapp || 'https://wa.me/923706599919'}
+          aria-label="WhatsApp"
           className="social-item"
           style={{ '--hover-bg': '#1db954', '--hover-fill': '#000' }}
         >
@@ -125,6 +147,7 @@ const SocialMenu = () => {
       <div className="social-item-wrapper" style={{ '--angle': '198deg' }}>
         <MagneticIcon
           href={`mailto:${socials.email || 'saadsalam659@gmail.com'}`}
+          aria-label="Email"
           className="social-item"
           style={{ '--hover-bg': '#EA4335', '--hover-fill': '#fff' }}
         >

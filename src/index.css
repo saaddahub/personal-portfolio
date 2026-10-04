@@ -48,8 +48,10 @@
   --fs-display-xl: clamp(2.75rem, 6vw, 5.5rem);
   --fs-display-lg: clamp(2rem, 4vw, 3.25rem);
   --fs-heading-md: clamp(1.25rem, 2vw, 1.75rem);
+  --fs-heading-lg: clamp(2rem, 4vw, 3.25rem);
   --fs-body-lg: 1.25rem;
   --fs-body-md: 1rem;
+  --fs-body-sm: 0.875rem;
   --fs-caption: 0.8rem;
 
   --line-height-tight: 1.05;

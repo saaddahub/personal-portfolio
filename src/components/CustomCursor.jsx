@@ -84,27 +84,10 @@ const CustomCursor = () => {
         points[i].y += (points[i - 1].y - points[i].y) * 0.4;
       }
 
-      // Draw ribbon/tail
+      // Draw tapered ribbon segments.
       if (isVisible) {
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-
-        for (let i = 1; i < NUM_POINTS - 1; i++) {
-          const xc = (points[i].x + points[i + 1].x) / 2;
-          const yc = (points[i].y + points[i + 1].y) / 2;
-          ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
-        }
-
-        ctx.lineTo(points[NUM_POINTS - 1].x, points[NUM_POINTS - 1].y);
-        
-        // Ribbon styling
-        ctx.strokeStyle = 'rgba(201, 182, 247, 0.6)'; // Pastel purple accent
-        ctx.lineWidth = 6;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        
-        // Taper effect using stroke pattern is complex in raw canvas, 
-        // we'll draw individual segments for taper & fade
         for (let i = 0; i < NUM_POINTS - 1; i++) {
           ctx.beginPath();
           ctx.moveTo(points[i].x, points[i].y);

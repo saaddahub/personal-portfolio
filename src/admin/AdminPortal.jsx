@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, Component } from 'react';
+import { useState, useRef, useEffect, useCallback, Component } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import './Admin.css';
 import {
@@ -78,6 +78,120 @@ class AdminErrorBoundary extends Component {
     return this.props.children;
   }
 }
+
+// Tag / Comma-separated list input component that preserves spaces and commas during typing
+const TagsListInput = ({
+  value = [],
+  onChange,
+  placeholder = 'Add items separated by commas...',
+  className = 'admin-input'
+}) => {
+  const [text, setText] = useState(() => (Array.isArray(value) ? value.join(', ') : ''));
+  const isInternalRef = useRef(false);
+
+  // Sync external changes (e.g. initial load, reset to defaults, import JSON, or switching items)
+  useEffect(() => {
+    if (isInternalRef.current) {
+      isInternalRef.current = false;
+      return;
+    }
+    const externalStr = Array.isArray(value) ? value.join(', ') : '';
+    const currentParsed = text.split(',').map((s) => s.trim()).filter(Boolean);
+    if (currentParsed.join(', ') !== externalStr) {
+      setText(externalStr);
+    }
+  }, [value, text]);
+
+  const handleChange = (e) => {
+    const newText = e.target.value;
+    setText(newText);
+    isInternalRef.current = true;
+
+    // Parse items into array
+    const parsed = newText
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    onChange(parsed);
+  };
+
+  const handleBlur = () => {
+    const parsed = text
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    setText(parsed.join(', '));
+    onChange(parsed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const trimmed = text.trim();
+      if (trimmed && !trimmed.endsWith(',')) {
+        const nextText = trimmed + ', ';
+        setText(nextText);
+        isInternalRef.current = true;
+        const parsed = nextText
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        onChange(parsed);
+      }
+    }
+  };
+
+  const handleRemoveChip = (indexToRemove) => {
+    const currentList = Array.isArray(value) ? value : [];
+    const updated = currentList.filter((_, idx) => idx !== indexToRemove);
+    setText(updated.join(', '));
+    isInternalRef.current = false;
+    onChange(updated);
+  };
+
+  const currentChips = Array.isArray(value) ? value : [];
+
+  return (
+    <div className="tags-input-wrapper">
+      <input
+        type="text"
+        className={className}
+        value={text}
+        placeholder={placeholder}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+      />
+      {currentChips.length > 0 && (
+        <div className="tags-manager-row">
+          {currentChips.map((chip, idx) => (
+            <span key={idx} className="tag-chip">
+              <span>{chip}</span>
+              <button
+                type="button"
+                className="tag-chip-remove"
+                onClick={() => handleRemoveChip(idx)}
+                title={`Remove "${chip}"`}
+                aria-label={`Remove "${chip}"`}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '0 2px',
+                  color: 'inherit',
+                  font: 'inherit',
+                  cursor: 'pointer'
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AdminPortalInner = ({ onExit, onLogout }) => {
   const {
@@ -519,26 +633,11 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
                 <div className="admin-field-group">
                   <label className="admin-label">Eyebrow Badges (comma separated)</label>
-                  <input
-                    type="text"
-                    className="admin-input"
-                    value={data.hero.eyebrows.join(', ')}
-                    onChange={(e) =>
-                      updateHero({
-                        eyebrows: e.target.value
-                          .split(',')
-                          .map((s) => s.trim())
-                          .filter(Boolean)
-                      })
-                    }
+                  <TagsListInput
+                    value={data.hero.eyebrows || []}
+                    onChange={(newEyebrows) => updateHero({ eyebrows: newEyebrows })}
+                    placeholder="e.g. AI UNDERGRADUATE, FULL-STACK DEVELOPER"
                   />
-                  <div className="tags-manager-row">
-                    {data.hero.eyebrows.map((tag, idx) => (
-                      <span key={idx} className="tag-chip">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
                 <div className="admin-field-group">
@@ -679,6 +778,42 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                         value={newProject.tags}
                         onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })}
                       />
+                      {newProject.tags && (
+                        <div className="tags-manager-row">
+                          {newProject.tags
+                            .split(',')
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                            .map((tag, idx) => (
+                              <span key={idx} className="tag-chip">
+                                <span>{tag}</span>
+                                <button
+                                  type="button"
+                                  className="tag-chip-remove"
+                                  onClick={() => {
+                                    const parsed = newProject.tags
+                                      .split(',')
+                                      .map((t) => t.trim())
+                                      .filter(Boolean);
+                                    const filtered = parsed.filter((_, i) => i !== idx);
+                                    setNewProject({ ...newProject, tags: filtered.join(', ') });
+                                  }}
+                                  title={`Remove "${tag}"`}
+                                  style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    padding: '0 2px',
+                                    color: 'inherit',
+                                    font: 'inherit',
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="admin-field-group">
@@ -820,18 +955,11 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
                     <div className="admin-field-group">
                       <label className="admin-label">Tags (comma-separated)</label>
-                      <input
-                        type="text"
-                        className="admin-input"
-                        value={project.tags ? project.tags.join(', ') : ''}
-                        onChange={(e) =>
-                          updateProject(project.id, {
-                            tags: e.target.value
-                              .split(',')
-                              .map((t) => t.trim())
-                              .filter(Boolean)
-                          })
-                        }
+                      <TagsListInput
+                        key={project.id}
+                        value={project.tags || []}
+                        onChange={(newTags) => updateProject(project.id, { tags: newTags })}
+                        placeholder="e.g. React, Next.js, TypeScript"
                       />
                     </div>
                   </div>

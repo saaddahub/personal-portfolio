@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import './SkillsGlobe.css';
@@ -26,12 +26,13 @@ function fibonacciSphere(count, radius) {
   return points;
 }
 
-const SkillsGlobe = () => {
+const SkillsGlobe = ({ embedded = false }) => {
   const mountRef = useRef(null);
   
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // --- 1. Scene Setup ---
     const scene = new THREE.Scene();
@@ -44,7 +45,14 @@ const SkillsGlobe = () => {
       2000
     );
     // Position camera far enough to see the whole sphere
-    camera.position.z = 500;
+    const fitCamera = () => {
+      const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+      // Leave room for labels that extend beyond the sphere on narrow screens.
+      const usableWidth = Math.max(container.clientWidth * 0.6, container.clientWidth - 96);
+      const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * usableWidth / container.clientHeight);
+      camera.position.z = 180 / Math.sin(Math.min(verticalFov, horizontalFov) / 2) * 1.15;
+    };
+    fitCamera();
     
     // WebGL Renderer (for the subtle dot shell)
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -209,7 +217,7 @@ const SkillsGlobe = () => {
         velocity.y *= 0.95;
         
         // Lerp towards auto-rotation when momentum is low
-        if (Math.abs(velocity.x) < 0.001 && Math.abs(velocity.y) < 0.001) {
+        if (!reducedMotion.matches && Math.abs(velocity.x) < 0.001 && Math.abs(velocity.y) < 0.001) {
           group.rotation.y += AUTO_SPEED_Y * delta;
           group.rotation.x += AUTO_SPEED_X * delta;
         }
@@ -270,18 +278,21 @@ const SkillsGlobe = () => {
       if (!container) return;
       const w = container.clientWidth;
       const h = container.clientHeight;
+      if (!w || !h) return;
       camera.aspect = w / h;
+      fitCamera();
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
       cssRenderer.setSize(w, h);
     };
-    window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
     
     // --- Cleanup ---
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       interactionLayer.removeEventListener('pointerdown', handlePointerDown);
       observer.disconnect();
       themeObserver.disconnect();
@@ -299,7 +310,7 @@ const SkillsGlobe = () => {
   }, []);
 
   return (
-    <section className="skills-globe-section" id="skills">
+    <section className={`skills-globe-section ${embedded ? 'skills-globe-embedded' : ''}`} id="skills">
       <div className="container">
         <div className="skills-globe-header">
           <p className="text-caption text-muted">Tools & technologies</p>

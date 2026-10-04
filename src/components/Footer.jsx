@@ -33,9 +33,6 @@ const Footer = () => {
           
           <div className="footer-info">
             <p className="footer-tagline">{footerData.tagline || 'AI undergraduate and full-stack developer.'}</p>
-            <div className="footer-social-wrapper">
-              
-            </div>
           </div>
           
           <div className="footer-divider"></div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Eye, EyeOff, ArrowLeft, ArrowRight } from 'lucide-react';
 import { login } from './adminAuth';
 import './AdminLogin.css';
