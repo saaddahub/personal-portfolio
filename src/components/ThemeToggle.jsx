@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import './ThemeToggle.css';
 
 const ThemeToggle = () => {
-  // Default to dark theme as requested
-  const [isDark, setIsDark] = useState(true);
+  // Preserve the current theme when moving between the portfolio and studio.
+  const [isDark, setIsDark] = useState(() => document.documentElement.getAttribute('data-theme') !== 'light');
 
   useEffect(() => {
     // Apply theme to HTML root element

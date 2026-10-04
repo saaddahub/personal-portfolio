@@ -74,7 +74,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
       <main className="admin-gate-main">
         <div className="admin-gate-header">
           <span className="admin-gate-eyebrow">Authentication Required</span>
-          <h1 className="admin-gate-title">Enter Passcode</h1>
+          <h1 className="admin-gate-title">Sign in to Studio</h1>
           <p className="admin-gate-desc">
             Provide the master studio password to manage project details, sections, and portfolio content.
           </p>

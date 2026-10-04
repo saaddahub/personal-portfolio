@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback, Component } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import './Admin.css';
+import ThemeToggle from '../components/ThemeToggle';
+import AdminOverview from './AdminOverview';
+import './AdminStudio.css';
 import {
   Sliders,
   FolderPlus,
@@ -23,7 +26,9 @@ import {
   Code,
   Layout,
   Lock,
-  KeyRound
+  KeyRound,
+  LayoutDashboard,
+  Search
 } from 'lucide-react';
 import AdminLogin from './AdminLogin';
 import ChangePasswordModal from './ChangePasswordModal';
@@ -205,10 +210,22 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
     toggleSectionVisibility,
     resetToDefaults,
     exportJson,
-    importJson
+    importJson,
+    lastSaved,
+    saveError
   } = usePortfolio();
 
-  const [activeTab, setActiveTab] = useState('hero');
+  const headerRef = useRef(null);
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const observer = new ResizeObserver(([entry]) => {
+      header.parentElement.style.setProperty('--admin-header-height', entry.target.getBoundingClientRect().height + 'px');
+    });
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [toastMessage, setToastMessage] = useState('');
   const [showAddProject, setShowAddProject] = useState(false);
   const [showSplitPreview, setShowSplitPreview] = useState(false);
@@ -225,11 +242,14 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
     image: ''
   });
 
+  const toastTimer = useRef(null);
+  useEffect(() => () => clearTimeout(toastTimer.current), []);
   const showToast = (msg) => {
+    clearTimeout(toastTimer.current);
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(''), 3000);
+    toastTimer.current = setTimeout(() => setToastMessage(''), 4000);
   };
-
+  const [projectQuery, setProjectQuery] = useState('');
   // Draggable slider handler for hero alignment
   const dragTrackRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -312,30 +332,32 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
       if (res.success) {
         showToast('Portfolio configuration imported!');
       } else {
-        alert('Invalid JSON file: ' + res.error);
+        showToast('Import failed: ' + res.error);
       }
     };
+    reader.onerror = () => showToast('Could not read that file. Please try again.');
     reader.readAsText(file);
     e.target.value = '';
   };
 
   return (
     <div className={`admin-portal ${showSplitPreview ? 'admin-view-split' : ''}`}>
-      <div className="admin-bg-glow"></div>
+      <div className="admin-bg-glow" aria-hidden="true"></div>
 
       {/* Admin Top Header */}
-      <header className="admin-header">
+      <header className="admin-header" ref={headerRef}>
         <div className="admin-header-inner">
           <div className="admin-brand">
-            <span className="admin-badge">Admin Studio</span>
-            <h1 className="admin-title">Saad Akhtar Portfolio Studio</h1>
+            <span className="admin-badge" aria-hidden="true">S<span>•</span></span>
+            <h1 className="admin-title">Studio<span>{data.hero.nameFirst} {data.hero.nameLast} / Portfolio</span></h1>
             <span className="admin-status-pill">
               <span className="admin-status-dot"></span>
-              Auto-saved
+              {saveError ? 'Save failed' : 'Saved locally'}
             </span>
           </div>
 
           <div className="admin-header-actions">
+            <div className="admin-theme-toggle"><ThemeToggle /></div>
             <button
               className={`admin-btn ${showSplitPreview ? 'admin-btn-accent' : ''}`}
               onClick={() => setShowSplitPreview(!showSplitPreview)}
@@ -416,6 +438,8 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
       <div className="admin-body">
         {/* Navigation Sidebar */}
         <aside className="admin-sidebar">
+          <div className="admin-nav-category">Workspace</div>
+          <button className={`admin-tab-btn ${activeTab === 'dashboard' ? 'is-active' : ''}`} onClick={() => setActiveTab('dashboard')}><LayoutDashboard size={16} /> Overview <span className="admin-tab-count">Home</span></button>
           <div className="admin-nav-category">Main Sections</div>
 
           <button
@@ -503,7 +527,9 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
         </aside>
 
         {/* Content Pane */}
-        <main className="admin-main">
+        <main className="admin-main" key={activeTab}>
+          {saveError && <div className="admin-save-warning" role="alert">{saveError}</div>}
+          {activeTab === 'dashboard' && <AdminOverview data={data} lastSaved={lastSaved} saveError={saveError} onNavigate={setActiveTab} onExport={exportJson} onAddProject={() => { setActiveTab('projects'); setShowAddProject(true); }} />}
           {/* TAB: HERO & DRAG LAYOUT */}
           {activeTab === 'hero' && (
             <div className="admin-tab-content">
@@ -535,6 +561,9 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
                   <div
                     className="drag-track"
+                    role="slider" tabIndex={0} aria-label="Hero horizontal position" aria-valuemin={-40} aria-valuemax={40} aria-valuenow={data.hero.dragOffsetPercent || 0}
+                    onKeyDown={e => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) { e.preventDefault(); const offset = e.key === 'Home' ? -40 : e.key === 'End' ? 40 : Math.max(-40, Math.min(40, (data.hero.dragOffsetPercent || 0) + (e.key === 'ArrowRight' ? 2 : -2))); updateHero({ dragOffsetPercent: offset, alignment: offset < -14 ? 'left' : offset > 14 ? 'right' : 'center' }); } }}
+                    onTouchStart={e => handleDrag(e.touches[0].clientX)} onTouchMove={e => handleDrag(e.touches[0].clientX)}
                     ref={dragTrackRef}
                     onMouseDown={(e) => {
                       setIsDragging(true);
@@ -550,7 +579,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                     <div
                       className="drag-handle"
                       style={{
-                        left: `calc(${((data.hero.dragOffsetPercent || 0) + 40) / 80 * 100}% - 45px)`
+                        left: `clamp(5px, calc(${((data.hero.dragOffsetPercent || 0) + 40) / 80 * 100}% - 45px), calc(100% - 95px))`
                       }}
                       onMouseDown={(e) => {
                         e.stopPropagation();
@@ -841,7 +870,11 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
               {/* Projects List with Reordering */}
               <div className="projects-admin-list">
+                <div className="admin-project-search"><Search size={17} /><input className="admin-input" aria-label="Search projects" placeholder="Find a project by name or technology…" value={projectQuery} onChange={event => setProjectQuery(event.target.value)} /></div>
+                {data.projects.length === 0 && <div className="admin-empty-state"><FolderPlus size={28} /><h3>Your next project starts here</h3><p>Add your first project to bring your portfolio to life.</p></div>}
+                {data.projects.length > 0 && !data.projects.some(project => [project.client, ...project.tags].join(' ').toLowerCase().includes(projectQuery.toLowerCase())) && <p className="admin-empty-state">No projects match your search.</p>}
                 {data.projects.map((project, index) => (
+                  <div key={project.id} hidden={!([project.client, ...project.tags].join(' ').toLowerCase().includes(projectQuery.toLowerCase()))}>
                   <div key={project.id} className="project-admin-item">
                     <div className="project-admin-item-header">
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
@@ -853,6 +886,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                       </div>
 
                       <div className="project-admin-actions">
+                        <button className="admin-btn" aria-pressed={project.visible !== false} onClick={() => updateProject(project.id, { visible: project.visible === false })} title="Toggle project visibility"><Eye size={14} />{project.visible === false ? 'Hidden' : 'Visible'}</button>
                         {/* Drag / Move Left / Move Right in the rail */}
                         <button
                           className="project-reorder-btn"
@@ -962,6 +996,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                         placeholder="e.g. React, Next.js, TypeScript"
                       />
                     </div>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -1727,6 +1762,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
       {/* Change Password Modal */}
       <ChangePasswordModal
+        key={showChangePassword ? 'open' : 'closed'}
         isOpen={showChangePassword}
         onClose={() => setShowChangePassword(false)}
         onSuccess={(msg) => showToast(msg)}
@@ -1734,7 +1770,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
       {/* Floating Save Toast */}
       {toastMessage && (
-        <div className="admin-toast">
+        <div className="admin-toast" role="status" aria-live="polite">
           <Check size={16} color="var(--color-accent-signal)" />
           <span>{toastMessage}</span>
         </div>

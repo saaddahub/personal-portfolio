@@ -149,7 +149,7 @@
   letter-spacing: normal; 
   /* Pull the script word tightly into the sans word */
   margin-left: -0.05em; 
-  color: #7C3AED;
+  color: var(--color-accent-brand);
 }
 
 .hero-desc {

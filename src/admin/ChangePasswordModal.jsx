@@ -47,7 +47,7 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="admin-modal-card">
+      <div className="admin-modal-card" role="dialog" aria-modal="true" aria-labelledby="password-modal-title" onKeyDown={event => { if (event.key === 'Escape') onClose(); if (event.key === 'Tab') { const controls = [...event.currentTarget.querySelectorAll('button:not(:disabled), input:not(:disabled)')]; const first = controls[0]; const last = controls[controls.length - 1]; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } } }}>
         <button
           className="admin-modal-close"
           onClick={onClose}
@@ -59,7 +59,7 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
 
         <div className="admin-modal-header">
           <span className="admin-modal-eyebrow">Security Credentials</span>
-          <h3 className="admin-modal-title">Change Master Passcode</h3>
+          <h3 id="password-modal-title" className="admin-modal-title">Change Master Passcode</h3>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-modal-form">

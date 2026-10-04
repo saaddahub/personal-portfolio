@@ -189,6 +189,36 @@ export const DEFAULT_PORTFOLIO_DATA = {
   }
 };
 
+// Validate known fields before accepting saved or imported content.
+export function normalizePortfolio(input, defaults = DEFAULT_PORTFOLIO_DATA, path = 'portfolio') {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error(path + ' must be an object');
+  const result = { ...defaults };
+  for (const [key, value] of Object.entries(defaults)) {
+    if (!(key in input)) continue;
+    const next = input[key];
+    const location = path + '.' + key;
+    if (Array.isArray(value)) {
+      if (!Array.isArray(next)) throw new Error(location + ' must be a list');
+      result[key] = next.map((item, index) => {
+        if (value[0] && typeof value[0] === 'object') {
+          const normalized = normalizePortfolio(item, value[0], location);
+          if ('id' in normalized && !item.id) normalized.id = key + '-' + index;
+          return normalized;
+        }
+        if (typeof item !== typeof value[0]) throw new Error(location + ' contains an invalid item');
+        return item;
+      });
+      if (result[key].some((item, index, list) => item?.id && list.findIndex(other => other.id === item.id) !== index)) throw new Error(location + ' contains duplicate IDs');
+    } else if (value && typeof value === 'object') {
+      result[key] = normalizePortfolio(next, value, location);
+    } else {
+      if (typeof next !== typeof value || (typeof next === 'number' && !Number.isFinite(next))) throw new Error(location + ' has an invalid value');
+      result[key] = next;
+    }
+  }
+  return result;
+}
+
 const STORAGE_KEY = 'saad_portfolio_cms_data_v1';
 
 const PortfolioContext = createContext(null);
@@ -199,23 +229,7 @@ export const PortfolioProvider = ({ children }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Merge deep with default to ensure no missing keys
-        return {
-          ...DEFAULT_PORTFOLIO_DATA,
-          ...parsed,
-          hero: { ...DEFAULT_PORTFOLIO_DATA.hero, ...parsed.hero },
-          punchline: { ...DEFAULT_PORTFOLIO_DATA.punchline, ...parsed.punchline },
-          about: { ...DEFAULT_PORTFOLIO_DATA.about, ...parsed.about },
-          stats: { ...DEFAULT_PORTFOLIO_DATA.stats, ...parsed.stats },
-          projects: parsed.projects || DEFAULT_PORTFOLIO_DATA.projects,
-          process: { ...DEFAULT_PORTFOLIO_DATA.process, ...parsed.process },
-          ctaSplit: { ...DEFAULT_PORTFOLIO_DATA.ctaSplit, ...parsed.ctaSplit },
-          faq: { ...DEFAULT_PORTFOLIO_DATA.faq, ...parsed.faq },
-          finalCta: { ...DEFAULT_PORTFOLIO_DATA.finalCta, ...parsed.finalCta },
-          footer: { ...DEFAULT_PORTFOLIO_DATA.footer, ...parsed.footer },
-          socials: { ...DEFAULT_PORTFOLIO_DATA.socials, ...parsed.socials },
-          sectionVisibility: { ...DEFAULT_PORTFOLIO_DATA.sectionVisibility, ...parsed.sectionVisibility }
-        };
+        return normalizePortfolio(parsed);
       }
     } catch (e) {
       console.error('Error loading portfolio data from localStorage', e);
@@ -223,17 +237,29 @@ export const PortfolioProvider = ({ children }) => {
     return DEFAULT_PORTFOLIO_DATA;
   });
 
-  const [lastSaved, setLastSaved] = useState(() => Date.now());
+  const [lastSaved, setLastSaved] = useState(null);
+  const [saveError, setSaveError] = useState('');
 
   // Automatically save changes to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       setLastSaved(Date.now());
+      setSaveError('');
     } catch (e) {
+      setSaveError('Changes could not be saved. Export a backup before leaving.');
       console.error('Error saving portfolio data to localStorage', e);
     }
   }, [data]);
+
+  useEffect(() => {
+    const sync = (event) => {
+      if (event.key !== STORAGE_KEY || !event.newValue) return;
+      try { setData(normalizePortfolio(JSON.parse(event.newValue))); } catch { /* Keep valid current content. */ }
+    };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, []);
 
   const updateSection = (sectionKey, updateFnOrObj) => {
     setData((prev) => {
@@ -255,7 +281,7 @@ export const PortfolioProvider = ({ children }) => {
       ...prev,
       projects: [
         {
-          id: 'proj-' + Date.now(),
+          id: 'proj-' + crypto.randomUUID(),
           client: 'New Project',
           outcome: 'Description of the project outcome and key technologies used.',
           type: 'browser',
@@ -312,7 +338,7 @@ export const PortfolioProvider = ({ children }) => {
 
   const resetToDefaults = () => {
     setData(DEFAULT_PORTFOLIO_DATA);
-    localStorage.removeItem(STORAGE_KEY);
+
   };
 
   const exportJson = () => {
@@ -329,10 +355,8 @@ export const PortfolioProvider = ({ children }) => {
   const importJson = (jsonString) => {
     try {
       const parsed = JSON.parse(jsonString);
-      setData((prev) => ({
-        ...prev,
-        ...parsed
-      }));
+      const normalized = normalizePortfolio(parsed);
+      setData(normalized);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
@@ -354,7 +378,8 @@ export const PortfolioProvider = ({ children }) => {
         resetToDefaults,
         exportJson,
         importJson,
-        lastSaved
+        lastSaved,
+        saveError
       }}
     >
       {children}

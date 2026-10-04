@@ -1,8 +1,9 @@
 import './ContactButton.css';
 
-const ContactButton = ({ text = "Contacts", href = "#contact", className = "" }) => {
+const ContactButton = ({ text = "Contacts", href = "#contact", className = "", onClick }) => {
+  const Tag = onClick ? 'button' : 'a';
   return (
-    <a href={href} className={`contact-btn-wrapper ${className}`}>
+    <Tag href={onClick ? undefined : href} type={onClick ? 'button' : undefined} onClick={onClick} className={`contact-btn-wrapper ${className}`}>
       <div className="contact-btn-inner-bg">
         <div className="contact-btn-slider"></div>
         <div className="contact-btn-icon-wrapper">
@@ -25,7 +26,7 @@ const ContactButton = ({ text = "Contacts", href = "#contact", className = "" })
       <div className="contact-btn-text">
         {text}
       </div>
-    </a>
+    </Tag>
   );
 };
 
