@@ -4,9 +4,9 @@ import { login } from './adminAuth';
 import './AdminLogin.css';
 
 const AdminLogin = ({ onLoginSuccess, onCancel }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [capsLockActive, setCapsLockActive] = useState(false);
@@ -36,7 +36,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
     setIsLoading(true);
 
     try {
-      const success = await login(password.trim(), rememberMe);
+      const success = await login(email.trim(), password);
       if (success) {
         setIsLoading(false);
         if (onLoginSuccess) {
@@ -49,9 +49,9 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
           inputRef.current.select();
         }
       }
-    } catch {
+    } catch (failure) {
       setIsLoading(false);
-      setError('// Authentication error: verification failed');
+      setError(failure.message || 'Sign-in failed.');
     }
   };
 
@@ -76,14 +76,15 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
           <span className="admin-gate-eyebrow">Authentication Required</span>
           <h1 className="admin-gate-title">Sign in to Studio</h1>
           <p className="admin-gate-desc">
-            Provide the master studio password to manage project details, sections, and portfolio content.
+            Use your admin email and password to manage project details, sections, and portfolio content.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-gate-form">
+          <div className="admin-gate-field"><label htmlFor="admin-email">Email</label><input id="admin-email" type="email" className="admin-gate-input" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" required disabled={isLoading} /></div>
           <div className="admin-gate-field">
             <div className="admin-gate-label-row">
-              <label htmlFor="admin-passcode">Master Passcode</label>
+              <label htmlFor="admin-passcode">Password</label>
               {capsLockActive && <span className="admin-gate-caps">Caps Lock On</span>}
             </div>
 
@@ -118,15 +119,7 @@ const AdminLogin = ({ onLoginSuccess, onCancel }) => {
             {error && <div className="admin-gate-error">{error}</div>}
           </div>
 
-          <label className="admin-gate-remember">
-            <input
-              type="checkbox"
-              className="admin-gate-checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-            <span>Remember this device</span>
-          </label>
+
 
           <button
             type="submit"

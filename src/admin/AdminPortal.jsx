@@ -32,7 +32,9 @@ import {
 } from 'lucide-react';
 import AdminLogin from './AdminLogin';
 import ChangePasswordModal from './ChangePasswordModal';
-import { isAuthenticated, logout } from './adminAuth';
+import { logout } from './adminAuth';
+import { supabase, isAdmin } from '../lib/supabase';
+import ProjectImageInput from './ProjectImageInput';
 
 // Error Boundary to prevent white/black screens
 class AdminErrorBoundary extends Component {
@@ -212,7 +214,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
     exportJson,
     importJson,
     lastSaved,
-    saveError
+    saveError, publishPortfolio, cloudError, cloudReady, publishing
   } = usePortfolio();
 
   const headerRef = useRef(null);
@@ -357,6 +359,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
           </div>
 
           <div className="admin-header-actions">
+            <button className="admin-btn" disabled={!cloudReady || publishing} onClick={async () => { if (await publishPortfolio()) showToast("Portfolio published"); }}>{publishing ? "Publishing..." : "Publish changes"}</button>
             <div className="admin-theme-toggle"><ThemeToggle /></div>
             <button
               className={`admin-btn ${showSplitPreview ? 'admin-btn-accent' : ''}`}
@@ -528,6 +531,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
         {/* Content Pane */}
         <main className="admin-main" key={activeTab}>
+          {cloudError && <div className="admin-save-warning" role="alert">{cloudError}</div>}
           {saveError && <div className="admin-save-warning" role="alert">{saveError}</div>}
           {activeTab === 'dashboard' && <AdminOverview data={data} lastSaved={lastSaved} saveError={saveError} onNavigate={setActiveTab} onExport={exportJson} onAddProject={() => { setActiveTab('projects'); setShowAddProject(true); }} />}
           {/* TAB: HERO & DRAG LAYOUT */}
@@ -846,14 +850,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                     </div>
 
                     <div className="admin-field-group">
-                      <label className="admin-label">Image Preview URL (optional)</label>
-                      <input
-                        type="text"
-                        placeholder="/images/netflix-visualiser.png or https://..."
-                        className="admin-input"
-                        value={newProject.image}
-                        onChange={(e) => setNewProject({ ...newProject, image: e.target.value })}
-                      />
+                      <ProjectImageInput value={newProject.image} name={newProject.client} onChange={image => setNewProject(prev => ({ ...prev, image }))} />
                     </div>
                   </div>
 
@@ -977,13 +974,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                       </div>
 
                       <div className="admin-field-group">
-                        <label className="admin-label">Image Preview URL</label>
-                        <input
-                          type="text"
-                          className="admin-input"
-                          value={project.image || ''}
-                          onChange={(e) => updateProject(project.id, { image: e.target.value })}
-                        />
+                        <ProjectImageInput value={project.image || ""} name={project.client} onChange={image => updateProject(project.id, { image })} />
                       </div>
                     </div>
 
@@ -1780,11 +1771,15 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 };
 
 const AdminPortal = (props) => {
-  const [authenticated, setAuthenticated] = useState(() => isAuthenticated());
+  const [authenticated, setAuthenticated] = useState(false);
+  useEffect(() => {
+    if (!supabase) return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setAuthenticated(isAdmin(session)));
+    return () => subscription.unsubscribe();
+  }, []);
 
-  const handleLogout = () => {
-    logout();
-    setAuthenticated(false);
+  const handleLogout = async () => {
+    try { await logout(); setAuthenticated(false); } catch (error) { window.alert(error.message); }
   };
 
   return (

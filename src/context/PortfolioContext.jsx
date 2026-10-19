@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { supabase, isAdmin } from '../lib/supabase';
 
 export const DEFAULT_PORTFOLIO_DATA = {
   hero: {
@@ -224,24 +225,65 @@ const STORAGE_KEY = 'saad_portfolio_cms_data_v1';
 const PortfolioContext = createContext(null);
 
 export const PortfolioProvider = ({ children }) => {
-  const [data, setData] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return normalizePortfolio(parsed);
+  const [data, setData] = useState(DEFAULT_PORTFOLIO_DATA);
+  const [adminSession, setAdminSession] = useState(null);
+  useEffect(() => {
+    if (!supabase) return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setAdminSession(isAdmin(session)));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const [loadedFor, setLoadedFor] = useState(null);
+  const [cloudReady, setCloudReady] = useState(false);
+  const [cloudError, setCloudError] = useState('');
+  const [publishing, setPublishing] = useState(false);
+  const publishLock = useRef(false);
+  useEffect(() => {
+    if (adminSession === null && supabase) return;
+    let cancelled = false;
+    setCloudReady(false);
+    async function load() {
+      if (!supabase) { setCloudError('Supabase is not configured.'); return; }
+      try {
+        const { data: row, error } = await supabase.from('portfolio_content').select('data').eq('id', 'main').maybeSingle();
+        if (error) throw error;
+        if (cancelled) return;
+        // Preserve this administrator's local draft; visitors load published content.
+        const draft = localStorage.getItem(STORAGE_KEY);
+        if (adminSession && draft) setData(normalizePortfolio(JSON.parse(draft)));
+        else setData(row ? normalizePortfolio(row.data) : DEFAULT_PORTFOLIO_DATA);
+        setCloudError('');
+        setLoadedFor(adminSession);
+        setCloudReady(true);
+      } catch (error) {
+        if (!cancelled) setCloudError('Cloud content could not load: ' + error.message + '. Check Supabase setup and reload.');
       }
-    } catch (e) {
-      console.error('Error loading portfolio data from localStorage', e);
     }
-    return DEFAULT_PORTFOLIO_DATA;
-  });
+    load();
+    return () => { cancelled = true; };
+  }, [adminSession]);
+
+  const publishPortfolio = async () => {
+    if (!cloudReady || !supabase || publishLock.current) return false;
+    publishLock.current = true;
+    setPublishing(true);
+    setCloudError('');
+    try {
+      const { error } = await supabase.from('portfolio_content').upsert({ id: 'main', data, updated_at: new Date().toISOString() });
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      setCloudError('Publishing failed: ' + error.message + '. Your local draft is retained.');
+      return false;
+    } finally { publishLock.current = false; setPublishing(false); }
+  };
 
   const [lastSaved, setLastSaved] = useState(null);
   const [saveError, setSaveError] = useState('');
 
   // Automatically save changes to localStorage
   useEffect(() => {
+    if (!cloudReady || !adminSession || loadedFor !== adminSession) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       setLastSaved(Date.now());
@@ -250,16 +292,17 @@ export const PortfolioProvider = ({ children }) => {
       setSaveError('Changes could not be saved. Export a backup before leaving.');
       console.error('Error saving portfolio data to localStorage', e);
     }
-  }, [data]);
+  }, [data, cloudReady, adminSession, loadedFor]);
 
   useEffect(() => {
     const sync = (event) => {
+      if (!adminSession) return;
       if (event.key !== STORAGE_KEY || !event.newValue) return;
       try { setData(normalizePortfolio(JSON.parse(event.newValue))); } catch { /* Keep valid current content. */ }
     };
     window.addEventListener('storage', sync);
     return () => window.removeEventListener('storage', sync);
-  }, []);
+  }, [adminSession]);
 
   const updateSection = (sectionKey, updateFnOrObj) => {
     setData((prev) => {
@@ -379,7 +422,7 @@ export const PortfolioProvider = ({ children }) => {
         exportJson,
         importJson,
         lastSaved,
-        saveError
+        saveError, cloudReady, cloudError, publishing, publishPortfolio
       }}
     >
       {children}

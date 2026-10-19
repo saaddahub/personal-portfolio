@@ -19,8 +19,8 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
       setError('// Current password required');
       return;
     }
-    if (!newPassword || newPassword.length < 4) {
-      setError('// New password must be at least 4 characters');
+    if (!newPassword || newPassword.length < 8) {
+      setError('// New password must be at least 8 characters');
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -83,7 +83,7 @@ const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
               className="admin-modal-input"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Min. 4 characters"
+              placeholder="Min. 8 characters"
               required
             />
           </div>

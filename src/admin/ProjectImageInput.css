@@ -1,0 +1,26 @@
+.project-image-field { min-width: 0; }
+.project-image-drop { position: relative; border: 1px dashed var(--color-border-default); border-radius: 10px; overflow: hidden; background: var(--color-bg); transition: border-color .2s, background .2s; }
+.project-image-drop.is-dragging { border-color: var(--studio-purple); background: color-mix(in srgb, var(--studio-purple) 8%, var(--color-bg)); }
+.project-image-editor-preview { display: block; width: 100%; height: 200px; object-fit: contain; }
+.project-image-empty { min-height: 180px; padding: 1.5rem 1rem; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; gap: .65rem; }
+.project-image-empty > svg { color: var(--studio-purple); }
+.project-image-empty p { font-size: .95rem; color: var(--color-text-primary); }
+.project-image-empty span, .project-image-help, .project-image-link, .project-image-feedback { color: var(--color-text-secondary); font-size: .875rem; line-height: 1.5; }
+.project-image-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; }
+.project-image-help { margin-top: .6rem; }
+.project-image-link { margin-top: .85rem; }
+.project-image-link summary { display: flex; align-items: center; gap: .4rem; width: fit-content; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.project-image-link summary:focus-visible { outline: 2px solid var(--studio-purple); outline-offset: 4px; }
+.project-image-link label { display: block; margin: .8rem 0 .4rem; }
+.project-image-link-row { display: flex; gap: .5rem; }
+.project-image-link-row input { min-width: 0; font-size: 1rem; }
+.project-image-link-row button { flex-shrink: 0; }
+.project-image-error { color: #fca5a5; font-size: .875rem; margin-top: .6rem; line-height: 1.5; }
+[data-theme='light'] .project-image-error { color: #b42318; }
+.project-image-feedback { display: block; margin-top: .4rem; }
+.project-image-feedback:empty { display: none; }
+.project-image-processing { position: absolute; inset: 0; display: flex; gap: .6rem; align-items: center; justify-content: center; background: color-mix(in srgb, var(--color-bg) 90%, transparent); color: var(--color-text-primary); font-size: .9rem; }
+.project-image-processing svg { animation: imageProcessing 1s linear infinite; }
+.project-image-field button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+@keyframes imageProcessing { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .project-image-processing svg { animation: none; } .project-image-drop { transition: none; } }
