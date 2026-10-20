@@ -1,103 +1,131 @@
-import { useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight, ArrowDown } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { projectColor, projectPath } from '../lib/projects';
 import './Projects.css';
 
-function ProjectArtwork({ project, index }) {
-  const [failedImage, setFailedImage] = useState('');
-  return project.image && failedImage !== project.image ? (
-    <img src={project.image} alt={`${project.client} preview`} draggable="false" onError={() => setFailedImage(project.image)} />
-  ) : (
-    <div className="showcase-artwork" aria-hidden="true">
-      <span>{String(index + 1).padStart(2, '0')}</span>
-      <div className="showcase-artwork-window"><i /><i /><i /><div /><div /><div /></div>
-      <div className="showcase-artwork-orbit" />
-    </div>
-  );
+gsap.registerPlugin(ScrollTrigger);
+
+function ProjectImage({ project, index }) {
+  const [failed, setFailed] = useState('');
+  if (project.image && failed !== project.image) {
+    return <img src={project.image} alt={`${project.client} project preview`} loading={index === 0 ? 'eager' : 'lazy'} onError={() => setFailed(project.image)} />;
+  }
+  return <div className="work-image-fallback" aria-hidden="true"><span>{String(index + 1).padStart(2, '0')}</span><div /><small>{project.tags?.slice(0, 2).join(' / ') || 'Selected project'}</small></div>;
 }
 
-function WorkShowcase({ projects }) {
-  const [selection, setSelection] = useState({ id: null, direction: 1 });
-  const index = Math.max(0, projects.findIndex(project => project.id === selection.id));
-  const project = projects[index];
-  const color = projectColor(project, index);
-  const previous = projects[(index - 1 + projects.length) % projects.length];
-  const next = projects[(index + 1) % projects.length];
-  const frame = useRef(null);
-  const palette = useRef(null);
-  const dragged = useRef(false);
-  const inView = useInView(frame, { amount: 0.15 });
-  const reduced = useReducedMotion();
-  const pointerX = useMotionValue(0);
-  const pointerY = useMotionValue(0);
-  const smoothX = useSpring(pointerX, { stiffness: 100, damping: 24 });
-  const smoothY = useSpring(pointerY, { stiffness: 100, damping: 24 });
-  const rotateX = useTransform(smoothY, [-0.5, 0.5], [7, -7]);
-  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-9, 9]);
+function ScrollWork({ projects, animationReady }) {
+  const section = useRef(null);
+  const timeline = useRef(null);
+  const activeRef = useRef(0);
+  const [active, setActive] = useState(0);
+  const [pinned, setPinned] = useState(false);
+  const ids = projects.map(project => project.id).join('|');
 
-  const select = target => {
-    const resolved = (target + projects.length) % projects.length;
-    if (resolved === index) return;
-    setSelection({ id: projects[resolved].id, direction: target > index ? 1 : -1 });
-    const swatch = palette.current?.children[resolved];
-    if (swatch) palette.current.scrollTo({ left: Math.max(0, swatch.offsetLeft - palette.current.offsetLeft - palette.current.clientWidth / 2 + swatch.clientWidth / 2), behavior: reduced ? 'instant' : 'smooth' });
+  useEffect(() => {
+    if (!animationReady) return;
+    let disposed = false;
+    const media = gsap.matchMedia();
+    media.add({ desktop: '(min-width: 800px) and (min-height: 620px)', reduced: '(prefers-reduced-motion: reduce)' }, context => {
+      const { desktop, reduced } = context.conditions;
+      const root = section.current;
+      const articles = [...root.querySelectorAll('.work-entry')];
+      if (!desktop || reduced || projects.length < 2) {
+        root.classList.remove('is-pinned');
+        setPinned(false);
+        if (!reduced) articles.forEach(article => {
+          gsap.fromTo(article.querySelector('.work-visual'), { y: 36, opacity: 0.35 }, {
+            y: 0, opacity: 1, ease: 'none',
+            scrollTrigger: { trigger: article, start: 'top 90%', end: 'top 45%', scrub: true },
+          });
+        });
+        return;
+      }
+      root.classList.add('is-pinned');
+      setPinned(true);
+      const visuals = articles.map(article => article.querySelector('.work-visual'));
+      const copy = articles.map(article => article.querySelector('.work-entry-copy'));
+      const length = projects.length - 0.35;
+      activeRef.current = 0;
+      setActive(0);
+      gsap.set(visuals.slice(1), { clipPath: 'inset(100% 0% 0% 0%)', yPercent: 8 });
+      gsap.set(copy.slice(1), { autoAlpha: 0, y: 24 });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: 'top top',
+          end: () => '+=' + Math.round((projects.length - 1) * window.innerHeight * 0.9 + window.innerHeight * 0.4),
+          pin: root.querySelector('.work-pin'),
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+        onUpdate() {
+          const current = Math.min(projects.length - 1, Math.floor(this.time() + 0.1));
+          if (current !== activeRef.current) { activeRef.current = current; setActive(current); }
+        },
+      });
+      tl.to(root.querySelector('.work-progress-fill'), { scaleX: 1, duration: length, ease: 'none' }, 0);
+      for (let i = 1; i < projects.length; i++) {
+        tl.to(copy[i - 1], { autoAlpha: 0, y: -24, duration: 0.22, ease: 'power1.in' }, i - 0.35);
+        tl.to(visuals[i - 1].querySelector('.work-image-inner'), { scale: 0.94, opacity: 0.7, duration: 0.6, ease: 'none' }, i - 0.35);
+        tl.to(visuals[i], { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, duration: 0.6, ease: 'power2.inOut' }, i - 0.35);
+        tl.to(copy[i], { autoAlpha: 1, y: 0, duration: 0.32, ease: 'power2.out' }, i - 0.1);
+      }
+      timeline.current = tl;
+      return () => { timeline.current = null; root.classList.remove('is-pinned'); };
+    }, section);
+    document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
+    return () => { disposed = true; media.revert(); };
+  // The animation geometry depends on project order/count, not on edited copy.
+  }, [animationReady, ids, projects.length]);
+
+  const jumpTo = index => {
+    const trigger = timeline.current?.scrollTrigger;
+    if (!trigger) return;
+    const length = projects.length - 0.35;
+    window.scrollTo({ top: trigger.start + (index / length) * (trigger.end - trigger.start), behavior: 'instant' });
   };
-  const resetTilt = () => { pointerX.set(0); pointerY.set(0); };
-  const transition = reduced ? { duration: 0 } : { type: 'spring', stiffness: 170, damping: 23, mass: 0.8 };
+
   return (
-    <motion.div ref={frame} className={`work-showcase ${inView ? 'is-inview' : ''}`} style={{ '--showcase-color': color }}
-      initial={reduced ? false : { opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: reduced ? 0 : 0.8 }}>
-      <div className="showcase-grain" aria-hidden="true" />
-      <AnimatePresence initial={false}>
-        <motion.div key={color} className="showcase-atmosphere" style={{ background: `radial-gradient(ellipse at 50% 48%, ${color}38, transparent 65%)` }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : 0.9 }} aria-hidden="true" />
-      </AnimatePresence>
-      <header className="showcase-header"><div><span className="showcase-eyebrow"><i /> A few things I've built</span><h2 id="work-heading">Ideas into<br /><em>interfaces.</em></h2></div><span className="showcase-counter"><motion.b key={index} initial={reduced ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>{String(index + 1).padStart(2, '0')}</motion.b><span>/ {String(projects.length).padStart(2, '0')}</span></span></header>
-
-      <div className="showcase-stage" onPointerMove={event => {
-        if (reduced || event.pointerType !== 'mouse') return;
-        const bounds = event.currentTarget.getBoundingClientRect();
-        pointerX.set((event.clientX - bounds.left) / bounds.width - 0.5);
-        pointerY.set((event.clientY - bounds.top) / bounds.height - 0.5);
-      }} onPointerLeave={resetTilt}>
-        <div className="showcase-orbits" aria-hidden="true"><i /><i /><i /></div>
-        <div className="showcase-floor" aria-hidden="true" />
-        <motion.div className="showcase-deck" style={reduced ? {} : { rotateX, rotateY }}>
-          {projects.length > 1 && <>
-            <motion.button className="showcase-ghost showcase-ghost-left" aria-label={`Previous project: ${previous.client}`} onClick={() => select(index - 1)} style={{ background: projectColor(previous, (index - 1 + projects.length) % projects.length) }} animate={{ rotate: -10, x: '-8%', y: '5%' }} whileHover={reduced ? {} : { rotate: -13, x: '-12%' }} transition={transition}><span aria-hidden="true">{previous.tags?.[0] || 'Project'}</span></motion.button>
-            <motion.button className="showcase-ghost showcase-ghost-right" aria-label={`Next project: ${next.client}`} onClick={() => select(index + 1)} style={{ background: projectColor(next, (index + 1) % projects.length) }} animate={{ rotate: 8, x: '8%', y: '3%' }} whileHover={reduced ? {} : { rotate: 12, x: '12%' }} transition={transition}><span aria-hidden="true">{next.tags?.[0] || 'Project'}</span></motion.button>
-          </>}
-          <AnimatePresence initial={false} mode="popLayout" custom={selection.direction}>
-            <motion.div key={project.id} className="showcase-card-position" custom={selection.direction}
-              variants={{ enter: direction => ({ opacity: 0, x: reduced ? 0 : direction * 65, y: reduced ? 0 : 20, rotate: reduced ? 0 : direction * 5, scale: reduced ? 1 : 0.9 }), center: { opacity: 1, x: 0, y: 0, rotate: -2, scale: 1 }, exit: direction => ({ opacity: 0, x: reduced ? 0 : direction * -75, rotate: reduced ? 0 : direction * -7, scale: reduced ? 1 : 0.92 }) }} initial="enter" animate="center" exit="exit" transition={transition}>
-              <motion.div className="showcase-card-float" animate={!reduced && inView ? { y: [0, -9, 0] } : { y: 0 }} transition={{ duration: 5, repeat: !reduced && inView ? Infinity : 0, ease: 'easeInOut' }}>
-                <motion.div className="showcase-card" style={{ '--card-color': color }} drag={!reduced && projects.length > 1 ? 'x' : false} dragConstraints={{ left: 0, right: 0 }} dragElastic={0.18} onDragStart={() => { dragged.current = true; }} onDragEnd={(_event, info) => { if (Math.abs(info.offset.x) > 40 || Math.abs(info.velocity.x) > 400) select(index + (info.offset.x < 0 || info.velocity.x < -400 ? 1 : -1)); }}>
-                  <a href={projectPath(project.id)} aria-label={`Explore ${project.client}`} onPointerDown={() => { dragged.current = false; }} onClick={event => { if (dragged.current) event.preventDefault(); }} draggable="false">
-                    <div className="showcase-browser"><span><i /><i /><i /></span><small>{project.url || project.tags?.slice(0, 2).join(' / ') || 'Selected project'}</small><ArrowUpRight size={13} /></div>
-                    <div className="showcase-image"><ProjectArtwork project={project} index={index} /><div className="showcase-glass" /><span className="showcase-open"><ArrowUpRight size={22} /></span></div>
-                  </a>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
+    <section id="work" ref={section} className="projects-section" aria-labelledby="work-heading">
+      <div className="work-pin">
+        <div className="container work-layout">
+          <header className="work-section-heading"><div><span className="work-kicker">Portfolio / Selected projects</span><h2 id="work-heading">Selected work<span>.</span></h2></div><span className="work-section-note">Development, data &amp; applied AI</span></header>
+          <div className="work-entries">
+            {projects.map((project, index) => {
+              const inactive = pinned && active !== index;
+              return <article key={project.id} className="work-entry" style={{ '--work-accent': projectColor(project, index), '--work-order': index }} aria-hidden={inactive || undefined}>
+                <div className="work-entry-copy">
+                  <span className="work-entry-number">{String(index + 1).padStart(2, '0')} <i /> {project.tags?.[0] || 'Project'}</span>
+                  <h3>{project.client}</h3>
+                  <p>{project.outcome}</p>
+                  <div className="work-technologies">{project.tags?.slice(0, 4).map((tag, i) => <span key={`${tag}-${i}`}>{tag}</span>)}</div>
+                  <a className="work-case-link" href={projectPath(project.id)} tabIndex={inactive ? -1 : undefined}>Explore project <ArrowUpRight size={18} /></a>
+                </div>
+                <a className="work-visual" href={projectPath(project.id)} tabIndex={inactive ? -1 : undefined} aria-label={`View ${project.client}`}>
+                  <div className="work-image-inner"><ProjectImage project={project} index={index} /></div>
+                  <span className="work-visual-open"><ArrowUpRight size={22} /></span>
+                </a>
+              </article>;
+            })}
+          </div>
+          <footer className="work-scroll-footer" aria-hidden={!pinned || undefined}>
+            <span className="work-scroll-prompt"><ArrowDown size={13} /> Scroll to explore</span>
+            <div className="work-chapters" aria-label="Jump to project">{projects.map((project, index) => <button key={project.id} aria-label={`Scroll to ${project.client}`} aria-current={index === active ? 'step' : undefined} tabIndex={pinned ? 0 : -1} onClick={() => jumpTo(index)} style={{ '--chapter-color': projectColor(project, index) }}><span /><small>{String(index + 1).padStart(2, '0')}</small></button>)}</div>
+            <span className="work-scroll-count">{String(active + 1).padStart(2, '0')} <span>/ {String(projects.length).padStart(2, '0')}</span></span>
+          </footer>
+          <div className="work-progress" aria-hidden="true"><div className="work-progress-fill" /></div>
+        </div>
       </div>
-
-      <div className="showcase-caption" aria-live="polite" aria-atomic="true"><AnimatePresence mode="wait" initial={false}><motion.div key={project.id} initial={{ opacity: 0, y: reduced ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : -8 }} transition={{ duration: reduced ? 0 : 0.18 }}><span>{project.tags?.slice(0, 3).join(' / ') || 'Selected work'}</span><h3><a href={projectPath(project.id)}>{project.client}<ArrowUpRight size={20} /></a></h3></motion.div></AnimatePresence></div>
-      <footer className="showcase-controls"><button className="showcase-arrow" disabled={projects.length < 2} onClick={() => select(index - 1)} aria-label="Previous project"><ArrowLeft size={18} /></button><div className="showcase-palette" ref={palette} aria-label="Choose a project">{projects.map((item, i) => <button key={item.id} className={`showcase-swatch ${i === index ? 'is-selected' : ''}`} style={{ '--swatch-color': projectColor(item, i) }} aria-label={`Preview ${item.client}`} aria-pressed={i === index} onPointerEnter={event => { if (event.pointerType === 'mouse') select(i); }} onClick={() => select(i)} onKeyDown={event => {
-        const target = event.key === 'ArrowRight' ? i + 1 : event.key === 'ArrowLeft' ? i - 1 : event.key === 'Home' ? 0 : event.key === 'End' ? projects.length - 1 : null;
-        if (target === null) return;
-        event.preventDefault(); select(target); palette.current?.children[(target + projects.length) % projects.length]?.focus();
-      }}><span />{i === index && <motion.i layoutId="work-swatch-indicator" transition={transition} />}</button>)}</div><button className="showcase-arrow" disabled={projects.length < 2} onClick={() => select(index + 1)} aria-label="Next project"><ArrowRight size={18} /></button></footer>
-      <span className="showcase-signature" aria-hidden="true">Selected work · Designed to be explored</span>
-    </motion.div>
+    </section>
   );
 }
 
-export default function Projects() {
+export default function Projects({ animationReady = true }) {
   const { data } = usePortfolio();
   const projects = data.projects.filter(project => project.visible !== false);
-  if (!projects.length) return null;
-  return <section className="projects-section" id="work" aria-labelledby="work-heading"><div className="container"><WorkShowcase projects={projects} /></div></section>;
+  return projects.length ? <ScrollWork projects={projects} animationReady={animationReady} /> : null;
 }

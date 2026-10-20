@@ -148,7 +148,7 @@ function PortfolioMain() {
           {visibility.punchline === false && visibility.skillsGlobe !== false && <SkillsGlobe />}
           {visibility.stats !== false && <Stats />}
           {visibility.githubActivity !== false && <GitHubActivity />}
-          {visibility.projects !== false && <Projects />}
+          {visibility.projects !== false && <Projects animationReady={!loading} />}
           {visibility.process !== false && <Process />}
           {visibility.ctaSplit !== false && <CtaSplit />}
           {visibility.about !== false && <About />}
