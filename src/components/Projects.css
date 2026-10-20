@@ -13,8 +13,9 @@
 .work-rail {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   width: max-content;
+  margin-inline: auto;
   min-height: 76px;
   perspective: 900px;
 }
@@ -48,7 +49,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--work-color);
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 400ms var(--ease-standard), box-shadow 400ms var(--ease-standard);
