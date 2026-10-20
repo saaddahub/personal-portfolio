@@ -37,7 +37,7 @@ export default function ProjectImageInput({ value = '', onChange, onBusyChange, 
   };
   const upload = (file) => {
     if (!file || busy) return;
-    applyImage(() => uploadProjectImage(file), 'Image uploaded. Publish changes to show it on your site.');
+    applyImage(() => uploadProjectImage(file), 'Image uploaded. Existing projects save automatically; for a new project, finish by clicking Save & Add to Portfolio.');
   };
 
   return (

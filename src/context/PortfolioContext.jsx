@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { supabase, isAdmin } from '../lib/supabase';
+import { savePortfolioSnapshot, readRecoveryDraft } from '../lib/portfolioPersistence';
 
 export const DEFAULT_PORTFOLIO_DATA = {
   hero: {
@@ -220,89 +221,146 @@ export function normalizePortfolio(input, defaults = DEFAULT_PORTFOLIO_DATA, pat
   return result;
 }
 
-const STORAGE_KEY = 'saad_portfolio_cms_data_v1';
+const PENDING_KEY = 'saad_portfolio_pending_v2';
 
 const PortfolioContext = createContext(null);
 
 export const PortfolioProvider = ({ children }) => {
-  const [data, setData] = useState(DEFAULT_PORTFOLIO_DATA);
+  const [data, renderData] = useState(DEFAULT_PORTFOLIO_DATA);
+  const current = useRef(DEFAULT_PORTFOLIO_DATA);
+  const baseline = useRef(JSON.stringify(DEFAULT_PORTFOLIO_DATA));
+  const revision = useRef(null);
+  const ready = useRef(false);
+  const saving = useRef(null);
+  const generation = useRef(0);
   const [adminSession, setAdminSession] = useState(null);
+  const [cloudReady, setCloudReady] = useState(false);
+  const [cloudError, setCloudError] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const [publishing, setPublishing] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  const [recoveryDraft, setRecoveryDraft] = useState(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) { setCloudError('Supabase is not configured.'); return; }
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setAdminSession(isAdmin(session)));
     return () => subscription.unsubscribe();
   }, []);
 
-  const [loadedFor, setLoadedFor] = useState(null);
-  const [cloudReady, setCloudReady] = useState(false);
-  const [cloudError, setCloudError] = useState('');
-  const [publishing, setPublishing] = useState(false);
-  const publishLock = useRef(false);
   useEffect(() => {
-    if (adminSession === null && supabase) return;
-    let cancelled = false;
+    if (adminSession === null || !supabase) return;
+    const epoch = ++generation.current;
+    ready.current = false;
     setCloudReady(false);
     async function load() {
-      if (!supabase) { setCloudError('Supabase is not configured.'); return; }
       try {
-        const { data: row, error } = await supabase.from('portfolio_content').select('data').eq('id', 'main').maybeSingle();
+        const { data: row, error } = await supabase.from('portfolio_content').select('data,updated_at').eq('id', 'main').maybeSingle();
         if (error) throw error;
-        if (cancelled) return;
-        // Preserve this administrator's local draft; visitors load published content.
-        const draft = localStorage.getItem(STORAGE_KEY);
-        if (adminSession && draft) setData(normalizePortfolio(JSON.parse(draft)));
-        else setData(row ? normalizePortfolio(row.data) : DEFAULT_PORTFOLIO_DATA);
+        if (epoch !== generation.current) return;
+        const published = row ? normalizePortfolio(row.data) : DEFAULT_PORTFOLIO_DATA;
+        current.current = published;
+        baseline.current = JSON.stringify(published);
+        revision.current = row?.updated_at ?? null;
+        renderData(published);
+        setDirty(false);
+        setLastSaved(row ? Date.parse(row.updated_at) : null);
+        try { setRecoveryDraft(adminSession ? readRecoveryDraft(localStorage, published, normalizePortfolio) : null); }
+        catch { setSaveError('Browser storage is unavailable. Cloud saving still works.'); }
         setCloudError('');
-        setLoadedFor(adminSession);
+        ready.current = true;
         setCloudReady(true);
       } catch (error) {
-        if (!cancelled) setCloudError('Cloud content could not load: ' + error.message + '. Check Supabase setup and reload.');
+        if (epoch === generation.current) setCloudError('Could not load saved work: ' + error.message + '. Editing is paused to protect existing content.');
       }
     }
     load();
-    return () => { cancelled = true; };
+    return () => { generation.current += 1; ready.current = false; };
+  }, [adminSession, reloadKey]);
+
+  // Back up every user edit immediately. Loading content never writes a draft.
+  const setData = useCallback((update) => {
+    if (!ready.current || !adminSession) return;
+    const next = typeof update === 'function' ? update(current.current) : update;
+    current.current = next;
+    renderData(next);
+    setDirty(JSON.stringify(next) !== baseline.current);
+    try {
+      localStorage.setItem(PENDING_KEY, JSON.stringify({ data: next, updatedAt: Date.now() }));
+      setSaveError('');
+    } catch {
+      setSaveError('Browser backup failed. Keep this tab open until the cloud save completes, or export a backup.');
+    }
   }, [adminSession]);
 
-  const publishPortfolio = async () => {
-    if (!cloudReady || !supabase || publishLock.current) return false;
-    publishLock.current = true;
+  const publishPortfolio = useCallback(async () => {
+    if (!ready.current || !adminSession || !supabase) return false;
+    if (saving.current) return saving.current;
+    if (JSON.stringify(current.current) === baseline.current && revision.current) return true;
+    const epoch = generation.current;
     setPublishing(true);
     setCloudError('');
-    try {
-      const { error } = await supabase.from('portfolio_content').upsert({ id: 'main', data, updated_at: new Date().toISOString() });
-      if (error) throw error;
-      return true;
-    } catch (error) {
-      setCloudError('Publishing failed: ' + error.message + '. Your local draft is retained.');
-      return false;
-    } finally { publishLock.current = false; setPublishing(false); }
-  };
-
-  const [lastSaved, setLastSaved] = useState(null);
-  const [saveError, setSaveError] = useState('');
-
-  // Automatically save changes to localStorage
-  useEffect(() => {
-    if (!cloudReady || !adminSession || loadedFor !== adminSession) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      setLastSaved(Date.now());
-      setSaveError('');
-    } catch (e) {
-      setSaveError('Changes could not be saved. Export a backup before leaving.');
-      console.error('Error saving portfolio data to localStorage', e);
-    }
-  }, [data, cloudReady, adminSession, loadedFor]);
-
-  useEffect(() => {
-    const sync = (event) => {
-      if (!adminSession) return;
-      if (event.key !== STORAGE_KEY || !event.newValue) return;
-      try { setData(normalizePortfolio(JSON.parse(event.newValue))); } catch { /* Keep valid current content. */ }
-    };
-    window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
+    const task = (async () => {
+      try {
+        // Keep saving if another edit arrived while the previous request was running.
+        do {
+          const snapshot = current.current;
+          const encoded = JSON.stringify(snapshot);
+          if (encoded === baseline.current && revision.current) return true;
+          const savedRevision = await savePortfolioSnapshot(supabase, snapshot, revision.current);
+          if (epoch !== generation.current) return false;
+          revision.current = savedRevision;
+          baseline.current = encoded;
+          setLastSaved(Date.parse(savedRevision));
+          const pending = JSON.stringify(current.current) !== encoded;
+          setDirty(pending);
+          if (!pending) {
+            // Don't remove another tab's pending work.
+            try {
+              localStorage.setItem('saad_portfolio_legacy_reviewed_v2', 'true');
+              const stored = JSON.parse(localStorage.getItem(PENDING_KEY) || 'null');
+              if (stored && JSON.stringify(stored.data) === encoded) localStorage.removeItem(PENDING_KEY);
+            } catch { /* Cloud save is confirmed even if local cleanup fails. */ }
+          }
+        } while (JSON.stringify(current.current) !== baseline.current);
+        return true;
+      } catch (error) {
+        if (epoch === generation.current) setCloudError('Not saved to cloud: ' + error.message + '. Keep this tab open, retry, or export a backup.');
+        return false;
+      } finally {
+        saving.current = null;
+        setPublishing(false);
+      }
+    })();
+    saving.current = task;
+    return task;
   }, [adminSession]);
+
+  useEffect(() => {
+    if (!dirty || !cloudReady || cloudError || !adminSession) return;
+    const timer = setTimeout(() => { void publishPortfolio(); }, 800);
+    return () => clearTimeout(timer);
+  }, [data, dirty, cloudReady, cloudError, adminSession, publishPortfolio]);
+
+  useEffect(() => {
+    const warn = event => {
+      if (!dirty && !publishing) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    const retry = () => { if (dirty) void publishPortfolio(); };
+    window.addEventListener('beforeunload', warn);
+    window.addEventListener('online', retry);
+    return () => { window.removeEventListener('beforeunload', warn); window.removeEventListener('online', retry); };
+  }, [dirty, publishing, publishPortfolio]);
+
+  const recoverDraft = () => {
+    if (!recoveryDraft) return;
+    setData(recoveryDraft);
+    setRecoveryDraft(null);
+  };
+  const saveStatus = cloudError ? 'Cloud save unavailable' : publishing ? 'Saving to cloud…' : !cloudReady ? 'Loading saved work…' : dirty ? 'Unsaved changes' : lastSaved ? 'Saved to cloud' : 'No cloud save yet';
 
   const updateSection = (sectionKey, updateFnOrObj) => {
     setData((prev) => {
@@ -422,7 +480,7 @@ export const PortfolioProvider = ({ children }) => {
         exportJson,
         importJson,
         lastSaved,
-        saveError, cloudReady, cloudError, publishing, publishPortfolio
+        saveError, cloudReady, cloudError, publishing, publishPortfolio, dirty, saveStatus, recoveryDraft, recoverDraft, retryLoad: () => setReloadKey(key => key + 1)
       }}
     >
       {children}

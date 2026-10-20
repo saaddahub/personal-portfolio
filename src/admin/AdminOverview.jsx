@@ -1,6 +1,6 @@
 import { ArrowUpRight, Plus, Folder, Layers, Eye, Check, ArrowRight, Download, Sliders, User, Share2, Image } from 'lucide-react';
 
-export default function AdminOverview({ data, lastSaved, saveError, onNavigate, onAddProject, onExport }) {
+export default function AdminOverview({ data, lastSaved, saveError, saveStatus, onNavigate, onAddProject, onExport }) {
   const visible = data.projects.filter(project => project.visible !== false).length;
   const sections = Object.values(data.sectionVisibility).filter(Boolean).length;
   const checks = [
@@ -56,7 +56,7 @@ export default function AdminOverview({ data, lastSaved, saveError, onNavigate, 
           <div className="studio-panel-heading"><div><h3>Content check</h3><p>A few essentials, covered.</p></div><span className="studio-completion">{completed}/{checks.length}</span></div>
           <div className="studio-readiness-track"><span style={{ width: `${completed / checks.length * 100}%` }} /></div>
           {checks.map(check => <button className="studio-check-row" key={check.label} onClick={() => onNavigate(check.tab)}><span className={check.ready ? 'studio-check-mark is-ready' : 'studio-check-mark'}>{check.ready ? <Check size={12} /> : <Plus size={12} />}</span><span>{check.label}</span><small>{check.ready ? 'Ready' : 'To do'}</small></button>)}
-          <div className="studio-backup-note"><Download size={17} /><div><strong>Keep a copy of your work</strong><p>Edits are saved in this browser. Download a backup whenever you need.</p><button className="studio-text-action" onClick={onExport}>Export backup <ArrowUpRight size={13} /></button></div></div>
+          <div className="studio-backup-note"><Download size={17} /><div><strong>Keep a copy of your work</strong><p>Edits save automatically to the cloud and become live. Wait for “Saved to cloud” before leaving.</p><button className="studio-text-action" onClick={onExport}>Export backup <ArrowUpRight size={13} /></button></div></div>
         </section>
       </div>
 
@@ -68,7 +68,7 @@ export default function AdminOverview({ data, lastSaved, saveError, onNavigate, 
           { icon: Share2, label: 'Contact & socials', detail: 'Keep your links up to date', tab: 'socials' },
         ].map(({ icon: Icon, label, detail, tab }) => <button className="studio-quick-card" key={tab} onClick={() => onNavigate(tab)}><span className="studio-quick-icon"><Icon size={18} /></span><span><strong>{label}</strong><small>{detail}</small></span><ArrowUpRight size={16} /></button>)}
       </div>
-      <div className="studio-save-line"><span className={saveError ? 'studio-save-error' : 'studio-save-indicator'} />{saveError ? 'Backup recommended — local save failed' : lastSaved ? `Saved locally at ${new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Preparing workspace'}</div>
+      <div className="studio-save-line"><span className={saveError ? 'studio-save-error' : 'studio-save-indicator'} />{saveError ? 'Backup recommended — local save failed' : lastSaved ? `Cloud save confirmed at ${new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : saveStatus || 'Preparing workspace'}</div>
     </div>
   );
 }

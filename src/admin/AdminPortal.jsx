@@ -214,7 +214,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
     exportJson,
     importJson,
     lastSaved,
-    saveError, publishPortfolio, cloudError, cloudReady, publishing
+    saveError, publishPortfolio, cloudError, cloudReady, publishing, saveStatus, recoveryDraft, recoverDraft, retryLoad
   } = usePortfolio();
 
   const headerRef = useRef(null);
@@ -234,6 +234,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
   const [showChangePassword, setShowChangePassword] = useState(false);
 
   // New project local form state
+  const [imageBusy, setImageBusy] = useState(false);
   const [newProject, setNewProject] = useState({
     client: '',
     outcome: '',
@@ -322,7 +323,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
       image: ''
     });
     setShowAddProject(false);
-    showToast('Project added successfully!');
+    showToast('Project added. Saving to cloud…');
   };
 
   const handleImportFile = (e) => {
@@ -354,12 +355,12 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
             <h1 className="admin-title">Studio<span>{data.hero.nameFirst} {data.hero.nameLast} / Portfolio</span></h1>
             <span className="admin-status-pill">
               <span className="admin-status-dot"></span>
-              {saveError ? 'Save failed' : 'Saved locally'}
+              {saveStatus}
             </span>
           </div>
 
           <div className="admin-header-actions">
-            <button className="admin-btn" disabled={!cloudReady || publishing} onClick={async () => { if (await publishPortfolio()) showToast("Portfolio published"); }}>{publishing ? "Publishing..." : "Publish changes"}</button>
+            <button className="admin-btn" disabled={!cloudReady || publishing} onClick={async () => { if (await publishPortfolio()) showToast("Saved to cloud and live on your portfolio"); }}>{publishing ? "Publishing..." : "Save now"}</button>
             <div className="admin-theme-toggle"><ThemeToggle /></div>
             <button
               className={`admin-btn ${showSplitPreview ? 'admin-btn-accent' : ''}`}
@@ -531,9 +532,11 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
         {/* Content Pane */}
         <main className="admin-main" key={activeTab}>
-          {cloudError && <div className="admin-save-warning" role="alert">{cloudError}</div>}
+          {cloudError && <div className="admin-save-warning" role="alert">{cloudError} {!cloudReady && <button className="admin-btn" onClick={retryLoad}>Retry loading</button>}</div>}
+          {recoveryDraft && <div className="admin-save-warning" role="status">An earlier browser draft was found. Restore it only if it contains the work you want to publish. <button className="admin-btn" disabled={!cloudReady} onClick={recoverDraft}>Restore and save browser draft</button></div>}
           {saveError && <div className="admin-save-warning" role="alert">{saveError}</div>}
-          {activeTab === 'dashboard' && <AdminOverview data={data} lastSaved={lastSaved} saveError={saveError} onNavigate={setActiveTab} onExport={exportJson} onAddProject={() => { setActiveTab('projects'); setShowAddProject(true); }} />}
+          <fieldset disabled={!cloudReady} style={{ border: 0, margin: 0, padding: 0, minWidth: 0 }}>
+          {activeTab === 'dashboard' && <AdminOverview data={data} lastSaved={lastSaved} saveError={saveError} saveStatus={saveStatus} onNavigate={setActiveTab} onExport={exportJson} onAddProject={() => { setActiveTab('projects'); setShowAddProject(true); }} />}
           {/* TAB: HERO & DRAG LAYOUT */}
           {activeTab === 'hero' && (
             <div className="admin-tab-content">
@@ -850,7 +853,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                     </div>
 
                     <div className="admin-field-group">
-                      <ProjectImageInput value={newProject.image} name={newProject.client} onChange={image => setNewProject(prev => ({ ...prev, image }))} />
+                      <ProjectImageInput onBusyChange={setImageBusy} value={newProject.image} name={newProject.client} onChange={image => setNewProject(prev => ({ ...prev, image }))} />
                     </div>
                   </div>
 
@@ -858,7 +861,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                     <button type="button" className="admin-btn" onClick={() => setShowAddProject(false)}>
                       Cancel
                     </button>
-                    <button type="submit" className="admin-btn admin-btn-primary">
+                    <button type="submit" disabled={imageBusy} className="admin-btn admin-btn-primary">
                       <Check size={15} /> Save & Add to Portfolio
                     </button>
                   </div>
@@ -1735,6 +1738,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
               </div>
             </div>
           )}
+        </fieldset>
         </main>
 
         {/* Optional Live Preview Split Pane */}
@@ -1771,6 +1775,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 };
 
 const AdminPortal = (props) => {
+  const { dirty, publishing, publishPortfolio } = usePortfolio();
   const [authenticated, setAuthenticated] = useState(false);
   useEffect(() => {
     if (!supabase) return;
@@ -1779,6 +1784,7 @@ const AdminPortal = (props) => {
   }, []);
 
   const handleLogout = async () => {
+    if ((dirty || publishing) && !(await publishPortfolio())) return;
     try { await logout(); setAuthenticated(false); } catch (error) { window.alert(error.message); }
   };
 
