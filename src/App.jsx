@@ -14,6 +14,7 @@ import SkillsGlobe from './components/SkillsGlobe';
 import Stats from './components/Stats';
 import GitHubActivity from './components/GitHubActivity';
 import Projects from './components/Projects';
+import ProjectPage from './components/ProjectPage';
 import Process from './components/Process';
 import CtaSplit from './components/CtaSplit';
 import About from './components/About';
@@ -30,7 +31,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 function PortfolioMain() {
   const [loading, setLoading] = useState(true);
-  const { data } = usePortfolio();
+  const { data, cloudReady } = usePortfolio();
   const visibility = data.sectionVisibility || {};
   const lenisRef = useRef(null);
   const finishLoading = useCallback(() => setLoading(false), []);
@@ -42,7 +43,7 @@ function PortfolioMain() {
   // Initialize Lenis for smooth scroll on portfolio
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (window.location.hash && window.location.hash !== '#admin') {
+    if (window.location.hash && !['#admin', '#work'].includes(window.location.hash)) {
       window.history.replaceState('', document.title, window.location.pathname + window.location.search);
     }
 
@@ -66,6 +67,17 @@ function PortfolioMain() {
       gsap.ticker.remove(tickerCallback);
     };
   }, []);
+
+  // Return project readers to the work gallery after the intro finishes.
+  useEffect(() => {
+    if (loading || !cloudReady || window.location.hash !== '#work') return;
+    const frame = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      const section = document.getElementById('work');
+      if (section) lenisRef.current?.scrollTo(section, { immediate: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [loading, cloudReady]);
 
   // Universal Scroll Reveal & Section Glow
   useEffect(() => {
@@ -158,11 +170,14 @@ function App() {
     return path.startsWith('/admin') || hash === '#admin';
   };
 
+  const [pathname, setPathname] = useState(window.location.pathname);
+  const projectId = (() => { try { return pathname.startsWith('/work/') ? decodeURIComponent(pathname.slice(6)) : null; } catch { return ''; } })();
   const [isAdmin, setIsAdmin] = useState(checkIsAdmin);
 
   useEffect(() => {
     const onLocationChange = () => {
       setIsAdmin(checkIsAdmin());
+      setPathname(window.location.pathname);
     };
 
     window.addEventListener('popstate', onLocationChange);
@@ -184,7 +199,7 @@ function App() {
           }}
         />
       ) : (
-        <PortfolioMain />
+        projectId !== null ? <ProjectPage id={projectId} /> : <PortfolioMain />
       )}
     </PortfolioProvider>
   );

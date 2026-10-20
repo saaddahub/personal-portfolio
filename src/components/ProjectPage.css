@@ -1,0 +1,40 @@
+.case-page { min-height:100vh; }
+.case-nav { min-height:100px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); gap:20px; font-size:13px; }
+.case-nav>a,.case-footer>a { display:flex; gap:10px; align-items:center; }
+.case-nav small { color:var(--color-text-secondary); }
+.case-heading { padding:76px 0 52px; max-width:1050px; }
+.case-eyebrow { display:flex; gap:32px; justify-content:space-between; font:11px var(--font-mono); text-transform:uppercase; letter-spacing:.12em; color:var(--color-text-secondary); }
+.case-eyebrow i { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--case-color); margin-right:10px; }
+.case-heading h1 { font-size:clamp(40px,6.5vw,88px); letter-spacing:-.06em; line-height:1.05; margin:32px 0 26px; overflow-wrap:anywhere; }
+.case-heading>p { max-width:720px; font-size:clamp(16px,1.8vw,21px); line-height:1.7; color:var(--color-text-secondary); }
+.case-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
+.case-actions>a,.case-actions>button { padding:13px 20px; border-radius:30px; background:var(--case-color); color:#171719; display:flex; gap:12px; align-items:center; font-size:13px; }
+.case-actions .case-secondary { color:var(--color-text-primary); background:transparent; border:1px solid var(--color-border-default); }
+.case-actions>a:hover { transform:translateY(-2px); }
+.case-cover { position:relative; background:var(--case-color); padding:clamp(14px,4vw,55px); border-radius:18px; overflow:hidden; }
+.case-cover>img { display:block; width:100%; max-height:760px; object-fit:contain; object-position:top; border-radius:8px; box-shadow:0 20px 60px #0004; }
+.case-cover-label { position:absolute; right:20px; bottom:16px; font:10px var(--font-mono); color:#171719; background:var(--case-color); border-radius:20px; padding:6px 12px; }
+.case-cover-art { min-height:300px; display:flex; align-items:center; justify-content:space-between; gap:30px; color:#171719; }
+.case-cover-art>span { font-size:clamp(120px,26vw,340px); line-height:1; opacity:.22; letter-spacing:-.1em; }
+.case-cover-art>p { max-width:340px; font-size:clamp(22px,3vw,40px); line-height:1.2; }
+.case-body { display:grid; grid-template-columns:1fr 2.3fr; gap:80px; margin:80px 0; }
+.case-facts>div { margin-bottom:32px; }
+.case-facts h2 { font:11px var(--font-mono); text-transform:uppercase; letter-spacing:.12em; color:var(--color-text-secondary); margin-bottom:14px; }
+.case-facts p { font-size:15px; }
+.case-tags { display:flex; gap:8px; flex-wrap:wrap; }
+.case-tags>span { border:1px solid var(--color-border-default); border-radius:30px; padding:6px 12px; font-size:11px; }
+.case-story section { padding:0 0 40px; display:flex; gap:24px; }
+.case-section-number { font:11px var(--font-mono); color:var(--color-text-secondary); padding-top:9px; }
+.case-story h2 { font-size:clamp(25px,3vw,36px); letter-spacing:-.035em; margin-bottom:18px; }
+.case-story p { color:var(--color-text-secondary); font-size:16px; line-height:1.85; white-space:pre-line; overflow-wrap:anywhere; }
+.case-next { border-top:1px solid var(--color-border-default); border-bottom:1px solid var(--color-border-default); padding:40px 0; display:flex; justify-content:space-between; align-items:center; gap:24px; }
+.case-next span { font:11px var(--font-mono); text-transform:uppercase; letter-spacing:.12em; color:var(--color-text-secondary); }
+.case-next h2 { font-size:clamp(24px,3.2vw,44px); margin-top:14px; }
+.case-next svg { flex-shrink:0; transition:transform .3s; }
+.case-next:hover svg { transform:translateX(8px); color:var(--next-color); }
+.case-footer { display:flex; justify-content:space-between; gap:20px; padding:35px 0 45px; font-size:11px; color:var(--color-text-secondary); }
+.case-message { padding-block:100px; }
+.case-message p { margin:20px 0; }
+.case-message a,.case-message button { display:inline-flex; align-items:center; gap:12px; padding-block:20px; text-decoration:underline; }
+@media(max-width:700px) { .case-nav { min-height:80px; } .case-nav>span { display:none; } .case-heading { padding-top:48px; } .case-body { grid-template-columns:1fr; gap:28px; margin:40px 0; } .case-facts { display:flex; gap:24px; flex-wrap:wrap; } .case-footer>span { display:none; } .case-cover-art { min-height:240px; } .case-cover-art>p { font-size:20px; } }
+@media(prefers-reduced-motion:reduce) { .case-page * { transition:none!important; transform:none!important; } }

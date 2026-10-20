@@ -41,6 +41,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
   projects: [
     {
       id: 'proj-1',
+      accent: '', role: '', year: '', overview: '', challenge: '', approach: '', results: '', sourceUrl: '',
       client: 'Netflix Data Visualiser (Python & Data Science)',
       outcome: 'Interactive exploratory data analysis and visualization dashboard for Netflix movies and TV shows. Analyzes genre distribution, release trends, content ratings, and international analytics.',
       image: '/images/netflix-visualiser.png',
@@ -383,6 +384,7 @@ export const PortfolioProvider = ({ children }) => {
       projects: [
         {
           id: 'proj-' + crypto.randomUUID(),
+          accent: '', role: '', year: '', overview: '', challenge: '', approach: '', results: '', sourceUrl: '',
           client: 'New Project',
           outcome: 'Description of the project outcome and key technologies used.',
           type: 'browser',

@@ -35,6 +35,7 @@ import ChangePasswordModal from './ChangePasswordModal';
 import { logout } from './adminAuth';
 import { supabase, isAdmin } from '../lib/supabase';
 import ProjectImageInput from './ProjectImageInput';
+import { projectPath, projectColor } from '../lib/projects';
 
 // Error Boundary to prevent white/black screens
 class AdminErrorBoundary extends Component {
@@ -978,6 +979,12 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
                       <div className="admin-field-group">
                         <ProjectImageInput value={project.image || ""} name={project.client} onChange={image => updateProject(project.id, { image })} />
+                        <details style={{ marginTop: '1.5rem' }}><summary style={{ cursor: 'pointer', marginBottom: '1rem' }}>Project page & color</summary>
+                          <label className="admin-label">Panel color</label><input type="color" aria-label="Project panel color" value={projectColor(project, data.projects.indexOf(project))} onChange={e => updateProject(project.id, { accent: e.target.value })} />
+                          {[['role', 'My role'], ['year', 'Year'], ['sourceUrl', 'Source code URL']].map(([key,label]) => <div className="admin-field-group" key={key}><label className="admin-label" htmlFor={project.id+'-'+key}>{label}</label><input id={project.id+'-'+key} className="admin-input" value={project[key] || ''} onChange={e=>updateProject(project.id,{[key]:e.target.value})} /></div>)}
+                          {[['overview','Project overview'],['challenge','The challenge'],['approach','What I built / my approach'],['results','Results & lessons']].map(([key,label])=><div className="admin-field-group" key={key}><label className="admin-label" htmlFor={project.id+'-'+key}>{label}</label><textarea id={project.id+'-'+key} className="admin-input" rows={4} value={project[key] || ''} onChange={e=>updateProject(project.id,{[key]:e.target.value})} /></div>)}
+                          <a className="admin-btn" href={projectPath(project.id)} target="_blank" rel="noopener noreferrer">Open project page <ExternalLink size={14} /></a>
+                        </details>
                       </div>
                     </div>
 
