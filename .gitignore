@@ -31,3 +31,6 @@ dist-ssr
 __pycache__/
 *.py[cod]
 
+
+# Local visual verification artifacts
+.impeccable/review/

@@ -1,167 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
-
-import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
+import { useEffect, useState } from 'react';
+import { PortfolioProvider } from './context/PortfolioContext';
 import AdminPortal from './admin/AdminPortal';
-
-import Nav from './components/Nav';
-import Hero from './components/Hero';
-import PunchlineTransition from './components/PunchlineTransition';
-import SkillsGlobe from './components/SkillsGlobe';
-import Stats from './components/Stats';
-import GitHubActivity from './components/GitHubActivity';
-import Projects from './components/Projects';
 import ProjectPage from './components/ProjectPage';
-import Process from './components/Process';
-import CtaSplit from './components/CtaSplit';
-import About from './components/About';
-import FAQ from './components/FAQ';
-import FinalCta from './components/FinalCta';
-import Footer from './components/Footer';
-import Preloader from './components/Preloader';
-import CustomCursor from './components/CustomCursor';
-import MusicPlayer from './components/MusicPlayer';
-import SocialMenu from './components/SocialMenu';
-
-// Register ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
-
-function PortfolioMain() {
-  const [loading, setLoading] = useState(true);
-  const { data, cloudReady } = usePortfolio();
-  const visibility = data.sectionVisibility || {};
-  const lenisRef = useRef(null);
-  const finishLoading = useCallback(() => setLoading(false), []);
-  const handleMenuChange = useCallback((isOpen) => {
-    if (isOpen) lenisRef.current?.stop();
-    else lenisRef.current?.start();
-  }, []);
-
-  // Initialize Lenis for smooth scroll on portfolio
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    if (window.location.hash && !['#admin', '#work'].includes(window.location.hash)) {
-      window.history.replaceState('', document.title, window.location.pathname + window.location.search);
-    }
-
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-    lenisRef.current = lenis;
-
-    lenis.on('scroll', ScrollTrigger.update);
-    const tickerCallback = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      lenis.destroy();
-      lenisRef.current = null;
-      gsap.ticker.remove(tickerCallback);
-    };
-  }, []);
-
-  // Return project readers to the work gallery after the intro finishes.
-  useEffect(() => {
-    if (loading || !cloudReady || window.location.hash !== '#work') return;
-    const frame = requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-      const section = document.getElementById('work');
-      if (section) lenisRef.current?.scrollTo(section, { immediate: true });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [loading, cloudReady]);
-
-  // Universal Scroll Reveal & Section Glow
-  useEffect(() => {
-    if (loading) return;
-    
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // 1. Universal Reveal
-    const initScrollReveal = () => {
-      const items = document.querySelectorAll('[data-reveal]');
-      
-      if (prefersReducedMotion) {
-        items.forEach(el => el.classList.add('is-visible'));
-        return;
-      }
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const delay = entry.target.dataset.revealDelay || 0;
-            setTimeout(() => entry.target.classList.add('is-visible'), delay);
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-
-      items.forEach((el) => observer.observe(el));
-    };
-
-    // 2. Section Glow
-    const initGlowReveal = () => {
-      if (prefersReducedMotion) return;
-      
-      const glowSections = document.querySelectorAll('.section-glow');
-      const glowObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const glowEl = entry.target;
-            glowEl.classList.add('is-active');
-            setTimeout(() => glowEl.classList.remove('is-active'), 1500);
-            glowObserver.unobserve(glowEl);
-          }
-        });
-      }, { threshold: 0.3 });
-
-      glowSections.forEach((el) => glowObserver.observe(el));
-    };
-
-    initScrollReveal();
-    initGlowReveal();
-  }, [loading]);
-
-  return (
-    <>
-      <Preloader onComplete={finishLoading} />
-      <CustomCursor />
-      
-      <div>
-        <Nav onMenuChange={handleMenuChange} />
-        <main>
-          {visibility.hero !== false && <Hero animationReady={!loading} />}
-          {visibility.punchline !== false && (
-            <PunchlineTransition
-              animationReady={!loading}
-              showGlobe={visibility.skillsGlobe !== false}
-            />
-          )}
-          {visibility.punchline === false && visibility.skillsGlobe !== false && <SkillsGlobe />}
-          {visibility.stats !== false && <Stats />}
-          {visibility.githubActivity !== false && <GitHubActivity />}
-          {visibility.projects !== false && <Projects animationReady={!loading} />}
-          {visibility.process !== false && <Process />}
-          {visibility.ctaSplit !== false && <CtaSplit />}
-          {visibility.about !== false && <About />}
-          {visibility.faq !== false && <FAQ />}
-          {visibility.finalCta !== false && <FinalCta />}
-        </main>
-        <Footer />
-        <MusicPlayer />
-        <SocialMenu />
-      </div>
-    </>
-  );
-}
+import AnalogEdges from './components/AnalogEdges';
+import VintageMonitor from './components/VintageMonitor';
+import PortfolioMain from './PortfolioMain.jsx';
+import './vintage.css';
 
 function App() {
   const checkIsAdmin = () => {
@@ -189,6 +33,8 @@ function App() {
     };
   }, []);
 
+  if (!isAdmin && !window.frameElement?.hasAttribute('data-portfolio-screen')) return <VintageMonitor />;
+
   return (
     <PortfolioProvider>
       {isAdmin ? (
@@ -199,10 +45,15 @@ function App() {
           }}
         />
       ) : (
-        projectId !== null ? <ProjectPage id={projectId} /> : <PortfolioMain />
+        <div className="portfolio-surface">
+          <AnalogEdges />
+          {projectId !== null ? <ProjectPage id={projectId} /> : <PortfolioMain />}
+        </div>
       )}
     </PortfolioProvider>
   );
 }
 
 export default App;
+
+export { default as PortfolioMain } from './PortfolioMain.jsx';

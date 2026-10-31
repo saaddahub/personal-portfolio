@@ -1,0 +1,698 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T11:10:28.350268+00:00",
+  "title": "Design System: SA-01 Personal Monitor",
+  "extensions": {
+    "colorMeta": {
+      "room": {
+        "role": "neutral",
+        "displayName": "Room",
+        "tonalRamp": [
+          "oklch(0.15 0.01008 158.76)",
+          "oklch(0.25 0.01008 158.76)",
+          "oklch(0.35 0.01008 158.76)",
+          "oklch(0.45 0.01008 158.76)",
+          "oklch(0.55 0.01008 158.76)",
+          "oklch(0.65 0.01008 158.76)",
+          "oklch(0.80 0.01008 158.76)",
+          "oklch(0.95 0.01008 158.76)"
+        ]
+      },
+      "screen": {
+        "role": "neutral",
+        "displayName": "Screen",
+        "tonalRamp": [
+          "oklch(0.15 0.00752 163.98)",
+          "oklch(0.25 0.00752 163.98)",
+          "oklch(0.35 0.00752 163.98)",
+          "oklch(0.45 0.00752 163.98)",
+          "oklch(0.55 0.00752 163.98)",
+          "oklch(0.65 0.00752 163.98)",
+          "oklch(0.80 0.00752 163.98)",
+          "oklch(0.95 0.00752 163.98)"
+        ]
+      },
+      "phosphor": {
+        "role": "primary",
+        "displayName": "Phosphor",
+        "tonalRamp": [
+          "oklch(0.15 0.02349 90.76)",
+          "oklch(0.25 0.02349 90.76)",
+          "oklch(0.35 0.02349 90.76)",
+          "oklch(0.45 0.02349 90.76)",
+          "oklch(0.55 0.02349 90.76)",
+          "oklch(0.65 0.02349 90.76)",
+          "oklch(0.80 0.02349 90.76)",
+          "oklch(0.95 0.02349 90.76)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent",
+        "tonalRamp": [
+          "oklch(0.15 0.18588 151.38)",
+          "oklch(0.25 0.18588 151.38)",
+          "oklch(0.35 0.18588 151.38)",
+          "oklch(0.45 0.18588 151.38)",
+          "oklch(0.55 0.18588 151.38)",
+          "oklch(0.65 0.18588 151.38)",
+          "oklch(0.80 0.18588 151.38)",
+          "oklch(0.95 0.18588 151.38)"
+        ]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Secondary",
+        "tonalRamp": [
+          "oklch(0.15 0.14859 72.10)",
+          "oklch(0.25 0.14859 72.10)",
+          "oklch(0.35 0.14859 72.10)",
+          "oklch(0.45 0.14859 72.10)",
+          "oklch(0.55 0.14859 72.10)",
+          "oklch(0.65 0.14859 72.10)",
+          "oklch(0.80 0.14859 72.10)",
+          "oklch(0.95 0.14859 72.10)"
+        ]
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Dim",
+        "tonalRamp": [
+          "oklch(0.15 0.02318 132.59)",
+          "oklch(0.25 0.02318 132.59)",
+          "oklch(0.35 0.02318 132.59)",
+          "oklch(0.45 0.02318 132.59)",
+          "oklch(0.55 0.02318 132.59)",
+          "oklch(0.65 0.02318 132.59)",
+          "oklch(0.80 0.02318 132.59)",
+          "oklch(0.95 0.02318 132.59)"
+        ]
+      },
+      "plastic-light": {
+        "role": "neutral",
+        "displayName": "Plastic Light",
+        "tonalRamp": [
+          "oklch(0.15 0.02653 90.11)",
+          "oklch(0.25 0.02653 90.11)",
+          "oklch(0.35 0.02653 90.11)",
+          "oklch(0.45 0.02653 90.11)",
+          "oklch(0.55 0.02653 90.11)",
+          "oklch(0.65 0.02653 90.11)",
+          "oklch(0.80 0.02653 90.11)",
+          "oklch(0.95 0.02653 90.11)"
+        ]
+      },
+      "plastic-mid": {
+        "role": "neutral",
+        "displayName": "Plastic Mid",
+        "tonalRamp": [
+          "oklch(0.15 0.03089 90.35)",
+          "oklch(0.25 0.03089 90.35)",
+          "oklch(0.35 0.03089 90.35)",
+          "oklch(0.45 0.03089 90.35)",
+          "oklch(0.55 0.03089 90.35)",
+          "oklch(0.65 0.03089 90.35)",
+          "oklch(0.80 0.03089 90.35)",
+          "oklch(0.95 0.03089 90.35)"
+        ]
+      },
+      "plastic-dark": {
+        "role": "neutral",
+        "displayName": "Plastic Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.03470 88.08)",
+          "oklch(0.25 0.03470 88.08)",
+          "oklch(0.35 0.03470 88.08)",
+          "oklch(0.45 0.03470 88.08)",
+          "oklch(0.55 0.03470 88.08)",
+          "oklch(0.65 0.03470 88.08)",
+          "oklch(0.80 0.03470 88.08)",
+          "oklch(0.95 0.03470 88.08)"
+        ]
+      },
+      "hardware-ink": {
+        "role": "neutral",
+        "displayName": "Hardware Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.02256 121.49)",
+          "oklch(0.25 0.02256 121.49)",
+          "oklch(0.35 0.02256 121.49)",
+          "oklch(0.45 0.02256 121.49)",
+          "oklch(0.55 0.02256 121.49)",
+          "oklch(0.65 0.02256 121.49)",
+          "oklch(0.80 0.02256 121.49)",
+          "oklch(0.95 0.02256 121.49)"
+        ]
+      },
+      "bezel-light": {
+        "role": "neutral",
+        "displayName": "Bezel Light",
+        "tonalRamp": [
+          "oklch(0.15 0.01686 120.76)",
+          "oklch(0.25 0.01686 120.76)",
+          "oklch(0.35 0.01686 120.76)",
+          "oklch(0.45 0.01686 120.76)",
+          "oklch(0.55 0.01686 120.76)",
+          "oklch(0.65 0.01686 120.76)",
+          "oklch(0.80 0.01686 120.76)",
+          "oklch(0.95 0.01686 120.76)"
+        ]
+      },
+      "bezel-mid": {
+        "role": "neutral",
+        "displayName": "Bezel Mid",
+        "tonalRamp": [
+          "oklch(0.15 0.01412 131.76)",
+          "oklch(0.25 0.01412 131.76)",
+          "oklch(0.35 0.01412 131.76)",
+          "oklch(0.45 0.01412 131.76)",
+          "oklch(0.55 0.01412 131.76)",
+          "oklch(0.65 0.01412 131.76)",
+          "oklch(0.80 0.01412 131.76)",
+          "oklch(0.95 0.01412 131.76)"
+        ]
+      },
+      "bezel-dark": {
+        "role": "neutral",
+        "displayName": "Bezel Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.01816 137.95)",
+          "oklch(0.25 0.01816 137.95)",
+          "oklch(0.35 0.01816 137.95)",
+          "oklch(0.45 0.01816 137.95)",
+          "oklch(0.55 0.01816 137.95)",
+          "oklch(0.65 0.01816 137.95)",
+          "oklch(0.80 0.01816 137.95)",
+          "oklch(0.95 0.01816 137.95)"
+        ]
+      },
+      "recess": {
+        "role": "neutral",
+        "displayName": "Recess",
+        "tonalRamp": [
+          "oklch(0.15 0.00911 153.04)",
+          "oklch(0.25 0.00911 153.04)",
+          "oklch(0.35 0.00911 153.04)",
+          "oklch(0.45 0.00911 153.04)",
+          "oklch(0.55 0.00911 153.04)",
+          "oklch(0.65 0.00911 153.04)",
+          "oklch(0.80 0.00911 153.04)",
+          "oklch(0.95 0.00911 153.04)"
+        ]
+      },
+      "key-light": {
+        "role": "neutral",
+        "displayName": "Key Light",
+        "tonalRamp": [
+          "oklch(0.15 0.02775 90.92)",
+          "oklch(0.25 0.02775 90.92)",
+          "oklch(0.35 0.02775 90.92)",
+          "oklch(0.45 0.02775 90.92)",
+          "oklch(0.55 0.02775 90.92)",
+          "oklch(0.65 0.02775 90.92)",
+          "oklch(0.80 0.02775 90.92)",
+          "oklch(0.95 0.02775 90.92)"
+        ]
+      },
+      "key-dark": {
+        "role": "neutral",
+        "displayName": "Key Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.03707 91.17)",
+          "oklch(0.25 0.03707 91.17)",
+          "oklch(0.35 0.03707 91.17)",
+          "oklch(0.45 0.03707 91.17)",
+          "oklch(0.55 0.03707 91.17)",
+          "oklch(0.65 0.03707 91.17)",
+          "oklch(0.80 0.03707 91.17)",
+          "oklch(0.95 0.03707 91.17)"
+        ]
+      },
+      "key-ink": {
+        "role": "neutral",
+        "displayName": "Key Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.02454 119.58)",
+          "oklch(0.25 0.02454 119.58)",
+          "oklch(0.35 0.02454 119.58)",
+          "oklch(0.45 0.02454 119.58)",
+          "oklch(0.55 0.02454 119.58)",
+          "oklch(0.65 0.02454 119.58)",
+          "oklch(0.80 0.02454 119.58)",
+          "oklch(0.95 0.02454 119.58)"
+        ]
+      },
+      "power-light": {
+        "role": "neutral",
+        "displayName": "Power Light",
+        "tonalRamp": [
+          "oklch(0.15 0.05681 119.71)",
+          "oklch(0.25 0.05681 119.71)",
+          "oklch(0.35 0.05681 119.71)",
+          "oklch(0.45 0.05681 119.71)",
+          "oklch(0.55 0.05681 119.71)",
+          "oklch(0.65 0.05681 119.71)",
+          "oklch(0.80 0.05681 119.71)",
+          "oklch(0.95 0.05681 119.71)"
+        ]
+      },
+      "power-dark": {
+        "role": "neutral",
+        "displayName": "Power Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.04663 126.29)",
+          "oklch(0.25 0.04663 126.29)",
+          "oklch(0.35 0.04663 126.29)",
+          "oklch(0.45 0.04663 126.29)",
+          "oklch(0.55 0.04663 126.29)",
+          "oklch(0.65 0.04663 126.29)",
+          "oklch(0.80 0.04663 126.29)",
+          "oklch(0.95 0.04663 126.29)"
+        ]
+      },
+      "power-ink": {
+        "role": "neutral",
+        "displayName": "Power Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.03852 120.16)",
+          "oklch(0.25 0.03852 120.16)",
+          "oklch(0.35 0.03852 120.16)",
+          "oklch(0.45 0.03852 120.16)",
+          "oklch(0.55 0.03852 120.16)",
+          "oklch(0.65 0.03852 120.16)",
+          "oklch(0.80 0.03852 120.16)",
+          "oklch(0.95 0.03852 120.16)"
+        ]
+      },
+      "amber-phosphor": {
+        "role": "primary",
+        "displayName": "Amber Phosphor",
+        "tonalRamp": [
+          "oklch(0.15 0.17038 76.39)",
+          "oklch(0.25 0.17038 76.39)",
+          "oklch(0.35 0.17038 76.39)",
+          "oklch(0.45 0.17038 76.39)",
+          "oklch(0.55 0.17038 76.39)",
+          "oklch(0.65 0.17038 76.39)",
+          "oklch(0.80 0.17038 76.39)",
+          "oklch(0.95 0.17038 76.39)"
+        ]
+      },
+      "amber-dim": {
+        "role": "neutral",
+        "displayName": "Amber Dim",
+        "tonalRamp": [
+          "oklch(0.15 0.13028 77.94)",
+          "oklch(0.25 0.13028 77.94)",
+          "oklch(0.35 0.13028 77.94)",
+          "oklch(0.45 0.13028 77.94)",
+          "oklch(0.55 0.13028 77.94)",
+          "oklch(0.65 0.13028 77.94)",
+          "oklch(0.80 0.13028 77.94)",
+          "oklch(0.95 0.13028 77.94)"
+        ]
+      },
+      "amber-screen": {
+        "role": "neutral",
+        "displayName": "Amber Screen",
+        "tonalRamp": [
+          "oklch(0.15 0.01538 81.72)",
+          "oklch(0.25 0.01538 81.72)",
+          "oklch(0.35 0.01538 81.72)",
+          "oklch(0.45 0.01538 81.72)",
+          "oklch(0.55 0.01538 81.72)",
+          "oklch(0.65 0.01538 81.72)",
+          "oklch(0.80 0.01538 81.72)",
+          "oklch(0.95 0.01538 81.72)"
+        ]
+      },
+      "p1-phosphor": {
+        "role": "primary",
+        "displayName": "P1 Phosphor",
+        "tonalRamp": [
+          "oklch(0.15 0.24932 146.58)",
+          "oklch(0.25 0.24932 146.58)",
+          "oklch(0.35 0.24932 146.58)",
+          "oklch(0.45 0.24932 146.58)",
+          "oklch(0.55 0.24932 146.58)",
+          "oklch(0.65 0.24932 146.58)",
+          "oklch(0.80 0.24932 146.58)",
+          "oklch(0.95 0.24932 146.58)"
+        ]
+      },
+      "p1-dim": {
+        "role": "neutral",
+        "displayName": "P1 Dim",
+        "tonalRamp": [
+          "oklch(0.15 0.12688 150.81)",
+          "oklch(0.25 0.12688 150.81)",
+          "oklch(0.35 0.12688 150.81)",
+          "oklch(0.45 0.12688 150.81)",
+          "oklch(0.55 0.12688 150.81)",
+          "oklch(0.65 0.12688 150.81)",
+          "oklch(0.80 0.12688 150.81)",
+          "oklch(0.95 0.12688 150.81)"
+        ]
+      },
+      "p1-screen": {
+        "role": "neutral",
+        "displayName": "P1 Screen",
+        "tonalRamp": [
+          "oklch(0.15 0.02165 147.55)",
+          "oklch(0.25 0.02165 147.55)",
+          "oklch(0.35 0.02165 147.55)",
+          "oklch(0.45 0.02165 147.55)",
+          "oklch(0.55 0.02165 147.55)",
+          "oklch(0.65 0.02165 147.55)",
+          "oklch(0.80 0.02165 147.55)",
+          "oklch(0.95 0.02165 147.55)"
+        ]
+      },
+      "white-phosphor": {
+        "role": "primary",
+        "displayName": "White Phosphor",
+        "tonalRamp": [
+          "oklch(0.15 0.02195 263.19)",
+          "oklch(0.25 0.02195 263.19)",
+          "oklch(0.35 0.02195 263.19)",
+          "oklch(0.45 0.02195 263.19)",
+          "oklch(0.55 0.02195 263.19)",
+          "oklch(0.65 0.02195 263.19)",
+          "oklch(0.80 0.02195 263.19)",
+          "oklch(0.95 0.02195 263.19)"
+        ]
+      },
+      "white-dim": {
+        "role": "neutral",
+        "displayName": "White Dim",
+        "tonalRamp": [
+          "oklch(0.15 0.03213 263.48)",
+          "oklch(0.25 0.03213 263.48)",
+          "oklch(0.35 0.03213 263.48)",
+          "oklch(0.45 0.03213 263.48)",
+          "oklch(0.55 0.03213 263.48)",
+          "oklch(0.65 0.03213 263.48)",
+          "oklch(0.80 0.03213 263.48)",
+          "oklch(0.95 0.03213 263.48)"
+        ]
+      },
+      "white-screen": {
+        "role": "neutral",
+        "displayName": "White Screen",
+        "tonalRamp": [
+          "oklch(0.15 0.01540 266.68)",
+          "oklch(0.25 0.01540 266.68)",
+          "oklch(0.35 0.01540 266.68)",
+          "oklch(0.45 0.01540 266.68)",
+          "oklch(0.55 0.01540 266.68)",
+          "oklch(0.65 0.01540 266.68)",
+          "oklch(0.80 0.01540 266.68)",
+          "oklch(0.95 0.01540 266.68)"
+        ]
+      },
+      "cga-phosphor": {
+        "role": "primary",
+        "displayName": "Cga Phosphor",
+        "tonalRamp": [
+          "oklch(0.15 0.00000 89.88)",
+          "oklch(0.25 0.00000 89.88)",
+          "oklch(0.35 0.00000 89.88)",
+          "oklch(0.45 0.00000 89.88)",
+          "oklch(0.55 0.00000 89.88)",
+          "oklch(0.65 0.00000 89.88)",
+          "oklch(0.80 0.00000 89.88)",
+          "oklch(0.95 0.00000 89.88)"
+        ]
+      },
+      "cga-accent": {
+        "role": "primary",
+        "displayName": "Cga Accent",
+        "tonalRamp": [
+          "oklch(0.15 0.13649 195.03)",
+          "oklch(0.25 0.13649 195.03)",
+          "oklch(0.35 0.13649 195.03)",
+          "oklch(0.45 0.13649 195.03)",
+          "oklch(0.55 0.13649 195.03)",
+          "oklch(0.65 0.13649 195.03)",
+          "oklch(0.80 0.13649 195.03)",
+          "oklch(0.95 0.13649 195.03)"
+        ]
+      },
+      "cga-secondary": {
+        "role": "secondary",
+        "displayName": "Cga Secondary",
+        "tonalRamp": [
+          "oklch(0.15 0.27182 327.90)",
+          "oklch(0.25 0.27182 327.90)",
+          "oklch(0.35 0.27182 327.90)",
+          "oklch(0.45 0.27182 327.90)",
+          "oklch(0.55 0.27182 327.90)",
+          "oklch(0.65 0.27182 327.90)",
+          "oklch(0.80 0.27182 327.90)",
+          "oklch(0.95 0.27182 327.90)"
+        ]
+      },
+      "cga-dim": {
+        "role": "neutral",
+        "displayName": "Cga Dim",
+        "tonalRamp": [
+          "oklch(0.15 0.02887 196.62)",
+          "oklch(0.25 0.02887 196.62)",
+          "oklch(0.35 0.02887 196.62)",
+          "oklch(0.45 0.02887 196.62)",
+          "oklch(0.55 0.02887 196.62)",
+          "oklch(0.65 0.02887 196.62)",
+          "oklch(0.80 0.02887 196.62)",
+          "oklch(0.95 0.02887 196.62)"
+        ]
+      },
+      "cga-screen": {
+        "role": "neutral",
+        "displayName": "Cga Screen",
+        "tonalRamp": [
+          "oklch(0.15 0.01356 269.43)",
+          "oklch(0.25 0.01356 269.43)",
+          "oklch(0.35 0.01356 269.43)",
+          "oklch(0.45 0.01356 269.43)",
+          "oklch(0.55 0.01356 269.43)",
+          "oklch(0.65 0.01356 269.43)",
+          "oklch(0.80 0.01356 269.43)",
+          "oklch(0.95 0.01356 269.43)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Home wordmark",
+        "purpose": "Single-line name; increases to 7.7cqw on phones."
+      },
+      "headline": {
+        "displayName": "Channel headline",
+        "purpose": "Main channel headings; reduces to 2em on phones."
+      },
+      "body": {
+        "displayName": "Terminal prose",
+        "purpose": "Readable channel copy, capped at 70 characters."
+      },
+      "molding": {
+        "displayName": "Molded brand",
+        "purpose": "Brand mark on the physical control panel."
+      },
+      "osd": {
+        "displayName": "Pixel OSD",
+        "purpose": "Transient status messages and channel digits."
+      }
+    },
+    "shadows": [
+      {
+        "name": "monitor-shell",
+        "value": "0 35px 65px #0009,0 7px 12px #0009,inset 0 2px 1px #fff9,inset 3px 0 5px #fff5,inset -4px -7px 12px #685f485e,0 1px 0 #9f9680",
+        "purpose": "Heavy desk shadow and highlighted aged molding."
+      },
+      {
+        "name": "tube-recess",
+        "value": "inset 0 6px 12px #000,0 -1px 0 #6c746855,inset 0 -3px 4px #adb89d44",
+        "purpose": "Recess the glass behind the bezel."
+      },
+      {
+        "name": "hardware-key",
+        "value": "0 3px 3px #5b543c66,0 1px 0 #6d664f,inset 0 1px 1px #fff,inset 0 -2px 2px #8e84633b",
+        "purpose": "Raised molded key at rest."
+      },
+      {
+        "name": "hardware-key-pressed",
+        "value": "0 1px 2px #5b543c66,inset 0 1px 2px #817b5d44",
+        "purpose": "Compress the lower shadow while pressed."
+      }
+    ],
+    "motion": [
+      {
+        "name": "screen-interaction",
+        "value": "background .12s, color .12s",
+        "purpose": "Inverse screen hover feedback."
+      },
+      {
+        "name": "channel-transition",
+        "value": "0.18s",
+        "purpose": "Framer Motion opacity, vertical and skew transition; reduced motion removes travel."
+      },
+      {
+        "name": "idle-breathe",
+        "value": "6s ease-in-out 3s infinite",
+        "purpose": "One-pixel desktop machine float; disabled by reduced motion and plain mode."
+      },
+      {
+        "name": "phosphor-flicker",
+        "value": "7.3s linear infinite",
+        "purpose": "Subtle picture variation; disabled by plain and reduced-motion modes."
+      },
+      {
+        "name": "refresh",
+        "value": "8.1s linear infinite",
+        "purpose": "Slow scan refresh; removed in plain and reduced-motion modes."
+      },
+      {
+        "name": "knob-spring",
+        "value": "spring(stiffness:180, damping:22)",
+        "purpose": "Physical brightness pointer rotation."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "(max-width:600px)"
+      },
+      {
+        "name": "compact-shell",
+        "value": "(max-width:900px)"
+      },
+      {
+        "name": "desktop-tilt",
+        "value": "(min-width:1000px)"
+      },
+      {
+        "name": "short-landscape",
+        "value": "(max-height:550px) and (min-width:601px)"
+      },
+      {
+        "name": "small-laptop",
+        "value": "(min-width:601px) and (max-height:750px) and (min-height:551px)"
+      },
+      {
+        "name": "tall-desktop",
+        "value": "(min-width:901px) and (min-height:751px)"
+      },
+      {
+        "name": "large-desktop",
+        "value": "(min-width:1500px) and (min-height:950px)"
+      }
+    ],
+    "notes": [
+      "CSS is the runtime source of truth. Color ramps are synthesized OKLCH preview metadata, not runtime palette additions.",
+      "Frontmatter owns primitive tokens; this sidecar extends it with material, interaction, responsive and narrative metadata.",
+      "Later CSS declarations keep the grille visible at every breakpoint and Home navigation in two columns.",
+      "Text-only story mode suppresses scenes, typewriter progression, random jitter, noise generation and static bursts; plain mode removes the complete glass/effects stack."
+    ],
+    "layout": {
+      "mode": "viewport-filling",
+      "height": "100dvh",
+      "width": "100%",
+      "tube": "flex: 1; min-height: 0; aspect-ratio: auto",
+      "storyZoom": false,
+      "roomFurniture": "hidden"
+    }
+  },
+  "components": [
+    {
+      "name": "Molded channel key",
+      "kind": "button",
+      "refersTo": "hardware-key",
+      "description": "A physical channel key beneath the glass.",
+      "html": "<button class=\"ds-hardware-key\" aria-label=\"Next channel\"><svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></button>",
+      "css": ".ds-hardware-key{display:grid;place-items:center;width:44px;height:44px;background:linear-gradient(145deg,#e7e0cc,#c1b89e);color:#4d5142;border:0;border-radius:7px;cursor:pointer;box-shadow:0 3px 3px #5b543c66,0 1px 0 #6d664f,inset 0 1px 1px #fff,inset 0 -2px 2px #8e84633b}.ds-hardware-key:hover{filter:brightness(1.03)}.ds-hardware-key:active{box-shadow:0 1px 2px #5b543c66,inset 0 1px 2px #817b5d44}.ds-hardware-key:focus-visible{outline:2px solid #2b4a30;outline-offset:4px}"
+    },
+    {
+      "name": "Olive power switch",
+      "kind": "button",
+      "refersTo": "power-button",
+      "description": "A round raised switch with a physical power symbol.",
+      "html": "<button class=\"ds-power-button\" aria-label=\"Power\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 2v10M6.3 5.6a9 9 0 1 0 11.4 0\"/></svg></button>",
+      "css": ".ds-power-button{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(145deg,#87916a,#5c684b);color:#d4dcc0;border:1px solid #626e50;cursor:pointer;box-shadow:0 3px 4px #403e2e99,inset 0 1px 2px #d2d4a999,inset 0 -2px 3px #34462e6b}.ds-power-button:hover{filter:brightness(1.03)}.ds-power-button:focus-visible{outline:2px solid #2b4a30;outline-offset:4px}"
+    },
+    {
+      "name": "Two-column channel menu",
+      "kind": "nav",
+      "refersTo": "channel-menu",
+      "description": "Numbered terminal buttons with inverse hover and visible keyboard focus.",
+      "html": "<nav class=\"ds-channel-menu\" aria-label=\"Channels\"><button><span>01</span> About the human</button><button><span>02</span> Work</button><button><span>03</span> Tools &amp; skills</button><button><span>04</span> The journey</button></nav>",
+      "css": ".ds-channel-menu{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;background:var(--bg,#0e1210);padding:12px}.ds-channel-menu button{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;gap:7px;align-items:center;min-height:28px;font-size:11px;line-height:1.5;padding:3px 2px}.ds-channel-menu button span{color:var(--dim,#b0b9aa)}.ds-channel-menu button:hover{color:var(--bg,#0e1210);background:var(--accent,#6dff9c)}.ds-channel-menu button:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+    },
+    {
+      "name": "Transmission launcher",
+      "kind": "button",
+      "refersTo": "story-invitation",
+      "description": "A bordered screen invitation to the seven-chapter personal transmission.",
+      "html": "<button class=\"ds-story-invitation\"><span>There is a story<br>behind the signal.</span><strong><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M5 3 21 12 5 21Z\"/></svg> PLAY TRANSMISSION</strong><small>7 CHAPTERS / ABOUT 2 MIN</small></button>",
+      "css": ".ds-story-invitation{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;flex-direction:column;align-items:flex-start;gap:5px;position:relative;border:1px solid color-mix(in srgb,var(--accent,#6dff9c) 30%,transparent);padding:10px;font-size:10px}.ds-story-invitation>span{color:var(--dim,#b0b9aa);font-size:9px;line-height:1.6}.ds-story-invitation strong{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:500;margin-top:1px}.ds-story-invitation small{color:var(--dim,#b0b9aa);font-size:8px}.ds-story-invitation:hover,.ds-story-invitation:hover *{background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-story-invitation:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+    },
+    {
+      "name": "Terminal return-address field",
+      "kind": "input",
+      "refersTo": "terminal-field",
+      "description": "An explicitly labeled square field with a phosphor bottom rule.",
+      "html": "<label class=\"ds-field-label\">02 / RETURN ADDRESS<input class=\"ds-field\" type=\"email\" autocomplete=\"email\" required placeholder=\"you@somewhere.good\"></label>",
+      "css": ".ds-field-label{font-family:\"IBM Plex Mono\",monospace;font-size:10px;color:var(--secondary,#ffb347);letter-spacing:.04em}.ds-field{display:block;width:100%;min-height:44px;background:color-mix(in srgb,var(--accent,#6dff9c) 3%,var(--bg,#0e1210));color:var(--phosphor,#efe9d8);border:0;border-bottom:1px solid color-mix(in srgb,var(--accent,#6dff9c) 40%,transparent);border-radius:0;margin-top:7px;padding:10px;font-family:\"IBM Plex Mono\",monospace;font-size:1.35em;line-height:1.7;caret-color:var(--accent,#6dff9c)}.ds-field::placeholder{color:var(--dim,#b0b9aa);opacity:1}.ds-field:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+    },
+    {
+      "name": "Selected project row",
+      "kind": "button",
+      "refersTo": "project-row-selected",
+      "description": "The active project uses a solid inverse selection bar.",
+      "html": "<button class=\"ds-project-row\" role=\"tab\" aria-selected=\"true\"><span>01</span><span>SELECTED PROJECT</span><small>VIEW</small></button>",
+      "css": ".ds-project-row{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;padding:10px 7px;font-size:11px;line-height:1.6;background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-project-row>span:nth-child(2){flex:1}.ds-project-row>span:first-child{font-size:.8em}.ds-project-row small{font-size:.75em}.ds-project-row:hover{background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-project-row:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+    },
+    {
+      "name": "Phosphor OSD",
+      "kind": "custom",
+      "refersTo": "status-overlay",
+      "description": "A transient pixel-font status announcement over the glass.",
+      "html": "<div class=\"ds-osd\" role=\"status\" aria-live=\"polite\">CH 01 / HOME</div>",
+      "css": ".ds-osd{font-family:\"Silkscreen\",monospace;color:#6dff9c;text-shadow:1px 1px #061309,-1px -1px #061309,0 0 5px #000;font-size:11px;text-align:right;background:#0a110bba;padding:4px 6px;max-width:85%;pointer-events:none}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Personal Signal",
+    "overview": "A warm, aged plastic CRT sits on a dark desk. The machine is the portfolio: its curved glass contains a working teletext and BBS interface, while the molded controls remain outside the picture. Hardware feels used and tactile; screen content feels numbered, deliberate and alive.\n\nThe user-supplied SA-01 brief fixes this world. CSS materials, ordinary React content and synthesized opt-in audio carry the experience. The same machine remains visible on phones, with a compact first Home frame and internally scrolling reading surfaces.",
+    "keyCharacteristics": [
+      "Aged plastic, recessed seams, a dark gasket and curved reflective glass.",
+      "Phosphor typography, numbered channels and inverse selection bars.",
+      "Physical controls and an always-visible sound grille.",
+      "Optional sound, plain reading mode and reduced-motion support."
+    ],
+    "rules": [
+      {
+        "name": "The Chassis Rule",
+        "body": "Colour mode changes the picture and its emitted light; it does not recolor the plastic chassis.",
+        "section": "colors"
+      },
+      {
+        "name": "The Readable Signal Rule",
+        "body": "Effects must yield to plain reading mode and reduced-motion preferences.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep physical controls beneath the glass and the sound grille visible at every breakpoint.",
+      "**Do** keep Home navigation in two columns and the transmission launcher reachable in its first compact frame.",
+      "**Do** use inverse phosphor selection for interactive screen states and preserve visible keyboard focus.",
+      "**Do** preserve plain mode, reduced motion, text-only storytelling and muted-by-default sound.",
+      "**Do** draw hardware and story materials in code and keep prose selectable, semantic and scrollable."
+    ],
+    "donts": [
+      "**Don't** recolor the molded chassis when changing screen colour modes.",
+      "**Don't** let decorative CRT layers intercept clicks or obscure reading controls.",
+      "**Don't** reintroduce story scenes, random jitter or static bursts into text-only storytelling.",
+      "**Don't** treat the compact Home menu as a generic spacious card grid."
+    ]
+  }
+}

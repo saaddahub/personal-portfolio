@@ -79,7 +79,7 @@ const SkillsGlobe = ({ embedded = false }) => {
     
     // Read theme color for the dots
     const getThemeColor = () => {
-      const colorStr = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
+      const colorStr = getComputedStyle(container.closest('.portfolio-surface') || document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
       return new THREE.Color(colorStr);
     };
     

@@ -120,10 +120,10 @@ const DottedText = ({ text = "data", className = "" }) => {
     let animationFrame;
     let isVisible = false;
     
-      let currentFillStyle = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
+      let currentFillStyle = getComputedStyle(canvas.closest('.portfolio-surface') || document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
       
       const themeObserver = new MutationObserver(() => {
-        currentFillStyle = getComputedStyle(document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
+        currentFillStyle = getComputedStyle(canvas.closest('.portfolio-surface') || document.body).getPropertyValue('--color-text-primary').trim() || '#ffffff';
       });
       themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 

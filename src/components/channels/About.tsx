@@ -1,0 +1,3 @@
+import { ui } from './../../data/content';
+import { content } from '../../data/content';
+export function About() { return <section><h1>{ui.theHuman}<br /><em>{ui.behindTheSignal}</em></h1><div className="about-layout"><div>{content.about.map(p => <p key={p}>{p}</p>)}</div><pre className="ascii-avatar" aria-label={ui.pixelPortraitOfAPersonAtA}>{ui.sa01}</pre></div><div className="terminal-section"><h2>{ui.currentlyRunning}</h2><dl className="currently-list">{content.currently.map(([label, text]) => <div key={label}><dt>{label}</dt><dd>{text}</dd></div>)}</dl></div><div className="terminal-section"><h2>{ui.fileFactsTxt}</h2>{content.facts.map((fact, i) => <p className="fact-line" key={fact}><span>{ui.label0}{i + 1}{ui.symbol2}</span> {fact}</p>)}</div></section>; }

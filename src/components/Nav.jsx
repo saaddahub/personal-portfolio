@@ -3,8 +3,8 @@ import './Nav.css';
 import ThemeToggle from './ThemeToggle';
 import ContactButton from './ContactButton';
 
-const Nav = ({ onMenuChange }) => {
-  const [isScrolled, setIsScrolled] = useState(() => window.scrollY > 40);
+const Nav = ({ onMenuChange, scroller }) => {
+  const [isScrolled, setIsScrolled] = useState(() => (scroller?.scrollTop ?? window.scrollY) > 40);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef(null);
   const menuRef = useRef(null);
@@ -12,12 +12,13 @@ const Nav = ({ onMenuChange }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled((scroller?.scrollTop ?? window.scrollY) > 40);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const target = scroller || window;
+    target.addEventListener('scroll', handleScroll, { passive: true });
+    return () => target.removeEventListener('scroll', handleScroll);
+  }, [scroller]);
 
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 901px)');
@@ -105,7 +106,7 @@ const Nav = ({ onMenuChange }) => {
         id="mobile-navigation"
         ref={menuRef}
         className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`}
-        inert={!mobileMenuOpen}
+        inert={!mobileMenuOpen ? '' : undefined}
         aria-hidden={!mobileMenuOpen}
         data-lenis-prevent
       >

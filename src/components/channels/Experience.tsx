@@ -1,0 +1,3 @@
+import { ui } from './../../data/content';
+import { content } from '../../data/content';
+export function Experience() { return <section><h1>{ui.theLongWay}<br /><em>{ui.isStillAWay}</em></h1><p>{ui.aFewStopsAlongTheFrequency}</p><div className="experience-timeline">{content.experience.map((entry, i) => <details key={entry.title} open={i === 0}><summary><span className="timeline-connector">{i === content.experience.length - 1 ? '└─' : '├─'}</span><span><small>{entry.year}</small><strong>{entry.title}</strong><span>{entry.place}</span></span><b>{ui.symbol6}</b></summary><p>{entry.description}</p></details>)}</div></section>; }

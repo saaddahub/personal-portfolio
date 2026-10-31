@@ -1,0 +1,164 @@
+/* Keep the public portfolio finish out of the editing studio. */
+:root:has(.portfolio-surface) {
+  --color-bg: #141310;
+  --color-bg-raised: #1c1a16;
+  --color-bg-card: #24211c;
+  --color-text-primary: #eee8dc;
+  --color-text-secondary: #b8afa0;
+  --color-text-muted: #a29888;
+  --color-border-subtle: rgb(238 224 201 / 10%);
+  --color-border-default: rgb(238 224 201 / 19%);
+  --color-accent-brand: #c8a477;
+  --color-accent-primary: #eee8dc;
+  --color-accent-pastel-a: #d5c2a5;
+  --color-accent-pastel-b: #c9c6a6;
+  --vintage-grain-opacity: .18;
+  --vintage-edge-ink: rgb(8 6 4 / 28%);
+  --vintage-edge-warmth: rgb(150 91 44 / 12%);
+}
+
+:root[data-theme='light']:has(.portfolio-surface) {
+  --color-bg: #eee6d6;
+  --color-bg-raised: #f5eedf;
+  --color-bg-card: #e4dac7;
+  --color-text-primary: #29261f;
+  --color-text-secondary: #62594b;
+  --color-text-muted: #716655;
+  --color-border-subtle: rgb(69 50 29 / 12%);
+  --color-border-default: rgb(69 50 29 / 24%);
+  --color-accent-brand: #805a32;
+  --color-accent-primary: #29261f;
+  --color-accent-pastel-a: #d5c2a5;
+  --color-accent-pastel-b: #c9c6a6;
+  --vintage-grain-opacity: .10;
+  --vintage-edge-ink: rgb(85 58 24 / 9%);
+  --vintage-edge-warmth: rgb(150 91 44 / 8%);
+}
+
+/* A cached, static texture adds grain without another animation loop. */
+.portfolio-surface::before,
+.portfolio-surface::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 9000;
+}
+
+.portfolio-surface::before {
+  background: url('/textures/film-grain.svg') repeat;
+  background-size: 180px 180px;
+  opacity: var(--vintage-grain-opacity);
+}
+
+.portfolio-surface::after {
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--vintage-edge-warmth), transparent 48%),
+    radial-gradient(ellipse at 100% 100%, var(--vintage-edge-warmth), transparent 48%);
+  box-shadow: inset 0 0 100px var(--vintage-edge-ink);
+}
+
+/* Only the margins are resampled, so fixed navigation and the reading plane stay intact. */
+.analog-edges {
+  position: fixed;
+  inset: 0;
+  z-index: 8998;
+  pointer-events: none;
+  user-select: none;
+}
+
+.analog-side {
+  position: absolute;
+  inset-block: 0;
+  width: clamp(56px, 12vw, 180px);
+  --edge-direction: to right;
+  --edge-optics: url('#analog-left');
+}
+
+.analog-side--left { left: 0; }
+.analog-side--right {
+  right: 0;
+  --edge-direction: to left;
+  --edge-optics: url('#analog-right');
+}
+
+.analog-edge {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(var(--edge-direction), #000, rgb(0 0 0 / 72%) 22%, transparent);
+}
+
+.analog-edge--soft {
+  backdrop-filter: blur(1.5px) sepia(.18);
+  background: linear-gradient(var(--edge-direction), var(--vintage-edge-ink), transparent 85%);
+}
+
+/* Separate plain blur remains the fallback where SVG backdrop filters are unsupported. */
+.analog-edge--optical {
+  backdrop-filter: var(--edge-optics);
+}
+
+.analog-edge--tracking {
+  opacity: 0;
+  backdrop-filter: var(--edge-optics) contrast(1.12);
+  background: linear-gradient(var(--edge-direction), rgb(188 126 65 / 16%), transparent);
+}
+
+.is-tracking .analog-edge--tracking {
+  animation: analog-tracking 480ms steps(1, end) both;
+}
+
+.is-tracking .analog-side--right .analog-edge--tracking {
+  animation-delay: 90ms;
+  animation-direction: reverse;
+}
+
+@keyframes analog-tracking {
+  0%, 100% { opacity: 0; clip-path: inset(15% 0 80%); transform: translateY(0); }
+  16% { opacity: .6; clip-path: inset(15% 0 80%); transform: translateY(3px); }
+  32% { opacity: .35; clip-path: inset(64% 0 24%); transform: translateY(-2px); }
+  50% { opacity: 0; }
+  72% { opacity: .45; clip-path: inset(38% 0 59%); transform: translateY(1px); }
+  88% { opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .analog-side { width: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .analog-edge--tracking { display: none; }
+  .analog-edge--optical { display: none; }
+  .analog-edge--soft { backdrop-filter: blur(.6px) sepia(.18); }
+}
+
+.portfolio-surface ::selection {
+  color: var(--color-bg);
+  background: var(--color-accent-brand);
+}
+
+.portfolio-surface .preloader-container {
+  background-color: var(--color-bg-raised);
+}
+
+.portfolio-surface .btn-primary:hover {
+  background: color-mix(in srgb, var(--color-accent-primary) 88%, var(--color-bg));
+}
+
+.portfolio-surface .cta-split-half {
+  color: #29261f;
+}
+
+.portfolio-surface .btn-split {
+  background-color: #514332;
+  color: #f5eedf;
+}
+
+@media (forced-colors: active), print {
+  .analog-edges,
+  .portfolio-surface::before,
+  .portfolio-surface::after {
+    display: none;
+  }
+}

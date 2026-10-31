@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePortfolio } from '../context/PortfolioContext';
+import VintageLens from './VintageLens';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -87,6 +88,20 @@ const Hero = ({ animationReady = true }) => {
         });
       });
 
+      gsap.to('.hero-focus-plane', {
+        scale: 1.2,
+        filter: 'blur(9px)',
+        opacity: 0.15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: () => `+=${window.innerHeight * .7}`,
+          scrub: .65,
+          invalidateOnRefresh: true,
+        },
+      });
+
     }, heroRef);
     
     return () => ctx.revert();
@@ -122,6 +137,7 @@ const Hero = ({ animationReady = true }) => {
 
   return (
     <section className="hero-section" ref={heroRef} id="home">
+      <VintageLens animationReady={animationReady} />
       
       {/* BACKGROUND: Spotlight and Particles */}
       <div className="parallax-layer parallax-sky" data-speed="0.1" data-max="100">
@@ -149,6 +165,7 @@ const Hero = ({ animationReady = true }) => {
       {/* TEXT CONTENT */}
       <div className="parallax-layer parallax-text" data-speed="0.4" data-max="350">
         <div className="hero-text-content" style={getAlignmentStyle()}>
+          <div className="hero-focus-plane">
           <h1 className="hero-headline text-gradient">
             <span className="hero-name-first">{heroData.nameFirst}</span>
             <span className="hero-name-last">{heroData.nameLast}</span>
@@ -169,6 +186,7 @@ const Hero = ({ animationReady = true }) => {
           <p className="hero-desc">
             {heroData.desc}
           </p>
+          </div>
         </div>
       </div>
 

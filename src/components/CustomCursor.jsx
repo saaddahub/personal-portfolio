@@ -54,13 +54,14 @@ const CustomCursor = () => {
     let animationFrameId;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
     };
 
     const onMouseMove = (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      const bounds = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - bounds.left;
+      mouse.y = e.clientY - bounds.top;
       if (!isVisible) setIsVisible(true);
     };
     
@@ -141,7 +142,7 @@ const CustomCursor = () => {
     <>
       <style>
         {`
-          * {
+          .portfolio-surface * {
             cursor: none !important;
           }
         `}
@@ -152,8 +153,8 @@ const CustomCursor = () => {
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           pointerEvents: 'none',
           zIndex: 9999,
           background: 'transparent'

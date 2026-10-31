@@ -35,7 +35,8 @@ import ChangePasswordModal from './ChangePasswordModal';
 import { logout } from './adminAuth';
 import { supabase, isAdmin } from '../lib/supabase';
 import ProjectImageInput from './ProjectImageInput';
-import { projectPath, projectColor } from '../lib/projects';
+import ProjectVideoInput from './ProjectVideoInput';
+import { externalLink, projectPath, projectColor } from '../lib/projects';
 
 // Error Boundary to prevent white/black screens
 class AdminErrorBoundary extends Component {
@@ -243,7 +244,8 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
     url: '',
     liveUrl: '',
     tags: 'React, Vite',
-    image: ''
+    image: '',
+    videoUrl: ''
   });
 
   const toastTimer = useRef(null);
@@ -298,6 +300,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
   const handleCreateProject = (e) => {
     e.preventDefault();
     if (!newProject.client.trim()) return;
+    if (newProject.videoUrl.trim() && !externalLink(newProject.videoUrl)) { showToast('Use an http:// or https:// video link.'); return; }
 
     const tagsArray = newProject.tags
       .split(',')
@@ -311,6 +314,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
       url: newProject.url,
       liveUrl: newProject.liveUrl,
       image: newProject.image,
+      videoUrl: newProject.videoUrl,
       tags: tagsArray.length > 0 ? tagsArray : ['Portfolio']
     });
 
@@ -321,7 +325,8 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
       url: '',
       liveUrl: '',
       tags: 'React, Vite',
-      image: ''
+      image: '',
+      videoUrl: ''
     });
     setShowAddProject(false);
     showToast('Project added. Saving to cloud…');
@@ -856,6 +861,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
                     <div className="admin-field-group">
                       <ProjectImageInput onBusyChange={setImageBusy} value={newProject.image} name={newProject.client} onChange={image => setNewProject(prev => ({ ...prev, image }))} />
                     </div>
+                    <ProjectVideoInput value={newProject.videoUrl} onChange={videoUrl => setNewProject(prev => ({ ...prev, videoUrl }))} />
                   </div>
 
                   <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
@@ -979,6 +985,7 @@ const AdminPortalInner = ({ onExit, onLogout }) => {
 
                       <div className="admin-field-group">
                         <ProjectImageInput value={project.image || ""} name={project.client} onChange={image => updateProject(project.id, { image })} />
+                        <div style={{ marginTop: '1.5rem' }}><ProjectVideoInput value={project.videoUrl || ''} onChange={videoUrl => updateProject(project.id, { videoUrl })} /></div>
                         <details style={{ marginTop: '1.5rem' }}><summary style={{ cursor: 'pointer', marginBottom: '1rem' }}>Project page & color</summary>
                           <label className="admin-label">Panel color</label><input type="color" aria-label="Project panel color" value={projectColor(project, data.projects.indexOf(project))} onChange={e => updateProject(project.id, { accent: e.target.value })} />
                           {[['role', 'My role'], ['year', 'Year'], ['sourceUrl', 'Source code URL']].map(([key,label]) => <div className="admin-field-group" key={key}><label className="admin-label" htmlFor={project.id+'-'+key}>{label}</label><input id={project.id+'-'+key} className="admin-input" value={project[key] || ''} onChange={e=>updateProject(project.id,{[key]:e.target.value})} /></div>)}

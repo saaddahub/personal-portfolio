@@ -203,7 +203,7 @@ const MusicPlayer = () => {
       />
 
       {/* UIVERSE Interactive Music Player Panel */}
-      <div className="music-player-panel" id="music-player-panel" inert={!isExpanded} aria-hidden={!isExpanded}>
+      <div className="music-player-panel" id="music-player-panel" inert={!isExpanded ? '' : undefined} aria-hidden={!isExpanded}>
         <div className="uiverse-music-container">
           
           {/* Top Floating Vinyl Disc (peeking out) */}
