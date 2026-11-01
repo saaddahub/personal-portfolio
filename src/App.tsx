@@ -3,6 +3,8 @@ import { Room } from './components/Room';
 import { ui } from './data/content';
 
 const Legacy = lazy(() => import('./Legacy'));
+const Rowan = lazy(() => import('./os/Rowan.jsx'));
+const Portfolio = lazy(() => import('./components/PortfolioScreen'));
 export default function App() {
   const [location, setLocation] = useState(window.location.pathname + window.location.hash);
   useEffect(() => {
@@ -13,5 +15,9 @@ export default function App() {
   }, []);
   return location.startsWith('/admin') || location.endsWith('#admin')
     ? <Suspense fallback={<p>{ui.openingArchive}</p>}><Legacy /></Suspense>
-    : <Room />;
+    : location.startsWith('/read')
+      ? <Suspense fallback={<p>Opening portfolio…</p>}><Portfolio /></Suspense>
+      : location.startsWith('/monitor') || location.includes('#story')
+        ? <Room />
+        : <Suspense fallback={<p style={{ padding: 32 }}>Opening Rowan…</p>}><Rowan /></Suspense>;
 }

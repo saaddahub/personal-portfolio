@@ -1,0 +1,87 @@
+/* Resample only the margins: the reading plane stays sharp. */
+.screen > .analog-edges {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+}
+.screen > .analog-edges::before,
+.screen > .analog-edges::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.screen > .analog-edges::before {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, #000d, transparent 13% 87%, #000d),
+    radial-gradient(ellipse at center, transparent 59%, #0004 82%, #000e 100%);
+}
+.screen > .analog-edges::after {
+  z-index: 2;
+  border: 1px solid #74b6ff12;
+  box-shadow:
+    inset 2px 0 14px #1e78ff28,
+    inset -2px 0 14px #1059d92b,
+    inset 0 1px 8px #67d9e01a,
+    inset 0 -2px 16px #164e8126;
+}
+.screen .analog-side {
+  position: absolute;
+  inset-block: 0;
+  width: clamp(34px, 11%, 170px);
+  --edge-direction: to right;
+  --edge-optics: url('#analog-left');
+}
+.screen .analog-side--left { left: 0; }
+.screen .analog-side--right {
+  right: 0;
+  --edge-direction: to left;
+  --edge-optics: url('#analog-right');
+}
+.screen .analog-edge {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(var(--edge-direction), #000 0%, #000d 23%, #0006 58%, transparent 100%);
+}
+.screen .analog-edge--soft {
+  backdrop-filter: blur(1.2px) saturate(1.5);
+}
+.screen .analog-edge--optical {
+  backdrop-filter: var(--edge-optics);
+}
+.screen .analog-edge--tracking {
+  opacity: 0;
+  backdrop-filter: var(--edge-optics) saturate(1.8);
+}
+.screen .is-tracking .analog-edge--tracking {
+  animation: edge-tracking 440ms steps(2, end) both;
+}
+.screen .is-tracking .analog-side--right .analog-edge--tracking {
+  animation-delay: 70ms;
+}
+@keyframes edge-tracking {
+  0%, 100% { opacity: 0; clip-path: inset(20% 0 75%); }
+  25% { opacity: .5; clip-path: inset(20% 0 75%); }
+  65% { opacity: .3; clip-path: inset(68% 0 26%); }
+}
+.plain .screen > .analog-edges { display: none; }
+.screen:is(.degrade-2, .degrade-3) .analog-edge--optical,
+.screen:is(.degrade-2, .degrade-3) .analog-edge--tracking {
+  display: none;
+}
+.screen:has(.text-only-story) > .analog-edges { display: none; }
+@media (max-width: 600px) {
+  .screen .analog-side { width: 24px; }
+  .screen > .analog-edges::before {
+    background: radial-gradient(ellipse at center, transparent 62%, #0003 83%, #000b 100%);
+  }
+}
+@media (prefers-reduced-motion: reduce), (forced-colors: active), print {
+  .screen .analog-edge--optical,
+  .screen .analog-edge--tracking { display: none; }
+}

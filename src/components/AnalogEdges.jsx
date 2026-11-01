@@ -22,12 +22,12 @@ export default function AnalogEdges() {
       clearTimeout(settle);
       settle = setTimeout(stop, 700);
     };
-    window.addEventListener('scroll', track, { passive: true });
+    window.addEventListener('scroll', track, { passive: true, capture: true });
     document.addEventListener('visibilitychange', stop);
     reduced.addEventListener('change', stop);
     return () => {
       stop();
-      window.removeEventListener('scroll', track);
+      window.removeEventListener('scroll', track, true);
       document.removeEventListener('visibilitychange', stop);
       reduced.removeEventListener('change', stop);
     };
@@ -45,10 +45,10 @@ export default function AnalogEdges() {
               <feDisplacementMap in="SourceGraphic" in2="map" scale=".55"
                 xChannelSelector="R" yChannelSelector="G" result="zoom" />
               <feGaussianBlur in="zoom" stdDeviation=".028 .0007" result="soft" />
-              <feOffset in="soft" dx=".018" result="red-offset" />
+              <feOffset in="soft" dx=".04" result="red-offset" />
               <feColorMatrix in="red-offset" type="matrix" result="red"
                 values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
-              <feOffset in="soft" dx="-.018" result="blue-offset" />
+              <feOffset in="soft" dx="-.04" result="blue-offset" />
               <feColorMatrix in="blue-offset" type="matrix" result="blue"
                 values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               <feColorMatrix in="soft" type="matrix" result="green"

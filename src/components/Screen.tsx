@@ -9,6 +9,7 @@ import { PowerAnimation } from './PowerAnimation';
 import { StaticBurst } from './StaticBurst';
 import { TestCard } from './TestCard';
 import { Osd } from './Osd';
+import AnalogEdges from './AnalogEdges.jsx';
 import { StoryLauncher } from './story/StoryLauncher';
 import { sfx } from '../audio/sfx';
 
@@ -70,6 +71,7 @@ export function Screen() {
     </div>
     <div className="effects" aria-hidden="true"><div className="bloom" /><div className="refresh-bar" /><div className="scanlines" /><div className="rgb-mask" /><canvas ref={canvas} width="160" height="120" className="screen-noise" /><div className="vignette" /></div>
     <div className="glass" aria-hidden="true"><div className="window-reflection" /><div className="secondary-reflection" /><div className="specular" /><div className="glass-smudge" /></div>
+    <AnalogEdges />
     {state.power && !(state.storyMode && state.textOnly) && <StaticBurst signal={state.glitch} />}<PowerAnimation phase={state.phase} />
     {!state.power && <div className="off-mark">{ui.personalSignalStandby}</div>}
     {!reduced && typeof DeviceOrientationEvent !== 'undefined' && !motionAccess && matchMedia(ui.pointerCoarse).matches && <button className="motion-access" onClick={enableTilt} aria-label={ui.enableGlassMotionUsingDeviceTilt}>{ui.tilt}</button>}

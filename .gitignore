@@ -34,3 +34,6 @@ __pycache__/
 
 # Local visual verification artifacts
 .impeccable/review/
+
+# Local rendering tools and temporary encoder files
+/tmp/

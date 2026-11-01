@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rowan · entry motion render</title>
+<style>
+body{margin:0;background:#111714;color:#e8eee3;font:14px system-ui,sans-serif}header{display:flex;gap:14px;align-items:center;padding:14px 20px;flex-wrap:wrap}h1{font-size:16px;margin:0;margin-right:auto}button,a{border:0;border-radius:6px;padding:10px 16px;background:#dce5d6;color:#202722;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:wait}a[hidden]{display:none}button:focus-visible,a:focus-visible{outline:2px solid #efb89e;outline-offset:3px}canvas,video{display:block;max-width:100%;width:min(100vw,1280px);height:auto;margin:auto}p{margin:10px 20px;color:#b9c6b3;font-size:12px}#status{min-width:120px}
+</style><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script></head>
+<body><header><h1>Rowan · entry motion</h1><span id="status" role="status">Preparing scene…</span><button id="play" disabled>Play preview</button><button id="export" disabled>Render 60fps MP4</button><a id="download" href="/video.mp4" download="rowan-entry-motion.mp4" hidden>Save video</a></header>
+<canvas id="film" width="1280" height="800" aria-label="Both computer setups and cinematic approaches"></canvas>
+<p>Motion visualization using the approved screen artwork on 3D monitor models. Demonstrates both choices; the live operating systems are not implemented.</p>
+<script type="module" src="/scene.mjs"></script></body></html>
