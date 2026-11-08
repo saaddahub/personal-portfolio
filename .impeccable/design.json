@@ -1,754 +1,151 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-31T11:10:28.350268+00:00",
-  "title": "Design System: SA-01 Personal Monitor",
+  "generatedAt": "2026-11-08T00:00:00Z",
+  "title": "Design System: Night Blossom",
   "extensions": {
     "colorMeta": {
-      "room": {
-        "role": "neutral",
-        "displayName": "Room",
-        "tonalRamp": [
-          "oklch(0.15 0.01008 158.76)",
-          "oklch(0.25 0.01008 158.76)",
-          "oklch(0.35 0.01008 158.76)",
-          "oklch(0.45 0.01008 158.76)",
-          "oklch(0.55 0.01008 158.76)",
-          "oklch(0.65 0.01008 158.76)",
-          "oklch(0.80 0.01008 158.76)",
-          "oklch(0.95 0.01008 158.76)"
-        ]
-      },
-      "screen": {
-        "role": "neutral",
-        "displayName": "Screen",
-        "tonalRamp": [
-          "oklch(0.15 0.00752 163.98)",
-          "oklch(0.25 0.00752 163.98)",
-          "oklch(0.35 0.00752 163.98)",
-          "oklch(0.45 0.00752 163.98)",
-          "oklch(0.55 0.00752 163.98)",
-          "oklch(0.65 0.00752 163.98)",
-          "oklch(0.80 0.00752 163.98)",
-          "oklch(0.95 0.00752 163.98)"
-        ]
-      },
-      "phosphor": {
-        "role": "primary",
-        "displayName": "Phosphor",
-        "tonalRamp": [
-          "oklch(0.15 0.02349 90.76)",
-          "oklch(0.25 0.02349 90.76)",
-          "oklch(0.35 0.02349 90.76)",
-          "oklch(0.45 0.02349 90.76)",
-          "oklch(0.55 0.02349 90.76)",
-          "oklch(0.65 0.02349 90.76)",
-          "oklch(0.80 0.02349 90.76)",
-          "oklch(0.95 0.02349 90.76)"
-        ]
-      },
-      "accent": {
-        "role": "primary",
-        "displayName": "Accent",
-        "tonalRamp": [
-          "oklch(0.15 0.18588 151.38)",
-          "oklch(0.25 0.18588 151.38)",
-          "oklch(0.35 0.18588 151.38)",
-          "oklch(0.45 0.18588 151.38)",
-          "oklch(0.55 0.18588 151.38)",
-          "oklch(0.65 0.18588 151.38)",
-          "oklch(0.80 0.18588 151.38)",
-          "oklch(0.95 0.18588 151.38)"
-        ]
-      },
-      "secondary": {
-        "role": "secondary",
-        "displayName": "Secondary",
-        "tonalRamp": [
-          "oklch(0.15 0.14859 72.10)",
-          "oklch(0.25 0.14859 72.10)",
-          "oklch(0.35 0.14859 72.10)",
-          "oklch(0.45 0.14859 72.10)",
-          "oklch(0.55 0.14859 72.10)",
-          "oklch(0.65 0.14859 72.10)",
-          "oklch(0.80 0.14859 72.10)",
-          "oklch(0.95 0.14859 72.10)"
-        ]
-      },
-      "dim": {
-        "role": "neutral",
-        "displayName": "Dim",
-        "tonalRamp": [
-          "oklch(0.15 0.02318 132.59)",
-          "oklch(0.25 0.02318 132.59)",
-          "oklch(0.35 0.02318 132.59)",
-          "oklch(0.45 0.02318 132.59)",
-          "oklch(0.55 0.02318 132.59)",
-          "oklch(0.65 0.02318 132.59)",
-          "oklch(0.80 0.02318 132.59)",
-          "oklch(0.95 0.02318 132.59)"
-        ]
-      },
-      "plastic-light": {
-        "role": "neutral",
-        "displayName": "Plastic Light",
-        "tonalRamp": [
-          "oklch(0.15 0.02653 90.11)",
-          "oklch(0.25 0.02653 90.11)",
-          "oklch(0.35 0.02653 90.11)",
-          "oklch(0.45 0.02653 90.11)",
-          "oklch(0.55 0.02653 90.11)",
-          "oklch(0.65 0.02653 90.11)",
-          "oklch(0.80 0.02653 90.11)",
-          "oklch(0.95 0.02653 90.11)"
-        ]
-      },
-      "plastic-mid": {
-        "role": "neutral",
-        "displayName": "Plastic Mid",
-        "tonalRamp": [
-          "oklch(0.15 0.03089 90.35)",
-          "oklch(0.25 0.03089 90.35)",
-          "oklch(0.35 0.03089 90.35)",
-          "oklch(0.45 0.03089 90.35)",
-          "oklch(0.55 0.03089 90.35)",
-          "oklch(0.65 0.03089 90.35)",
-          "oklch(0.80 0.03089 90.35)",
-          "oklch(0.95 0.03089 90.35)"
-        ]
-      },
-      "plastic-dark": {
-        "role": "neutral",
-        "displayName": "Plastic Dark",
-        "tonalRamp": [
-          "oklch(0.15 0.03470 88.08)",
-          "oklch(0.25 0.03470 88.08)",
-          "oklch(0.35 0.03470 88.08)",
-          "oklch(0.45 0.03470 88.08)",
-          "oklch(0.55 0.03470 88.08)",
-          "oklch(0.65 0.03470 88.08)",
-          "oklch(0.80 0.03470 88.08)",
-          "oklch(0.95 0.03470 88.08)"
-        ]
-      },
-      "hardware-ink": {
-        "role": "neutral",
-        "displayName": "Hardware Ink",
-        "tonalRamp": [
-          "oklch(0.15 0.02256 121.49)",
-          "oklch(0.25 0.02256 121.49)",
-          "oklch(0.35 0.02256 121.49)",
-          "oklch(0.45 0.02256 121.49)",
-          "oklch(0.55 0.02256 121.49)",
-          "oklch(0.65 0.02256 121.49)",
-          "oklch(0.80 0.02256 121.49)",
-          "oklch(0.95 0.02256 121.49)"
-        ]
-      },
-      "bezel-light": {
-        "role": "neutral",
-        "displayName": "Bezel Light",
-        "tonalRamp": [
-          "oklch(0.15 0.01686 120.76)",
-          "oklch(0.25 0.01686 120.76)",
-          "oklch(0.35 0.01686 120.76)",
-          "oklch(0.45 0.01686 120.76)",
-          "oklch(0.55 0.01686 120.76)",
-          "oklch(0.65 0.01686 120.76)",
-          "oklch(0.80 0.01686 120.76)",
-          "oklch(0.95 0.01686 120.76)"
-        ]
-      },
-      "bezel-mid": {
-        "role": "neutral",
-        "displayName": "Bezel Mid",
-        "tonalRamp": [
-          "oklch(0.15 0.01412 131.76)",
-          "oklch(0.25 0.01412 131.76)",
-          "oklch(0.35 0.01412 131.76)",
-          "oklch(0.45 0.01412 131.76)",
-          "oklch(0.55 0.01412 131.76)",
-          "oklch(0.65 0.01412 131.76)",
-          "oklch(0.80 0.01412 131.76)",
-          "oklch(0.95 0.01412 131.76)"
-        ]
-      },
-      "bezel-dark": {
-        "role": "neutral",
-        "displayName": "Bezel Dark",
-        "tonalRamp": [
-          "oklch(0.15 0.01816 137.95)",
-          "oklch(0.25 0.01816 137.95)",
-          "oklch(0.35 0.01816 137.95)",
-          "oklch(0.45 0.01816 137.95)",
-          "oklch(0.55 0.01816 137.95)",
-          "oklch(0.65 0.01816 137.95)",
-          "oklch(0.80 0.01816 137.95)",
-          "oklch(0.95 0.01816 137.95)"
-        ]
-      },
-      "recess": {
-        "role": "neutral",
-        "displayName": "Recess",
-        "tonalRamp": [
-          "oklch(0.15 0.00911 153.04)",
-          "oklch(0.25 0.00911 153.04)",
-          "oklch(0.35 0.00911 153.04)",
-          "oklch(0.45 0.00911 153.04)",
-          "oklch(0.55 0.00911 153.04)",
-          "oklch(0.65 0.00911 153.04)",
-          "oklch(0.80 0.00911 153.04)",
-          "oklch(0.95 0.00911 153.04)"
-        ]
-      },
-      "key-light": {
-        "role": "neutral",
-        "displayName": "Key Light",
-        "tonalRamp": [
-          "oklch(0.15 0.02775 90.92)",
-          "oklch(0.25 0.02775 90.92)",
-          "oklch(0.35 0.02775 90.92)",
-          "oklch(0.45 0.02775 90.92)",
-          "oklch(0.55 0.02775 90.92)",
-          "oklch(0.65 0.02775 90.92)",
-          "oklch(0.80 0.02775 90.92)",
-          "oklch(0.95 0.02775 90.92)"
-        ]
-      },
-      "key-dark": {
-        "role": "neutral",
-        "displayName": "Key Dark",
-        "tonalRamp": [
-          "oklch(0.15 0.03707 91.17)",
-          "oklch(0.25 0.03707 91.17)",
-          "oklch(0.35 0.03707 91.17)",
-          "oklch(0.45 0.03707 91.17)",
-          "oklch(0.55 0.03707 91.17)",
-          "oklch(0.65 0.03707 91.17)",
-          "oklch(0.80 0.03707 91.17)",
-          "oklch(0.95 0.03707 91.17)"
-        ]
-      },
-      "key-ink": {
-        "role": "neutral",
-        "displayName": "Key Ink",
-        "tonalRamp": [
-          "oklch(0.15 0.02454 119.58)",
-          "oklch(0.25 0.02454 119.58)",
-          "oklch(0.35 0.02454 119.58)",
-          "oklch(0.45 0.02454 119.58)",
-          "oklch(0.55 0.02454 119.58)",
-          "oklch(0.65 0.02454 119.58)",
-          "oklch(0.80 0.02454 119.58)",
-          "oklch(0.95 0.02454 119.58)"
-        ]
-      },
-      "power-light": {
-        "role": "neutral",
-        "displayName": "Power Light",
-        "tonalRamp": [
-          "oklch(0.15 0.05681 119.71)",
-          "oklch(0.25 0.05681 119.71)",
-          "oklch(0.35 0.05681 119.71)",
-          "oklch(0.45 0.05681 119.71)",
-          "oklch(0.55 0.05681 119.71)",
-          "oklch(0.65 0.05681 119.71)",
-          "oklch(0.80 0.05681 119.71)",
-          "oklch(0.95 0.05681 119.71)"
-        ]
-      },
-      "power-dark": {
-        "role": "neutral",
-        "displayName": "Power Dark",
-        "tonalRamp": [
-          "oklch(0.15 0.04663 126.29)",
-          "oklch(0.25 0.04663 126.29)",
-          "oklch(0.35 0.04663 126.29)",
-          "oklch(0.45 0.04663 126.29)",
-          "oklch(0.55 0.04663 126.29)",
-          "oklch(0.65 0.04663 126.29)",
-          "oklch(0.80 0.04663 126.29)",
-          "oklch(0.95 0.04663 126.29)"
-        ]
-      },
-      "power-ink": {
-        "role": "neutral",
-        "displayName": "Power Ink",
-        "tonalRamp": [
-          "oklch(0.15 0.03852 120.16)",
-          "oklch(0.25 0.03852 120.16)",
-          "oklch(0.35 0.03852 120.16)",
-          "oklch(0.45 0.03852 120.16)",
-          "oklch(0.55 0.03852 120.16)",
-          "oklch(0.65 0.03852 120.16)",
-          "oklch(0.80 0.03852 120.16)",
-          "oklch(0.95 0.03852 120.16)"
-        ]
-      },
-      "amber-phosphor": {
-        "role": "primary",
-        "displayName": "Amber Phosphor",
-        "tonalRamp": [
-          "oklch(0.15 0.17038 76.39)",
-          "oklch(0.25 0.17038 76.39)",
-          "oklch(0.35 0.17038 76.39)",
-          "oklch(0.45 0.17038 76.39)",
-          "oklch(0.55 0.17038 76.39)",
-          "oklch(0.65 0.17038 76.39)",
-          "oklch(0.80 0.17038 76.39)",
-          "oklch(0.95 0.17038 76.39)"
-        ]
-      },
-      "amber-dim": {
-        "role": "neutral",
-        "displayName": "Amber Dim",
-        "tonalRamp": [
-          "oklch(0.15 0.13028 77.94)",
-          "oklch(0.25 0.13028 77.94)",
-          "oklch(0.35 0.13028 77.94)",
-          "oklch(0.45 0.13028 77.94)",
-          "oklch(0.55 0.13028 77.94)",
-          "oklch(0.65 0.13028 77.94)",
-          "oklch(0.80 0.13028 77.94)",
-          "oklch(0.95 0.13028 77.94)"
-        ]
-      },
-      "amber-screen": {
-        "role": "neutral",
-        "displayName": "Amber Screen",
-        "tonalRamp": [
-          "oklch(0.15 0.01538 81.72)",
-          "oklch(0.25 0.01538 81.72)",
-          "oklch(0.35 0.01538 81.72)",
-          "oklch(0.45 0.01538 81.72)",
-          "oklch(0.55 0.01538 81.72)",
-          "oklch(0.65 0.01538 81.72)",
-          "oklch(0.80 0.01538 81.72)",
-          "oklch(0.95 0.01538 81.72)"
-        ]
-      },
-      "p1-phosphor": {
-        "role": "primary",
-        "displayName": "P1 Phosphor",
-        "tonalRamp": [
-          "oklch(0.15 0.24932 146.58)",
-          "oklch(0.25 0.24932 146.58)",
-          "oklch(0.35 0.24932 146.58)",
-          "oklch(0.45 0.24932 146.58)",
-          "oklch(0.55 0.24932 146.58)",
-          "oklch(0.65 0.24932 146.58)",
-          "oklch(0.80 0.24932 146.58)",
-          "oklch(0.95 0.24932 146.58)"
-        ]
-      },
-      "p1-dim": {
-        "role": "neutral",
-        "displayName": "P1 Dim",
-        "tonalRamp": [
-          "oklch(0.15 0.12688 150.81)",
-          "oklch(0.25 0.12688 150.81)",
-          "oklch(0.35 0.12688 150.81)",
-          "oklch(0.45 0.12688 150.81)",
-          "oklch(0.55 0.12688 150.81)",
-          "oklch(0.65 0.12688 150.81)",
-          "oklch(0.80 0.12688 150.81)",
-          "oklch(0.95 0.12688 150.81)"
-        ]
-      },
-      "p1-screen": {
-        "role": "neutral",
-        "displayName": "P1 Screen",
-        "tonalRamp": [
-          "oklch(0.15 0.02165 147.55)",
-          "oklch(0.25 0.02165 147.55)",
-          "oklch(0.35 0.02165 147.55)",
-          "oklch(0.45 0.02165 147.55)",
-          "oklch(0.55 0.02165 147.55)",
-          "oklch(0.65 0.02165 147.55)",
-          "oklch(0.80 0.02165 147.55)",
-          "oklch(0.95 0.02165 147.55)"
-        ]
-      },
-      "white-phosphor": {
-        "role": "primary",
-        "displayName": "White Phosphor",
-        "tonalRamp": [
-          "oklch(0.15 0.02195 263.19)",
-          "oklch(0.25 0.02195 263.19)",
-          "oklch(0.35 0.02195 263.19)",
-          "oklch(0.45 0.02195 263.19)",
-          "oklch(0.55 0.02195 263.19)",
-          "oklch(0.65 0.02195 263.19)",
-          "oklch(0.80 0.02195 263.19)",
-          "oklch(0.95 0.02195 263.19)"
-        ]
-      },
-      "white-dim": {
-        "role": "neutral",
-        "displayName": "White Dim",
-        "tonalRamp": [
-          "oklch(0.15 0.03213 263.48)",
-          "oklch(0.25 0.03213 263.48)",
-          "oklch(0.35 0.03213 263.48)",
-          "oklch(0.45 0.03213 263.48)",
-          "oklch(0.55 0.03213 263.48)",
-          "oklch(0.65 0.03213 263.48)",
-          "oklch(0.80 0.03213 263.48)",
-          "oklch(0.95 0.03213 263.48)"
-        ]
-      },
-      "white-screen": {
-        "role": "neutral",
-        "displayName": "White Screen",
-        "tonalRamp": [
-          "oklch(0.15 0.01540 266.68)",
-          "oklch(0.25 0.01540 266.68)",
-          "oklch(0.35 0.01540 266.68)",
-          "oklch(0.45 0.01540 266.68)",
-          "oklch(0.55 0.01540 266.68)",
-          "oklch(0.65 0.01540 266.68)",
-          "oklch(0.80 0.01540 266.68)",
-          "oklch(0.95 0.01540 266.68)"
-        ]
-      },
-      "cga-phosphor": {
-        "role": "primary",
-        "displayName": "Cga Phosphor",
-        "tonalRamp": [
-          "oklch(0.15 0.00000 89.88)",
-          "oklch(0.25 0.00000 89.88)",
-          "oklch(0.35 0.00000 89.88)",
-          "oklch(0.45 0.00000 89.88)",
-          "oklch(0.55 0.00000 89.88)",
-          "oklch(0.65 0.00000 89.88)",
-          "oklch(0.80 0.00000 89.88)",
-          "oklch(0.95 0.00000 89.88)"
-        ]
-      },
-      "cga-accent": {
-        "role": "primary",
-        "displayName": "Cga Accent",
-        "tonalRamp": [
-          "oklch(0.15 0.13649 195.03)",
-          "oklch(0.25 0.13649 195.03)",
-          "oklch(0.35 0.13649 195.03)",
-          "oklch(0.45 0.13649 195.03)",
-          "oklch(0.55 0.13649 195.03)",
-          "oklch(0.65 0.13649 195.03)",
-          "oklch(0.80 0.13649 195.03)",
-          "oklch(0.95 0.13649 195.03)"
-        ]
-      },
-      "cga-secondary": {
-        "role": "secondary",
-        "displayName": "Cga Secondary",
-        "tonalRamp": [
-          "oklch(0.15 0.27182 327.90)",
-          "oklch(0.25 0.27182 327.90)",
-          "oklch(0.35 0.27182 327.90)",
-          "oklch(0.45 0.27182 327.90)",
-          "oklch(0.55 0.27182 327.90)",
-          "oklch(0.65 0.27182 327.90)",
-          "oklch(0.80 0.27182 327.90)",
-          "oklch(0.95 0.27182 327.90)"
-        ]
-      },
-      "cga-dim": {
-        "role": "neutral",
-        "displayName": "Cga Dim",
-        "tonalRamp": [
-          "oklch(0.15 0.02887 196.62)",
-          "oklch(0.25 0.02887 196.62)",
-          "oklch(0.35 0.02887 196.62)",
-          "oklch(0.45 0.02887 196.62)",
-          "oklch(0.55 0.02887 196.62)",
-          "oklch(0.65 0.02887 196.62)",
-          "oklch(0.80 0.02887 196.62)",
-          "oklch(0.95 0.02887 196.62)"
-        ]
-      },
-      "cga-screen": {
-        "role": "neutral",
-        "displayName": "Cga Screen",
-        "tonalRamp": [
-          "oklch(0.15 0.01356 269.43)",
-          "oklch(0.25 0.01356 269.43)",
-          "oklch(0.35 0.01356 269.43)",
-          "oklch(0.45 0.01356 269.43)",
-          "oklch(0.55 0.01356 269.43)",
-          "oklch(0.65 0.01356 269.43)",
-          "oklch(0.80 0.01356 269.43)",
-          "oklch(0.95 0.01356 269.43)"
-        ]
-      }
+      "night": { "role": "neutral", "displayName": "Plum Night", "canonical": "#0d0a10", "tonalRamp": ["#0d0a10", "#17111a", "#211925", "#2e2433", "#45394a", "#6b5e70", "#ab9ca5", "#f4ede9"] },
+      "night-raised": { "role": "neutral", "displayName": "Raised Night", "canonical": "#17111a", "tonalRamp": ["#0d0a10", "#17111a", "#211925", "#2e2433", "#45394a", "#6b5e70", "#ab9ca5", "#f4ede9"] },
+      "bark": { "role": "neutral", "displayName": "Night Bark", "canonical": "#4a2a36", "tonalRamp": ["#381f29", "#442530", "#4a2a36", "#5d3240", "#6a3848", "#773f51", "#844659", "#98556d"] },
+      "mist": { "role": "neutral", "displayName": "Mist", "canonical": "#f4ede9", "tonalRamp": ["#0d0a10", "#17111a", "#2e2433", "#45394a", "#6b5e70", "#ab9ca5", "#d6ccd0", "#f4ede9"] },
+      "dusk": { "role": "neutral", "displayName": "Dusk", "canonical": "#ab9ca5", "tonalRamp": ["#0d0a10", "#17111a", "#2e2433", "#45394a", "#6b5e70", "#ab9ca5", "#d6ccd0", "#f4ede9"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#f4ede91f", "tonalRamp": ["#f4ede90a", "#f4ede90f", "#f4ede914", "#f4ede91f", "#f4ede933", "#f4ede94d", "#f4ede980", "#f4ede9"] },
+      "blossom": { "role": "primary", "displayName": "Blossom Pink", "canonical": "#f5a9c2", "tonalRamp": ["#a33a5e", "#c94a72", "#d9658a", "#e2789b", "#ec8fae", "#f5a9c2", "#ffd3e0", "#ffe6ee"] },
+      "blossom-deep": { "role": "primary", "displayName": "Deep Blossom", "canonical": "#d9577e", "tonalRamp": ["#a33a5e", "#c94a72", "#d9577e", "#e2789b", "#ec8fae", "#f5a9c2", "#ffd3e0", "#ffe6ee"] },
+      "blossom-pale": { "role": "primary", "displayName": "Pale Blossom", "canonical": "#ffdbe6", "tonalRamp": ["#a33a5e", "#c94a72", "#d9658a", "#e2789b", "#ec8fae", "#f5a9c2", "#ffdbe6", "#ffe6ee"] },
+      "dawn": { "role": "secondary", "displayName": "Dawn Field", "canonical": "#f3c6d3", "tonalRamp": ["#24111c", "#3a1a2b", "#57253d", "#7b3552", "#a2526f", "#c87792", "#e3a3b8", "#f3c6d3"] },
+      "dawn-ink": { "role": "secondary", "displayName": "Dawn Ink", "canonical": "#2a1521", "tonalRamp": ["#2a1521", "#3a1a2b", "#57253d", "#6e3d50", "#a2526f", "#c87792", "#e3a3b8", "#f3c6d3"] },
+      "dawn-dim": { "role": "secondary", "displayName": "Dawn Dim", "canonical": "#6e3d50", "tonalRamp": ["#2a1521", "#3a1a2b", "#57253d", "#6e3d50", "#a2526f", "#c87792", "#e3a3b8", "#f3c6d3"] }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Home wordmark",
-        "purpose": "Single-line name; increases to 7.7cqw on phones."
-      },
-      "headline": {
-        "displayName": "Channel headline",
-        "purpose": "Main channel headings; reduces to 2em on phones."
-      },
-      "body": {
-        "displayName": "Terminal prose",
-        "purpose": "Readable channel copy, capped at 70 characters."
-      },
-      "molding": {
-        "displayName": "Molded brand",
-        "purpose": "Brand mark on the physical control panel."
-      },
-      "osd": {
-        "displayName": "Pixel OSD",
-        "purpose": "Transient status messages and channel digits."
-      }
+      "display": { "displayName": "Display", "purpose": "Hero name and the dawn title only." },
+      "statement": { "displayName": "Statement", "purpose": "The pinned, scroll-lit sentence." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles, sticky beside their content from 900px." },
+      "title": { "displayName": "Title", "purpose": "Project titles in the work index." },
+      "lead": { "displayName": "Lead", "purpose": "About paragraphs, max 36ch." },
+      "title-small": { "displayName": "Title Small", "purpose": "Timeline entry titles." },
+      "body": { "displayName": "Body", "purpose": "Reading text, 52 to 56ch measures." },
+      "body-small": { "displayName": "Body Small", "purpose": "Nav links, timeline years and places, project facts." },
+      "meta": { "displayName": "Meta", "purpose": "Project year and status, footer; tabular figures." },
+      "label": { "displayName": "Label", "purpose": "Definition-list terms and the hero hint, in dusk." }
     },
-    "shadows": [
-      {
-        "name": "monitor-shell",
-        "value": "0 35px 65px #0009,0 7px 12px #0009,inset 0 2px 1px #ffffff26,inset 3px 0 5px #ffffff14,inset -4px -7px 12px #05090699,0 1px 0 #414b42",
-        "purpose": "Heavy desk shadow and highlighted aged molding."
-      },
-      {
-        "name": "tube-recess",
-        "value": "inset 0 6px 12px #000,0 -1px 0 #6c746855,inset 0 -3px 4px #727e6a33",
-        "purpose": "Recess the glass behind the bezel."
-      },
-      {
-        "name": "hardware-key",
-        "value": "0 3px 3px #0008,0 1px 0 #121a13,inset 0 1px 1px #fff,inset 0 -2px 2px #18201966",
-        "purpose": "Raised molded key at rest."
-      },
-      {
-        "name": "hardware-key-pressed",
-        "value": "0 1px 2px #0008,inset 0 1px 2px #0008",
-        "purpose": "Compress the lower shadow while pressed."
-      }
+    "shadows": [],
+    "materials": [
+      { "name": "nav-glass", "value": "background-color: #17111ad1; border: 1px solid #f4ede914; backdrop-filter: blur(18px) saturate(140%)", "purpose": "The scrolled nav pill; the only translucent surface." },
+      { "name": "nav-glass-dawn", "value": "background-color: #f6d4deb8; border: 1px solid #2a152124", "purpose": "The nav pill once the sunrise is behind it." },
+      { "name": "dawn-gradient", "value": "linear-gradient(to bottom, #0d0a10 0, #160c13 3rem, #24111c 6rem, #3a1a2b 9rem, #57253d 12rem, #7b3552 15rem, #a2526f 18rem, #c87792 21rem, #e3a3b8 24rem, #f0bccb 27rem, #f3c6d3 30rem)", "purpose": "Night turning to dawn at the top of the contact section." },
+      { "name": "ground", "value": "linear-gradient(to bottom, #d9577e00, #d9577e3d 55%, #c94a7252)", "purpose": "The strip where petals settle." },
+      { "name": "tree-mask", "value": "linear-gradient(to bottom, #000 72%, transparent)", "purpose": "Sinks the trunk into the night instead of ending at the canvas edge." }
     ],
     "motion": [
-      {
-        "name": "screen-interaction",
-        "value": "background .12s, color .12s",
-        "purpose": "Inverse screen hover feedback."
-      },
-      {
-        "name": "channel-transition",
-        "value": "0.18s",
-        "purpose": "Framer Motion opacity, vertical and skew transition; reduced motion removes travel."
-      },
-      {
-        "name": "idle-breathe",
-        "value": "6s ease-in-out 3s infinite",
-        "purpose": "One-pixel desktop machine float; disabled by reduced motion and plain mode."
-      },
-      {
-        "name": "phosphor-flicker",
-        "value": "7.3s linear infinite",
-        "purpose": "Subtle picture variation; disabled by plain and reduced-motion modes."
-      },
-      {
-        "name": "refresh",
-        "value": "8.1s linear infinite",
-        "purpose": "Slow scan refresh; removed in plain and reduced-motion modes."
-      },
-      {
-        "name": "knob-spring",
-        "value": "spring(stiffness:180, damping:22)",
-        "purpose": "Physical brightness pointer rotation."
-      }
+      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "House ease for every transition and entrance." },
+      { "name": "press", "value": "transform 100ms ease-out; scale(0.97)", "purpose": "Pointer-down feedback on links, actions and buttons (0.94 on the copy button, 0.985 on project titles)." },
+      { "name": "reveal-fade", "value": "opacity 0.9s; stagger 60ms by index", "purpose": "Plain fade for section titles, rows, About blocks and dawn copy." },
+      { "name": "reveal-bloom", "value": "scale(0.94) and blur(8px) to rest over 1.2s", "purpose": "The dawn title only." },
+      { "name": "hero-rise", "value": "translateY(108%) to 0, 1.3s, from 1.1s, 90ms per line", "purpose": "Hero name entrance." },
+      { "name": "arrive", "value": "opacity 0, translateY(0.75rem), blur(6px) to rest, 1.1s", "purpose": "Hero role (1.45s), actions (1.6s), hint (2.6s, 1.4s)." },
+      { "name": "nav-morph", "value": "width and padding 0.7s, fill, border and blur 0.45s", "purpose": "Nav becoming a pill after 40px of scroll." },
+      { "name": "row-expand", "value": "grid-template-rows 0fr to 1fr 0.65s; content opacity 0.4s after 0.12s", "purpose": "Project row open and close, reversible mid-flight." },
+      { "name": "tree-grow", "value": "1.9s cubic ease-out after 0.25s", "purpose": "Tree growth along branch distance; blooms follow the growth front." },
+      { "name": "tree-parallax", "value": "translateY(-0.45 x scroll); opacity fades to 0 over 1.4 viewports", "purpose": "Fixed tree layer lingering over the statement." },
+      { "name": "smooth-scroll", "value": "Lenis lerp 0.085", "purpose": "Smooth scrolling, off under reduced motion." }
     ],
     "breakpoints": [
-      {
-        "name": "phone",
-        "value": "(max-width:600px)"
-      },
-      {
-        "name": "compact-shell",
-        "value": "(max-width:900px)"
-      },
-      {
-        "name": "desktop-tilt",
-        "value": "(min-width:1000px)"
-      },
-      {
-        "name": "short-landscape",
-        "value": "(max-height:550px) and (min-width:601px)"
-      },
-      {
-        "name": "small-laptop",
-        "value": "(min-width:601px) and (max-height:750px) and (min-height:551px)"
-      },
-      {
-        "name": "tall-desktop",
-        "value": "(min-width:901px) and (min-height:751px)"
-      },
-      {
-        "name": "large-desktop",
-        "value": "(min-width:1500px) and (min-height:950px)"
-      }
-    ],
-    "notes": [
-      "CSS is the runtime source of truth. Color ramps are synthesized OKLCH preview metadata, not runtime palette additions.",
-      "Frontmatter owns primitive tokens; this sidecar extends it with material, interaction, responsive and narrative metadata.",
-      "Later CSS declarations keep the grille visible at every breakpoint and Home navigation in two columns.",
-      "Text-only story mode suppresses scenes, typewriter progression, random jitter, noise generation and static bursts; plain mode removes the complete glass/effects stack."
-    ],
-    "layout": {
-      "mode": "viewport-filling",
-      "height": "100dvh",
-      "width": "100%",
-      "tube": "flex: 1; min-height: 0; aspect-ratio: auto",
-      "storyZoom": false,
-      "roomFurniture": "hidden"
-    },
-    "crtEdges": {
-      "source": "User-supplied CRT reference, 2026-10-31",
-      "sideWidth": "clamp(34px, 11%, 170px)",
-      "phoneSideWidth": "24px",
-      "treatment": "Dark bowed falloff, cool optical rim, displaced RGB side bleed",
-      "plainMode": "hidden",
-      "reducedMotion": "no optical displacement or tracking"
-    },
-    "rowan98Hardware": {
-      "reference": "docs/concepts/rowan-98-crt.png",
-      "geometry": "src/os/classicChassis.js",
-      "liveAperture": {
-        "left": 0.097,
-        "right": 0.097,
-        "top": 0.097,
-        "bottom": 0.18
-      },
-      "finish": "Reference-projected photographic finish on open rounded 3D casing/recess rings",
-      "compactDisplayControls": "Display settings through host toolbar; preserve portrait top/chin proportions",
-      "lightingLimit": "Baked photographic highlights and regional emission; not calibrated dynamic reflection",
-      "typography": {
-        "fontFamily": "Tahoma, Verdana, sans-serif",
-        "fontSize": "13px",
-        "lineHeight": 1.5
-      }
-    },
-    "rowanArrivalAndGames": {
-      "updated": "2026-11-01",
-      "arrivalMode": "Experience",
-      "gameMode": "Operate",
-      "furniture": false,
-      "greeting": "Well, hello.",
-      "choiceCaption": "Where shall we begin?",
-      "choiceAcknowledgmentMs": 420,
-      "approachMs": 1800,
-      "desktopRevealMs": 420,
-      "returnMs": 900,
-      "games98": [
-        "Minesweeper",
-        "Snake",
-        "Breakout",
-        "Pong",
-        "Memory",
-        "Fifteen"
-      ],
-      "games26": [
-        "Orbit",
-        "Merge",
-        "Lights",
-        "Sequence",
-        "Constellation",
-        "Chromatic"
-      ],
-      "roundPersistence": "session only",
-      "hardwareLighting": "regional approximation; photographic highlights remain baked"
-    }
+      { "name": "phone", "value": "640px" },
+      { "name": "split", "value": "900px" },
+      { "name": "scene-small", "value": "760px or pointer: coarse" }
+    ]
   },
   "components": [
     {
-      "name": "Molded channel key",
-      "kind": "button",
-      "refersTo": "hardware-key",
-      "description": "A physical channel key beneath the glass.",
-      "html": "<button class=\"ds-hardware-key\" aria-label=\"Next channel\"><svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></button>",
-      "css": ".ds-hardware-key{display:grid;place-items:center;width:44px;height:44px;background:linear-gradient(145deg,#60675f,#3b443c);color:#e4e7dd;border:0;border-radius:7px;cursor:pointer;box-shadow:0 3px 3px #0008,0 1px 0 #121a13,inset 0 1px 1px #fff,inset 0 -2px 2px #18201966}.ds-hardware-key:hover{filter:brightness(1.03)}.ds-hardware-key:active{box-shadow:0 1px 2px #0008,inset 0 1px 2px #0008}.ds-hardware-key:focus-visible{outline:2px solid #b5e29b;outline-offset:4px}"
-    },
-    {
-      "name": "Olive power switch",
-      "kind": "button",
-      "refersTo": "power-button",
-      "description": "A round raised switch with a physical power symbol.",
-      "html": "<button class=\"ds-power-button\" aria-label=\"Power\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 2v10M6.3 5.6a9 9 0 1 0 11.4 0\"/></svg></button>",
-      "css": ".ds-power-button{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(145deg,#87916a,#5c684b);color:#d4dcc0;border:1px solid #626e50;cursor:pointer;box-shadow:0 3px 4px #403e2e99,inset 0 1px 2px #d2d4a999,inset 0 -2px 3px #34462e6b}.ds-power-button:hover{filter:brightness(1.03)}.ds-power-button:focus-visible{outline:2px solid #b5e29b;outline-offset:4px}"
-    },
-    {
-      "name": "Two-column channel menu",
+      "name": "Navigation pill",
       "kind": "nav",
-      "refersTo": "channel-menu",
-      "description": "Numbered terminal buttons with inverse hover and visible keyboard focus.",
-      "html": "<nav class=\"ds-channel-menu\" aria-label=\"Channels\"><button><span>01</span> About the human</button><button><span>02</span> Work</button><button><span>03</span> Tools &amp; skills</button><button><span>04</span> The journey</button></nav>",
-      "css": ".ds-channel-menu{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;background:var(--bg,#0e1210);padding:12px}.ds-channel-menu button{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;gap:7px;align-items:center;min-height:28px;font-size:11px;line-height:1.5;padding:3px 2px}.ds-channel-menu button span{color:var(--dim,#b0b9aa)}.ds-channel-menu button:hover{color:var(--bg,#0e1210);background:var(--accent,#6dff9c)}.ds-channel-menu button:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+      "refersTo": "nav-bar-scrolled",
+      "description": "Wordmark and three links in the translucent night pill shown after the first scroll.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a class=\"ds-nav-mark\" href=\"#top\">Saad Akhtar</a><ul class=\"ds-nav-list\"><li><a href=\"#work\">Work</a></li><li><a href=\"#about\">About</a></li><li><a href=\"#contact\">Contact</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: min(100%, 31rem); padding: 0.55rem 0.6rem 0.55rem 1.25rem; border-radius: 999px; border: 1px solid #f4ede914; background-color: #17111ad1; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); color: var(--mist, #f4ede9); font-family: 'Bricolage Grotesque', system-ui, sans-serif; } .ds-nav-mark { font-weight: 500; letter-spacing: -0.01em; text-decoration: none; color: inherit; white-space: nowrap; } .ds-nav-list { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; } .ds-nav-list a { display: block; padding: 0.35rem 0.8rem; border-radius: 999px; color: var(--dusk, #ab9ca5); font-size: 0.9375rem; text-decoration: none; transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 100ms ease-out; } .ds-nav-list a:hover { color: var(--mist, #f4ede9); background-color: #f4ede90f; } .ds-nav-list a:active { transform: scale(0.97); } .ds-nav a:focus-visible { outline: 2px solid var(--blossom, #f5a9c2); outline-offset: 4px; border-radius: 6px; }"
     },
     {
-      "name": "Transmission launcher",
+      "name": "Navigation pill, dawn tone",
+      "kind": "nav",
+      "refersTo": "nav-bar-dawn",
+      "description": "The same pill once the sunrise is behind it.",
+      "html": "<nav class=\"ds-nav-dawn\" aria-label=\"Main\"><a class=\"ds-nav-dawn-mark\" href=\"#top\">Saad Akhtar</a><ul class=\"ds-nav-dawn-list\"><li><a href=\"#work\">Work</a></li><li><a href=\"#about\">About</a></li><li><a href=\"#contact\">Contact</a></li></ul></nav>",
+      "css": ".ds-nav-dawn { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: min(100%, 31rem); padding: 0.55rem 0.6rem 0.55rem 1.25rem; border-radius: 999px; border: 1px solid #2a152124; background-color: #f6d4deb8; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); color: var(--dawn-ink, #2a1521); font-family: 'Bricolage Grotesque', system-ui, sans-serif; } .ds-nav-dawn-mark { font-weight: 500; letter-spacing: -0.01em; text-decoration: none; color: inherit; } .ds-nav-dawn-list { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; } .ds-nav-dawn-list a { display: block; padding: 0.35rem 0.8rem; border-radius: 999px; color: var(--dawn-dim, #6e3d50); font-size: 0.9375rem; text-decoration: none; transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-dawn-list a:hover { color: var(--dawn-ink, #2a1521); background-color: #2a152112; } .ds-nav-dawn a:focus-visible { outline: 2px solid var(--dawn-ink, #2a1521); outline-offset: 4px; border-radius: 6px; }"
+    },
+    {
+      "name": "Primary action",
       "kind": "button",
-      "refersTo": "story-invitation",
-      "description": "A bordered screen invitation to the seven-chapter personal transmission.",
-      "html": "<button class=\"ds-story-invitation\"><span>There is a story<br>behind the signal.</span><strong><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M5 3 21 12 5 21Z\"/></svg> PLAY TRANSMISSION</strong><small>7 CHAPTERS / ABOUT 2 MIN</small></button>",
-      "css": ".ds-story-invitation{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;flex-direction:column;align-items:flex-start;gap:5px;position:relative;border:1px solid color-mix(in srgb,var(--accent,#6dff9c) 30%,transparent);padding:10px;font-size:10px}.ds-story-invitation>span{color:var(--dim,#b0b9aa);font-size:9px;line-height:1.6}.ds-story-invitation strong{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:500;margin-top:1px}.ds-story-invitation small{color:var(--dim,#b0b9aa);font-size:8px}.ds-story-invitation:hover,.ds-story-invitation:hover *{background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-story-invitation:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+      "refersTo": "action-link",
+      "description": "Text action with a full blossom underline and a lucide arrow.",
+      "html": "<a class=\"ds-action ds-action-primary\" href=\"#work\">See the work <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14\"/><path d=\"m19 12-7 7-7-7\"/></svg></a>",
+      "css": ".ds-action { position: relative; display: inline-flex; align-items: center; gap: 0.5em; padding-block: 0.3em; color: var(--mist, #f4ede9); font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 1.0625rem; font-weight: 450; text-decoration: none; transition: transform 100ms ease-out; } .ds-action svg { width: 1em; height: 1em; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); } .ds-action::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: var(--blossom, #f5a9c2); transform-origin: left; } .ds-action:hover svg { transform: translateY(2px); } .ds-action:active { transform: scale(0.97); } .ds-action:focus-visible { outline: 2px solid var(--blossom, #f5a9c2); outline-offset: 4px; border-radius: 6px; }"
     },
     {
-      "name": "Terminal return-address field",
-      "kind": "input",
-      "refersTo": "terminal-field",
-      "description": "An explicitly labeled square field with a phosphor bottom rule.",
-      "html": "<label class=\"ds-field-label\">02 / RETURN ADDRESS<input class=\"ds-field\" type=\"email\" autocomplete=\"email\" required placeholder=\"you@somewhere.good\"></label>",
-      "css": ".ds-field-label{font-family:\"IBM Plex Mono\",monospace;font-size:10px;color:var(--secondary,#ffb347);letter-spacing:.04em}.ds-field{display:block;width:100%;min-height:44px;background:color-mix(in srgb,var(--accent,#6dff9c) 3%,var(--bg,#0e1210));color:var(--phosphor,#efe9d8);border:0;border-bottom:1px solid color-mix(in srgb,var(--accent,#6dff9c) 40%,transparent);border-radius:0;margin-top:7px;padding:10px;font-family:\"IBM Plex Mono\",monospace;font-size:1.35em;line-height:1.7;caret-color:var(--accent,#6dff9c)}.ds-field::placeholder{color:var(--dim,#b0b9aa);opacity:1}.ds-field:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
-    },
-    {
-      "name": "Selected project row",
+      "name": "Secondary action",
       "kind": "button",
-      "refersTo": "project-row-selected",
-      "description": "The active project uses a solid inverse selection bar.",
-      "html": "<button class=\"ds-project-row\" role=\"tab\" aria-selected=\"true\"><span>01</span><span>SELECTED PROJECT</span><small>VIEW</small></button>",
-      "css": ".ds-project-row{font-family:\"IBM Plex Mono\",monospace;border:0;border-radius:0;background:none;color:var(--accent,#6dff9c);cursor:pointer;text-align:left;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;padding:10px 7px;font-size:11px;line-height:1.6;background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-project-row>span:nth-child(2){flex:1}.ds-project-row>span:first-child{font-size:.8em}.ds-project-row small{font-size:.75em}.ds-project-row:hover{background:var(--accent,#6dff9c);color:var(--bg,#0e1210)}.ds-project-row:focus-visible{outline:2px solid var(--accent,#6dff9c);outline-offset:2px;}"
+      "refersTo": "action-link",
+      "description": "Text action whose underline rests short and draws to full width on hover.",
+      "html": "<a class=\"ds-action-quiet\" href=\"#contact\">Get in touch</a>",
+      "css": ".ds-action-quiet { position: relative; display: inline-flex; align-items: center; gap: 0.5em; padding-block: 0.3em; color: var(--mist, #f4ede9); font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 1.0625rem; font-weight: 450; text-decoration: none; transition: transform 100ms ease-out; } .ds-action-quiet::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: currentColor; opacity: 0.45; transform: scaleX(0.3); transform-origin: left; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1); } .ds-action-quiet:hover::after { transform: scaleX(1); opacity: 1; } .ds-action-quiet:active { transform: scale(0.97); } .ds-action-quiet:focus-visible { outline: 2px solid var(--blossom, #f5a9c2); outline-offset: 4px; border-radius: 6px; }"
     },
     {
-      "name": "Phosphor OSD",
+      "name": "Project row",
       "kind": "custom",
-      "refersTo": "status-overlay",
-      "description": "A transient pixel-font status announcement over the glass.",
-      "html": "<div class=\"ds-osd\" role=\"status\" aria-live=\"polite\">CH 01 / HOME</div>",
-      "css": ".ds-osd{font-family:\"Silkscreen\",monospace;color:#6dff9c;text-shadow:1px 1px #061309,-1px -1px #061309,0 0 5px #000;font-size:11px;text-align:right;background:#0a110bba;padding:4px 6px;max-width:85%;pointer-events:none}"
+      "refersTo": "work-row-head",
+      "description": "Typographic index row: title, meta and a plus that rotates to blossom when open.",
+      "html": "<div class=\"ds-row\"><button type=\"button\" class=\"ds-row-head\" aria-expanded=\"false\"><span class=\"ds-row-title\">Netflix Data Visualiser</span><span class=\"ds-row-meta\"><span>2024</span><span>Live</span></span><svg class=\"ds-row-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></button></div>",
+      "css": ".ds-row { border-block: 1px solid var(--line, #f4ede91f); font-family: 'Bricolage Grotesque', system-ui, sans-serif; color: var(--mist, #f4ede9); } .ds-row-head { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: baseline; gap: 0.5rem 1.75rem; padding: 1.6rem 0; } .ds-row-title { font-size: clamp(1.6rem, 3vw, 2.75rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.03em; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1); } .ds-row-meta { display: flex; gap: 1.25rem; color: var(--dusk, #ab9ca5); font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; } .ds-row-icon { width: 1.15rem; height: 1.15rem; align-self: center; color: var(--dusk, #ab9ca5); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1); } .ds-row-head:hover .ds-row-title { transform: translateX(0.6rem); color: var(--blossom-pale, #ffdbe6); } .ds-row-head:hover .ds-row-icon { color: var(--mist, #f4ede9); } .ds-row-head[aria-expanded='true'] .ds-row-icon { transform: rotate(45deg); color: var(--blossom, #f5a9c2); } .ds-row-head:active .ds-row-title { transform: scale(0.985); transform-origin: left; } .ds-row-head:focus-visible { outline: 2px solid var(--blossom, #f5a9c2); outline-offset: 4px; border-radius: 6px; }"
+    },
+    {
+      "name": "Copy email",
+      "kind": "button",
+      "refersTo": "mail-copy",
+      "description": "Circular icon button on the dawn field that copies the email address.",
+      "html": "<button type=\"button\" class=\"ds-copy\" aria-label=\"Copy email address\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg></button>",
+      "css": ".ds-copy { all: unset; box-sizing: border-box; cursor: pointer; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 1px solid #2a152133; color: var(--dawn-ink, #2a1521); background-color: transparent; transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 100ms ease-out; } .ds-copy svg { width: 1.05rem; height: 1.05rem; } .ds-copy:hover { background-color: #2a152112; } .ds-copy:active { transform: scale(0.94); } .ds-copy:focus-visible { outline: 2px solid var(--dawn-ink, #2a1521); outline-offset: 3px; }"
+    },
+    {
+      "name": "Dawn field",
+      "kind": "card",
+      "refersTo": "dawn-field",
+      "description": "Contact section: the night gradient into dawn with a display invitation and email.",
+      "html": "<section class=\"ds-dawn\"><h2 class=\"ds-dawn-title\">Say hello.</h2><p class=\"ds-dawn-text\">Open to internships, research and freelance work.</p><a class=\"ds-dawn-mail\" href=\"mailto:hello@example.com\">hello@example.com</a></section>",
+      "css": ".ds-dawn { padding: 16rem 2rem 3rem; color: var(--dawn-ink, #2a1521); font-family: 'Bricolage Grotesque', system-ui, sans-serif; background: linear-gradient(to bottom, #0d0a10 0, #3a1a2b 4rem, #7b3552 8rem, #c87792 11rem, #f0bccb 14rem, #f3c6d3 15rem); } .ds-dawn-title { margin: 0; font-size: clamp(3.25rem, 10vw, 6rem); font-weight: 250; line-height: 0.95; letter-spacing: -0.04em; } .ds-dawn-text { margin: 1.5rem 0 0; max-width: 36ch; color: var(--dawn-dim, #6e3d50); font-size: clamp(1.0625rem, 1.5vw, 1.25rem); } .ds-dawn-mail { display: inline-block; margin-top: 3rem; color: inherit; font-size: clamp(1.4rem, 3.6vw, 2.75rem); font-weight: 300; letter-spacing: -0.025em; text-decoration-thickness: 1px; text-underline-offset: 0.22em; text-decoration-color: #2a152159; transition: text-decoration-color 0.4s cubic-bezier(0.16, 1, 0.3, 1); } .ds-dawn-mail:hover { text-decoration-color: var(--dawn-ink, #2a1521); } .ds-dawn-mail:focus-visible { outline: 2px solid var(--dawn-ink, #2a1521); outline-offset: 4px; border-radius: 6px; }"
     }
   ],
   "narrative": {
-    "northStar": "The Personal Signal",
-    "overview": "A warm, aged plastic CRT sits on a dark desk. The machine is the portfolio: its curved glass contains a working teletext and BBS interface, while the molded controls remain outside the picture. Hardware feels used and tactile; screen content feels numbered, deliberate and alive.\n\nThe user-supplied SA-01 brief fixes this world. CSS materials, ordinary React content and synthesized opt-in audio carry the experience. The same machine remains visible on phones, with a compact first Home frame and internally scrolling reading surfaces.",
+    "northStar": "The Night Orchard",
+    "overview": "One idea owns the page: a cherry tree at night, and a wind the visitor steers. The tree grows from its base on arrival and blooms as the growth front passes its clusters, then sways. Petals leave it and cross every section on a wind that follows the pointer and gusts with scroll speed, then land on the ground at the foot of the contact section, where the night has turned to a pink dawn. Everything else stays quiet so that this one moment can be loud.\n\nThe scene sits on fixed layers behind the content: the tree canvas (a fixed layer that drifts up at 0.45 of scroll speed and fades out over 1.4 viewports, so the canopy lingers over the statement), then the petal canvas, then text. The interface is spare: one thin variable grotesque, hairline rules, text actions instead of buttons, and one translucent pill nav. Density is low and type is large; hierarchy comes from size and weight, never from labels.\n\nMotion follows one ease (exponential ease-out) and starts from a visible default: with scripts off or reduced motion on, everything renders in place. Petal density, settling and frame rate were reviewed from source only and have not been measured live. This file records how they are meant to behave and makes no performance claims.",
     "keyCharacteristics": [
-      "Aged plastic, recessed seams, a dark gasket and curved reflective glass.",
-      "Phosphor typography, numbered channels and inverse selection bars.",
-      "Physical controls and an always-visible sound grille.",
-      "Optional sound, plain reading mode and reduced-motion support."
+      "Plum-black night, never pure black, giving way once to a drenched pink dawn.",
+      "Pink belongs to the tree and petals; the interface borrows it only for focus, selection, the primary underline and an open row.",
+      "One self-hosted variable face (Bricolage Grotesque) at every size, thin at display sizes.",
+      "Depth comes from the scene's layers, not from shadows.",
+      "Quiet entrances so the tree, the scrubbed statement and the dawn title keep the motion."
     ],
     "rules": [
-      {
-        "name": "The Chassis Rule",
-        "body": "Colour mode changes the picture and its emitted light; it does not recolor the plastic chassis.",
-        "section": "colors"
-      },
-      {
-        "name": "The Readable Signal Rule",
-        "body": "Effects must yield to plain reading mode and reduced-motion preferences.",
-        "section": "elevation"
-      }
+      { "name": "The Night-to-Dawn Rule", "body": "The page changes colour exactly once, from night to dawn in the contact section. No other section gets its own background.", "section": "colors" },
+      { "name": "The Blossom Owns Pink Rule", "body": "Pink is the tree's colour. Interface elements use it only for focus, selection, the primary underline and the open or hovered project state, never for fills or blocks.", "section": "colors" },
+      { "name": "The One Face Rule", "body": "Bricolage Grotesque at every size. No monospace and no second family, because nothing on the page is code.", "section": "typography" },
+      { "name": "The Thin Display Rule", "body": "Anything larger than 1.6rem is set at weight 250 or 300 with negative tracking (-0.03em to -0.04em). Weight 450 to 500 is kept for small emphasis: actions, the wordmark, timeline titles.", "section": "typography" },
+      { "name": "The Tabular Numbers Rule", "body": "Years, dates and the Lahore clock use tabular figures.", "section": "typography" },
+      { "name": "The Scene Is the Depth Rule", "body": "Layers come from the tree, the petals and the dawn. Do not add box shadows or lifted cards.", "section": "elevation" },
+      { "name": "The One Glass Rule", "body": "The nav pill is the only translucent, blurred surface. Under reduced transparency it turns solid (night-raised, or dawn).", "section": "elevation" }
     ],
     "dos": [
-      "**Do** keep physical controls beneath the glass and the sound grille visible at every breakpoint.",
-      "**Do** keep Home navigation in two columns and the transmission launcher reachable in its first compact frame.",
-      "**Do** use inverse phosphor selection for interactive screen states and preserve visible keyboard focus.",
-      "**Do** preserve plain mode, reduced motion, text-only storytelling and muted-by-default sound.",
-      "**Do** draw hardware and story materials in code and keep prose selectable, semantic and scrollable."
+      "Do keep one moment loud: the tree and its wind. Entrances elsewhere stay a plain fade.",
+      "Do start every animated element from a visible state, gating entrances on the `motion` class so scripts-off and reduced-motion visitors see everything in place.",
+      "Do theme selection, focus rings and the scrollbar from the palette, and switch them to dawn-ink inside the dawn field.",
+      "Do use the house ease (cubic-bezier(0.16, 1, 0.3, 1)) and press feedback (scale 0.97, 100ms) on interactive elements.",
+      "Do divide content with 1px hairlines (line on night, translucent dawn-ink on dawn) instead of boxing it."
     ],
     "donts": [
-      "**Don't** recolor the molded chassis when changing screen colour modes.",
-      "**Don't** let decorative CRT layers intercept clicks or obscure reading controls.",
-      "**Don't** reintroduce story scenes, random jitter or static bursts into text-only storytelling.",
-      "**Don't** treat the compact Home menu as a generic spacious card grid."
+      "Don't add eyebrow labels, section numbers or stat counters above headings.",
+      "Don't put petals over text, or let motion hide content when JavaScript fails.",
+      "Don't add box shadows, cards or a second translucent surface. The nav pill is the only glass.",
+      "Don't use pink as an interface fill. Light and glow belong to the blossoms.",
+      "Don't introduce monospace or a second typeface."
     ]
   }
 }

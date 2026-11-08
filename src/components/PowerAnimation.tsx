@@ -1,1 +1,0 @@
-export function PowerAnimation({ phase }: { phase: string }) { return phase === 'starting' || phase === 'stopping' ? <div key={phase} className={`power-animation power-${phase}`} aria-hidden="true"><i /></div> : null; }

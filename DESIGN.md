@@ -1,253 +1,275 @@
 ---
-name: SA-01 Personal Monitor
-description: A working vintage CRT that carries Saad Akhtar's personal signal.
+name: Night Blossom
+description: Saad Akhtar's portfolio as a cherry tree at night, its petals carried through the page by a wind the visitor steers, settling in a pink dawn.
 colors:
-  rowan-paper: "#f1f0e8"
-  rowan-moss: "#294f3d"
-  rowan-copper: "#dcab83"
-  rowan-clay: "#ad5637"
-  rowan-indigo: "#5c6496"
-  room: "#0b100d"
-  screen: "#0e1210"
-  phosphor: "#efe9d8"
-  accent: "#6dff9c"
-  secondary: "#ffb347"
-  dim: "#b0b9aa"
-  plastic-light: "#343936"
-  plastic-mid: "#292e2b"
-  plastic-dark: "#191e1b"
-  hardware-ink: "#d3d7ce"
-  bezel-light: "#252c27"
-  bezel-mid: "#111813"
-  bezel-dark: "#080d09"
-  recess: "#090d0a"
-  key-light: "#60675f"
-  key-dark: "#3b443c"
-  key-ink: "#e4e7dd"
-  power-light: "#87916a"
-  power-dark: "#5c684b"
-  power-ink: "#d4dcc0"
-  amber-phosphor: "#ffb000"
-  amber-dim: "#d49c39"
-  amber-screen: "#130f08"
-  p1-phosphor: "#33ff66"
-  p1-dim: "#6dc584"
-  p1-screen: "#081109"
-  white-phosphor: "#e8f0ff"
-  white-dim: "#b3bed3"
-  white-screen: "#0d1017"
-  cga-phosphor: "#fff"
-  cga-accent: "#55ffff"
-  cga-secondary: "#ff55ff"
-  cga-dim: "#b8d3d3"
-  cga-screen: "#080a10"
+  night: "#0d0a10"
+  night-raised: "#17111a"
+  bark: "#4a2a36"
+  mist: "#f4ede9"
+  dusk: "#ab9ca5"
+  line: "#f4ede91f"
+  blossom: "#f5a9c2"
+  blossom-deep: "#d9577e"
+  blossom-pale: "#ffdbe6"
+  dawn: "#f3c6d3"
+  dawn-ink: "#2a1521"
+  dawn-dim: "#6e3d50"
 typography:
-  rowan-editorial:
-    fontFamily: "Georgia, serif"
-    fontSize: "clamp(50px, 6.2vw, 88px)"
-    fontStyle: italic
-    lineHeight: 1.15
-    letterSpacing: "-0.04em"
-  rowan-ui:
-    fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "13px"
-    lineHeight: 1.5
-  classic-ui:
-    fontFamily: "Tahoma, Verdana, sans-serif"
-    fontSize: "13px"
-    lineHeight: 1.5
   display:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "5cqw"
-    fontWeight: 600
-    lineHeight: 1
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "clamp(3.25rem, 10vw, 6rem)"
+    fontWeight: 250
+    lineHeight: 0.92
     letterSpacing: "-0.04em"
+  statement:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "clamp(1.9rem, 4.4vw, 4rem)"
+    fontWeight: 300
+    lineHeight: 1.08
+    letterSpacing: "-0.03em"
   headline:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "2.55em"
-    fontWeight: 600
-    lineHeight: 1.13
-    letterSpacing: "-0.04em"
-  title:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "1em"
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: "0.035em"
-  body:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "0.88em"
-    lineHeight: 1.8
-  label:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "0.57em"
-    letterSpacing: "0.07em"
-  molding:
-    fontFamily: "Archivo Black, sans-serif"
-    fontSize: "clamp(14px, 1.8vw, 25px)"
-    lineHeight: 1.1
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 4.2vw, 3.75rem)"
+    fontWeight: 250
+    lineHeight: 1
     letterSpacing: "-0.035em"
-  osd:
-    fontFamily: "Silkscreen, monospace"
-    fontSize: "0.78em"
+  title:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "clamp(1.6rem, 3vw, 2.75rem)"
+    fontWeight: 300
+    lineHeight: 1.05
+    letterSpacing: "-0.03em"
+  lead:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "clamp(1.25rem, 1.9vw, 1.6rem)"
+    fontWeight: 300
+    lineHeight: 1.42
+    letterSpacing: "-0.01em"
+  title-small:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 450
+    lineHeight: 1.3
+    letterSpacing: "-0.01em"
+  body:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "1.0625rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  body-small:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "0.9375rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  meta:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.6
+    fontFeature: "\"tnum\""
+  label:
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 400
+    lineHeight: 1.6
 rounded:
-  key: "7px"
-  shell: "34px 34px 30px 30px"
-  bezel: "26px 26px 29px 29px"
-  tube: "7% / 9%"
+  focus: "6px"
+  media: "14px"
+  pill: "999px"
   circle: "50%"
-  field: "0"
-  plain-screen: "14px"
+spacing:
+  gutter: "clamp(1.25rem, 4vw, 2.5rem)"
+  section: "clamp(5rem, 13vh, 9rem)"
+  column-gap: "clamp(2rem, 5vw, 5rem)"
+  row: "1.6rem"
+  container: "76rem"
 components:
-  hardware-key:
-    textColor: "{colors.key-ink}"
-    rounded: "{rounded.key}"
-    width: "44px"
-    height: "44px"
-  power-button:
-    textColor: "{colors.power-ink}"
+  nav-bar:
+    textColor: "{colors.mist}"
+    rounded: "{rounded.pill}"
+    padding: "0.55rem 0"
+    width: "min(100%, 76rem)"
+  nav-bar-scrolled:
+    backgroundColor: "#17111ad1"
+    rounded: "{rounded.pill}"
+    padding: "0.55rem 0.6rem 0.55rem 1.25rem"
+    width: "min(100%, 31rem)"
+  nav-bar-dawn:
+    backgroundColor: "#f6d4deb8"
+    textColor: "{colors.dawn-ink}"
+  nav-link:
+    textColor: "{colors.dusk}"
+    typography: "{typography.body-small}"
+    rounded: "{rounded.pill}"
+    padding: "0.35rem 0.8rem"
+  nav-link-hover:
+    backgroundColor: "#f4ede90f"
+    textColor: "{colors.mist}"
+  action-link:
+    textColor: "{colors.mist}"
+    padding: "0.3em 0"
+  work-row-head:
+    textColor: "{colors.mist}"
+    typography: "{typography.title}"
+    padding: "1.6rem 0"
+  work-row-head-open:
+    textColor: "{colors.blossom-pale}"
+  work-image:
+    rounded: "{rounded.media}"
+  dawn-field:
+    backgroundColor: "{colors.dawn}"
+    textColor: "{colors.dawn-ink}"
+  mail-copy:
+    textColor: "{colors.dawn-ink}"
     rounded: "{rounded.circle}"
-    width: "46px"
-    height: "46px"
-  channel-menu:
-    textColor: "{colors.accent}"
-    padding: "3px 2px"
-  channel-menu-hover:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.screen}"
-  story-invitation:
-    textColor: "{colors.accent}"
-    padding: "10px"
-  terminal-field:
-    textColor: "{colors.phosphor}"
-    rounded: "{rounded.field}"
-    padding: "10px"
-  project-row-selected:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.screen}"
-  status-overlay:
-    textColor: "{colors.accent}"
-    typography: "{typography.osd}"
-    padding: "4px 6px"
+    size: "2.75rem"
 ---
 
-# Design System: SA-01 Personal Monitor
-
-> Next-version specification: [OS_DESIGN.md](OS_DESIGN.md) defines Rowan 98 and Rowan, their paired CRT/thin-bezel hardware, and the two-computer opening scene with a choice popup and cinematic approach into one focused desktop. [OS_ENGINEERING.md](docs/OS_ENGINEERING.md) defines the 60fps transition target and screen handoff, CGI lighting, application behavior, migration, and release gates. Those are the target for the OS build; the system below documents the current monitor implementation.
+# Design System: Night Blossom
 
 ## Overview
 
-**Creative North Star: "The Personal Signal"**
+**Creative North Star: "The Night Orchard"**
 
-A dark charcoal plastic CRT fills the viewport. The machine is the portfolio: its curved glass contains a working teletext and BBS interface, while the molded controls remain outside the picture. Hardware feels used and tactile; screen content feels numbered, deliberate and alive.
+One idea owns the page: a cherry tree at night, and a wind the visitor steers. The tree grows from its base on arrival and blooms as the growth front passes its clusters, then sways. Petals leave it and cross every section on a wind that follows the pointer and gusts with scroll speed, then land on the ground at the foot of the contact section, where the night has turned to a pink dawn. Everything else stays quiet so that this one moment can be loud.
 
-The user-supplied SA-01 brief fixes this world. CSS materials, ordinary React content and synthesized opt-in audio carry the experience. The same machine remains visible on phones, with a compact first Home frame and internally scrolling reading surfaces.
+The scene sits on fixed layers behind the content: the tree canvas (a fixed layer that drifts up at 0.45 of scroll speed and fades out over 1.4 viewports, so the canopy lingers over the statement), then the petal canvas, then text. The interface is spare: one thin variable grotesque, hairline rules, text actions instead of buttons, and one translucent pill nav. Density is low and type is large; hierarchy comes from size and weight, never from labels.
+
+Motion follows one ease (exponential ease-out) and starts from a visible default: with scripts off or reduced motion on, everything renders in place. Petal density, settling and frame rate were reviewed from source only and have not been measured live. This file records how they are meant to behave and makes no performance claims.
 
 **Key Characteristics:**
-- Aged plastic, recessed seams, a dark gasket and curved reflective glass.
-- Phosphor typography, numbered channels and inverse selection bars.
-- Physical controls and an always-visible sound grille.
-- Optional sound, plain reading mode and reduced-motion support.
+- Plum-black night, never pure black, giving way once to a drenched pink dawn.
+- Pink belongs to the tree and petals; the interface borrows it only for focus, selection, the primary underline and an open row.
+- One self-hosted variable face (Bricolage Grotesque) at every size, thin at display sizes.
+- Depth comes from the scene's layers, not from shadows.
+- Quiet entrances so the tree, the scrubbed statement and the dawn title keep the motion.
 
 ## Colors
 
-Warm molding surrounds a dark, green-tinted room and a variable phosphor screen. Frontmatter values are extracted from `src/styles/tokens.css`, `monitor.css` and `screen.css`; the CSS remains the runtime source of truth.
+A restrained night palette with one committed close: plum-black and mist carry the page, blossom pinks belong to the scene, and the contact section is drenched in dawn.
 
 ### Primary
-- **Phosphor green** (`accent`): links, channel controls, focus outlines, rules, progress and screen spill.
-- **Warm phosphor** (`phosphor`): default reading text, bright enough to survive the glass treatment.
+- **Blossom Pink** (blossom): the petals' and canopy's middle tone. On the interface, only the focus ring, text selection, the primary action's underline and an open project's plus icon use it.
+- **Deep Blossom** (blossom-deep): the darkest bloom and the dawn petals. It also tints the ground strip where petals settle.
+- **Pale Blossom** (blossom-pale): the brightest bloom. A project title turns this colour on hover and while its row is open.
 
 ### Secondary
-- **Signal amber** (`secondary`): field labels, small emphasis and story details.
+- **Dawn Field** (dawn): the full-bleed ground of the contact section, reached through a 30rem gradient that climbs from night through wine and rose stops.
+- **Dawn Ink** (dawn-ink): text, focus rings and selection on the dawn field. Translucent dawn-ink also draws the hairlines and hover washes there.
+- **Dawn Dim** (dawn-dim): secondary text on dawn (availability line, footer, the nav's links when it takes the dawn tone).
 
 ### Neutral
-- **Night room** (`room`) and **tube black** (`screen`): the scene and reading plane.
-- **Quiet signal** (`dim`): supporting copy and secondary status.
-- **Aged plastic** (`plastic-light`, `plastic-mid`, `plastic-dark`): the shell's diagonal material gradient.
-- **Recessed gasket** (`bezel-light`, `bezel-mid`, `bezel-dark`, `recess`): the dark transition from molding into glass.
-- **Molded keys** (`key-light`, `key-dark`, `key-ink`) and **olive power** (`power-light`, `power-dark`, `power-ink`): physical control surfaces and legends.
+- **Night** (night): the page and scrollbar track; also the theme-color.
+- **Night Raised** (night-raised): the scrolled nav pill (at about 82% alpha), and its solid ground under reduced transparency.
+- **Bark** (bark): the scrollbar thumb. Lit bark tones in the canvas engine draw the trunk.
+- **Mist** (mist): primary text on night.
+- **Dusk** (dusk): secondary text, meta, timeline years, list terms and the hero hint.
+- **Hairline** (line): mist at 12% alpha for the row and section rules.
 
-**The Chassis Rule.** Colour mode changes the picture and its emitted light; it does not recolor the plastic chassis.
+### Named Rules
+**The Night-to-Dawn Rule.** The page changes colour exactly once, from night to dawn in the contact section. No other section gets its own background.
 
-The four alternate modes replace the five screen variables: amber uses its phosphor for foreground, accent and secondary; green P1 does the same; cool white does the same; CGA separates white foreground, cyan accent and magenta secondary. Each mode has its own dim text and screen background. Story tint can choose the chapter's mode through the same mechanism.
+**The Blossom Owns Pink Rule.** Pink is the tree's colour. Interface elements use it only for focus, selection, the primary underline and the open or hovered project state, never for fills or blocks.
 
 ## Typography
 
-The original portfolio retains General Sans, italic Newsreader and its existing type scale inside `.portfolio-surface`. IBM Plex Mono and Silkscreen serve the monitor boot, OSD and optional terminal/story views. Archivo Black supplies the molded chassis lettering. The original palette and theme toggle remain intact; alternate CRT colour modes tint the entire picture.
+**Display Font:** Bricolage Grotesque (with system-ui, sans-serif), self-hosted as one variable woff2 (weight 200 to 800, width 75 to 100%), preloaded.
+**Body Font:** the same family.
+
+**Character:** One family with optical sizing on, so it is calm at reading sizes and full of character at display sizes. Display sizes are thin (250 to 300) and tightly tracked. Reading text sits at 400 with neutral tracking.
+
+### Hierarchy
+- **Display** (250, clamp(3.25rem, 10vw, 6rem), 0.92): the hero name, set line by line, and the dawn title "Say hello." (line-height 0.95 there).
+- **Statement** (300, clamp(1.9rem, 4.4vw, 4rem), 1.08): the pinned sentence, balanced wrap, its words lighting from 16% opacity in reading order.
+- **Headline** (250, clamp(2.25rem, 4.2vw, 3.75rem), 1): section titles, sticky at 7rem from 900px up.
+- **Title** (300, clamp(1.6rem, 3vw, 2.75rem), 1.05): project titles in the work index. The email link on dawn uses a near sibling (300, clamp(1.4rem, 3.6vw, 2.75rem)).
+- **Lead** (300, clamp(1.25rem, 1.9vw, 1.6rem), 1.42): About paragraphs, max 36ch.
+- **Title Small** (450, 1.25rem, 1.3): timeline entry titles.
+- **Body** (400, 1.0625rem, 1.6): reading text. Project descriptions max 52ch, timeline text max 56ch. The hero role and dawn text step up through small clamps (to 1.125rem and 1.25rem).
+- **Body Small** (400, 0.9375rem): nav links, timeline years and places, project facts.
+- **Meta** (400, 0.875rem, tabular): project year and status, footer.
+- **Label** (400, 0.8125rem): definition-list terms ("Role", "Built with", the "currently" notes) and the hero hint, always in dusk.
+
+### Named Rules
+**The One Face Rule.** Bricolage Grotesque at every size. No monospace and no second family, because nothing on the page is code.
+
+**The Thin Display Rule.** Anything larger than 1.6rem is set at weight 250 or 300 with negative tracking (-0.03em to -0.04em). Weight 450 to 500 is kept for small emphasis: actions, the wordmark, timeline titles.
+
+**The Tabular Numbers Rule.** Years, dates and the Lahore clock use tabular figures.
 
 ## Layout
 
-The chassis fills the complete browser viewport (`100dvh`, 100% width). Its column layout reserves space for physical controls and gives the remaining height to the tube. The desk, stand and external room labels are hidden; Story Mode keeps the chassis at this size.
+Content sits in a single wrapper, min(100% minus two gutters, 76rem), with a fluid gutter (1.25rem to 2.5rem). The hero is 100svh (min 34rem) with the copy anchored bottom-left, clear of the tree, and the wind hint at the lower right (static under the actions below 640px). The statement is a 260vh track with a sticky 100svh pin. Work and About share a frame: stacked below 900px, then a 1 : 2.25 grid with a sticky section title on the left. Their vertical padding is clamp(5rem, 13vh, 9rem).
 
-The original continuous portfolio renders directly in React inside `.portfolio-viewport`, with no iframe. Its navigation, project gallery, globe, music player and content provider are retained. Lenis and ScrollTrigger use this internal scroll container. Viewport units in original styles map to the tube's container dimensions. Scoped CSS prevents the portfolio and monitor styles from affecting each other. Project detail routes also render inside the tube.
+The work index is a list of full-width rows separated by hairlines, 1.6rem tall padding. Below 900px a row's meta drops under its title. An open row with an image splits 1 : 1.15. The "currently" notes run three across, then one column below 900px. Timeline entries run as a 9rem year column beside the text, then stack.
 
-At narrow widths the original portfolio's mobile navigation and layouts apply, while the physical controls wrap into a full-width row. The grille remains visible. The shell has 16px corners and safe-area-aware padding.
+The dawn section opens with 31rem of gradient (27rem below 640px) before its content, then a 7rem gap above the footer and a 4.5rem ground strip at the bottom.
 
 ## Elevation & Depth
 
-Depth is structural. The shell combines a long desk shadow, a short contact shadow, bright upper inset edges and dark lower inset edges. The bezel and tube recess invert that shading to put the picture behind the molding. Physical keys have lifted lower shadows that compress when pressed; the olive power button and ridged brightness knob share this tactile treatment.
+The system has no shadows. Depth comes from the scene's stacking: the tree canvas (z 0, fixed, masked to fade its trunk into the night at 72%), the petal canvas (z 1, fixed, pointer-transparent), then content (z 2). Petals pass behind text, never over it. The only material surface is the nav pill: night-raised at 82% alpha with an 18px blur, 140% saturation and a hairline edge, or a translucent dawn tone once the sunrise is behind it.
 
-Glass adds scanlines, an RGB mask, low-opacity noise, bloom, a vignette and reflected room light. The tube content can use SVG displacement. Pointer position shifts the reflections and, on large desktop layouts, tilts the shell slightly. The exact shell, key and tube shadow values are recorded in the sidecar rather than flattened into a generic elevation scale.
+### Named Rules
+**The Scene Is the Depth Rule.** Layers come from the tree, the petals and the dawn. Do not add box shadows or lifted cards.
 
-**The Readable Signal Rule.** Effects must yield to plain reading mode and reduced-motion preferences.
-
-Plain mode removes the effect stack, glass, distortion, text glow and animated power/static treatments while retaining the machine. Reduced motion removes travel, flicker, jitter, moving noise and tracking, stops idle motion, and lowers scanline opacity. Text-only story mode omits scenes, stops typing, hides tracking and suppresses random jitter, noise generation and static bursts. It retains the surrounding CRT presentation; plain mode is the full effects-off option. Rendering also drops displacement, bloom blur and then noise as frame time degrades.
-
-The user-supplied CRT side reference adds a cool optical rim and deeper bowed edge falloff. `src/styles/crt-edges.css` confines blur, displacement and RGB channel separation to 11% side strips (24px on phones). Optical rim colours use translucent blue/cyan: #74b6ff12, #1e78ff28, #1059d92b, #67d9e01a and #164e8126. Black falloff uses #000d, #0004, #000e, #0003 and #000b. These are glass optics, independent of the original portfolio palette. Captured internal scrolling triggers a brief tracking tear. Plain mode and text-only story hide the layer; reduced motion and lower rendering quality disable the heavier optical filter.
-
-The outer casing uses dark charcoal moulded plastic, light grey hardware legends, graphite keys and a lighter knurled brightness dial. Fine highlights preserve the chassis seams against the black glass; the existing olive power button remains the physical accent. This finish follows the user’s darker-monitor direction.
-
-### Rowan 98 reference fidelity
-
-The classic OS at `/os/98` uses rounded extruded casing/recess rings from `src/os/classicChassis.js`, with the approved `docs/concepts/rowan-98-crt.png` projected onto the hardware finish. The central opening remains real semantic DOM; the reference desktop is not painted over the working apps. A readonly full-image preview is used only before the focused desktop takes over. Hardware control hit targets follow the reference arrow keys, colour key, brightness dial, grille and power button. Pixel icons, classic Start/program menus, and the file tree/details view live in the classic shell. Saved documents and layouts are preserved.
-
-The finish includes photographic grain and baked highlights. Four regional emission materials and the glass edge layer remain approximations, not calibrated dynamic reflections. This appearance repair does not claim the future lighting release gates are complete. Portrait layouts preserve top/chin texture proportions; compact touch users reach display adjustments through the 44px Display control instead of overlapping tiny hardware targets. The shared window drag handler retains React-owned width/height when moving a resized window.
-
-### Rowan arrival and game collections
-
-The arrival surface is Experience mode. `src/os/Arrival.jsx` and `arrival.css` replace the static chooser with a masked mixed-type greeting and a dimensional unfolding popup. `HardwareScene.jsx` renders the monitor bodies without tables or stands, introduces their pose once, and moves the camera automatically after an era selection. A matching teal/mineral handoff surface precedes the live desktop. Reduced motion and Skip intro motion retain the same choice and destination. Physical hardware renders stop after settling, until something changes.
-
-The game application is Operate mode. Classic **Games** and modern **Play** contain six different playable titles each, as listed in OS_DESIGN.md. Preserve square classic boards and the modern mineral-paper/geometric language. Games have real rules, instructions, restart, touch/keyboard controls and outcomes. Session rounds are not persisted; the existing file store and window layouts are unchanged. Regular classic window bounds leave a 14px inset to protect controls from the glass corners.
+**The One Glass Rule.** The nav pill is the only translucent, blurred surface. Under reduced transparency it turns solid (night-raised, or dawn).
 
 ## Shapes
 
-The viewport-filling shell has 16px rounded corners; the bezel repeats the molded shape at a smaller inset. The tube uses elliptical percentage radii. Vents, seams, crosshead screws, grille slits and small indicator lights establish physical scale without image assets. The stand is hidden in this layout.
-
-Channel text controls, project rows and terminal fields stay square. Physical channel keys are gently rounded, while colour, power and brightness controls are circular. Phone molding rounds down to 22px, with a 19px bezel and a taller tube silhouette. Plain mode gives the screen a simple 14px radius.
+The page has almost no containers, so it has little form language. Rows and sections are divided by 1px hairlines rather than boxed. Round shapes are kept for things you touch: the pill nav and its link hovers (999px), the circular copy button (50%). Project screenshots get gently rounded corners (14px) with a hairline border. Focus rings are 2px, offset 4px, softly rounded (6px).
 
 ## Components
 
-### Hardware controls
+### Navigation
+The nav is quiet at the top and becomes a compact pill after the first scroll.
+- **Rest:** a transparent, full-width bar (76rem max) with the wordmark (weight 500) and three links: Work, About, Contact.
+- **Scrolled (past 40px):** it narrows to 31rem and takes the translucent night pill. Width, padding, fill and blur animate together (0.7s and 0.45s, house ease).
+- **Dawn tone:** once the sunrise is 14rem past the nav, the pill turns translucent dawn (#f6d4deb8) with dawn-ink text, dawn-dim links and dawn-ink focus.
+- **Links:** dusk, 0.9375rem, pill padding. On hover they turn mist over a 6% mist wash (dawn-ink wash in the dawn tone); press scales them to 0.97.
+- **Mobile:** below 640px the wordmark shortens to "Saad".
+- **Entrance:** fades in at 1.8s, after the name.
 
-Tactile molded controls live beneath the glass. Channel keys are 44px square; power is 46px square. Circular colour and brightness controls reach 44px on phones. The sound grille remains visible and acts as a labeled mute button, with a 44px minimum interaction height. Hardware focus uses a pale green outline against the dark plastic. The brightness knob is an ARIA slider with keyboard, wheel, pointer and reset interactions; it exposes its percentage value.
+### Action links
+Actions are text, not buttons.
+- **Shape:** inline text with a lucide line icon and a 1px underline drawn from the left.
+- **Default:** the underline rests at 30% width and 45% opacity. On the primary action it is a full-width blossom line.
+- **Hover:** the underline draws to full width (0.5s). Arrow-down icons nudge down 2px; external links nudge up-right.
+- **Press:** scale 0.97 over 100ms.
 
-### Channel navigation and project rows
+### Project row (signature)
+A typographic index row that expands in place.
+- **Head:** a full-width button with the title, then meta (year, status), then a plus icon. It carries `aria-expanded` and `aria-controls`; closed panels are `inert`.
+- **Hover:** the title shifts 0.6rem right and turns pale blossom. Hovering with a mouse sends a sideways gust through the petals at that row's height.
+- **Open:** the plus rotates 45 degrees to blossom, the panel grows via grid rows (0.65s, reversible mid-flight), and its contents fade in after 0.12s.
+- **Panel:** a description, a facts list (Role, Built with) and an optional live link. Where a screenshot exists it sits beside the text.
 
-Numbered text buttons use the screen accent without a filled resting surface. Hover inverts foreground and background; focus keeps a visible two-pixel outline. Home is a two-column grid with compact 28px minimum row heights. Selected project rows use the same inverse treatment and `aria-selected`. Phone project rows have 44px minimum height. Preserve the current compact menu dimensions when editing copy; the Home rows are intentionally smaller than the physical controls.
+### Copy email
+A 2.75rem circular icon button beside the email link, with a translucent dawn-ink hairline. It swaps Copy for Check and announces "Email address copied" through a polite status region. If the clipboard fails it falls back to mailto.
 
-### Transmission launcher and story transport
+### Dawn field (signature)
+The contact section: a 30rem gradient from night to dawn, a display-size invitation, the availability line, the email, external links, a footer with a live Lahore clock, and the ground strip (a blossom-deep wash) where petals settle and stay. Selection and focus switch to dawn-ink here.
 
-The launcher is a square-cornered accent-tinted border with a play label. It sits beside desktop navigation and becomes a single 44px minimum-height call to action below phone navigation. The seven-part story uses a timecode, chapter text, optional code-drawn scenes, play/pause/skip controls and a segmented tape progress bar. Text-only mode leaves chapter text and transport available. Reduced motion selects text-only storytelling automatically.
+### Scene engine (signature)
+`src/blossom.js` draws on two canvases. The tree is generated from a fixed seed and grows along its branch distance over 1.9s (cubic ease-out, after 0.25s), with blooms appearing as the front passes. Limbs bend one way along their length and outer limbs arch under their own weight. The wood tapers exactly with round joints, carries a pink rim light from the blossoms over a shadowed underside, and thick limbs show dark fissures and the pale horizontal lenticels of cherry bark. About a third of the blossom clusters sit deeper in the crown, smaller, darker and dimmer, so the canopy reads as a volume. Branches and blossoms draw from separate random streams, so blossom tuning never reshapes the tree. It then sways around its trunk base. Petals are particles in a wind field. Near the pointer, petals take on its velocity. Scroll speed raises gusts and releases more petals, and fast pointer movement in the canopy shakes petals loose near the pointer. Petals are tinted night pinks above the dawn line and dawn pinks below it. Particle counts are capped lower on coarse pointers and narrow screens. Under reduced motion the tree renders fully grown and still, and no petals fly.
 
-### Terminal fields
-
-Visible labels use the secondary screen color. Fields have a faint accent-tinted background, one bottom rule, square corners and accent carets; placeholders use the dim color. On phones they retain a 44px minimum height. Native required/email validation and explicit error/status messages accompany submission. Sending visibly disables the transmit control.
-
-### OSD and remote guide
-
-Transient Silkscreen feedback sits toward the upper-right glass on a translucent dark backing and announces changes through a polite live region. The remote guide is an inset, scrollable terminal dialog with a thin accent border. It moves focus inside, traps keyboard tabbing and restores focus on close. A focus-revealed skip control enables plain mode. Decorative effect layers do not intercept input.
+### Motion grammar
+- **Ease:** cubic-bezier(0.16, 1, 0.3, 1) everywhere except linear word-lighting and 100ms ease-out press feedback.
+- **Hero entrance:** name lines rise from 108% (1.3s, from 1.1s, 90ms apart), then the role, actions and hint arrive with a 0.75rem lift and a 6px blur clearing. Hero copy fades out over the first 35% of a viewport of scroll.
+- **Reveals:** a plain opacity fade (0.9s, 60ms stagger by index) for section titles, rows, About blocks and the dawn copy. The dawn title alone blooms from 0.94 scale and 8px blur.
+- **Smooth scroll:** Lenis (lerp 0.085), off under reduced motion.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep physical controls beneath the glass and the sound grille visible at every breakpoint.
-- **Do** keep Home navigation in two columns and the transmission launcher reachable in its first compact frame.
-- **Do** use inverse phosphor selection for interactive screen states and preserve visible keyboard focus.
-- **Do** preserve plain mode, reduced motion, text-only storytelling and muted-by-default sound.
-- **Do** draw hardware and story materials in code and keep prose selectable, semantic and scrollable.
+- **Do** keep one moment loud: the tree and its wind. Entrances elsewhere stay a plain fade.
+- **Do** start every animated element from a visible state, gating entrances on the `motion` class so scripts-off and reduced-motion visitors see everything in place.
+- **Do** theme selection, focus rings and the scrollbar from the palette, and switch them to dawn-ink inside the dawn field.
+- **Do** use the house ease (cubic-bezier(0.16, 1, 0.3, 1)) and press feedback (scale 0.97, 100ms) on interactive elements.
+- **Do** divide content with 1px hairlines (line on night, translucent dawn-ink on dawn) instead of boxing it.
 
 ### Don't:
-- **Don't** recolor the molded chassis when changing screen colour modes.
-- **Don't** let decorative CRT layers intercept clicks or obscure reading controls.
-- **Don't** reintroduce story scenes, random jitter or static bursts into text-only storytelling.
-- **Don't** treat the compact Home menu as a generic spacious card grid.
+- **Don't** add eyebrow labels, section numbers or stat counters above headings.
+- **Don't** put petals over text, or let motion hide content when JavaScript fails.
+- **Don't** add box shadows, cards or a second translucent surface. The nav pill is the only glass.
+- **Don't** use pink as an interface fill. Light and glow belong to the blossoms.
+- **Don't** introduce monospace or a second typeface.
