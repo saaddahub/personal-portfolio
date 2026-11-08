@@ -3,7 +3,62 @@ export const content = {
   name: ['Saad', 'Akhtar'],
   role: 'Full-stack developer and AI student in Lahore.',
   pitch: 'Useful interfaces, thoughtful systems, built with curiosity.',
-  statement: 'I work where interfaces, data and systems meet. I like software that feels considered: clear enough to disappear, interesting enough to remember.',
+  // The Showcase. Each chapter's line is both its narration (public/showcase/audio/<id>.wav) and its caption.
+  // Only the intro is Saad's own wording; the other lines are drafts for him to approve or rewrite.
+  showcase: {
+    intro: {
+      kicker: 'About me',
+      line: 'I work where interfaces, data, and systems meet. I like software that feels considered.',
+    },
+    interfaces: {
+      kicker: '3D product visuals',
+      line: 'I render products in 3D, down to the last component, so you can see how they are made. Every layer has a reason to be there.',
+      // Bottom to top. Drawn plates stand in until Saad's 3D product frame sequence arrives.
+      layers: [
+        { part: 'Chassis', label: 'Accessibility' },
+        { part: 'Battery', label: 'Performance' },
+        { part: 'Logic board', label: 'State and logic' },
+        { part: 'Display', label: 'Interface' },
+        { part: 'Glass', label: 'Visual design' },
+      ],
+    },
+    dashboards: {
+      kicker: 'Dashboards',
+      line: 'Data should answer a question before you have to ask it. These are dashboards I have built.',
+      boards: [
+        { title: 'Netflix Data Visualiser', note: 'Genres, release trends and ratings across the catalogue.', image: '/images/netflix-visualiser.jpg' },
+        { title: 'PNLF dashboard', note: 'Screenshot on the way.' },
+        { title: 'PNLF dashboard', note: 'Screenshot on the way.' },
+      ],
+    },
+    backend: {
+      kicker: 'Backend',
+      line: 'Behind every screen is a system that keeps it honest. I build the backend too, so changing the site is a decision, not a deployment.',
+      field: 'Contact headline',
+      from: 'Get in touch.',
+      to: 'Say hello.',
+      stages: [
+        ['Admin', 'A signed-in editor changes one field.'],
+        ['API', 'One endpoint receives the change.'],
+        ['Validation', 'The input is checked before anything is written.'],
+        ['Database', 'contact.headline: “Get in touch.” → “Say hello.”'],
+        ['Cache', 'The old page is cleared, so nobody sees stale copy.'],
+        ['Site', 'The live site shows the new headline.'],
+      ],
+    },
+    security: {
+      kicker: 'Security',
+      line: 'Security is not a feature you add at the end. It is every layer saying no to the wrong thing, quietly, every time.',
+      // Outermost first. Saad to confirm each layer is one his projects actually use.
+      layers: [
+        ['HTTPS', 'Eavesdropping'],
+        ['Rate limiting', 'Too many requests'],
+        ['Authentication', 'Stolen token'],
+        ['Authorisation', 'Someone else’s data'],
+        ['Input validation', 'SQL injection'],
+      ],
+    },
+  },
   projects: [
     {
       id: 'netflix',

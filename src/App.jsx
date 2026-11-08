@@ -3,12 +3,13 @@ import Lenis from 'lenis';
 import { ArrowDown, ArrowUpRight, Check, Copy, Plus } from 'lucide-react';
 import { startScene } from './blossom.js';
 import { content } from './content.js';
+import Showcase from './Showcase.jsx';
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lahoreTime = () => new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit' }).format(new Date());
 
 export default function App() {
-  const treeCanvas = useRef(null), petalCanvas = useRef(null), scene = useRef(null), statement = useRef(null), heroCopy = useRef(null);
+  const treeCanvas = useRef(null), petalCanvas = useRef(null), scene = useRef(null), heroCopy = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [dawn, setDawn] = useState(false);
 
@@ -17,8 +18,6 @@ export default function App() {
     scene.current = startScene({ treeCanvas: treeCanvas.current, petalCanvas: petalCanvas.current, reduced });
     const lenis = reduced ? null : new Lenis({ autoRaf: true, anchors: true, lerp: 0.085 });
 
-    // Light each word of the statement in reading order as its pinned section scrolls past.
-    const words = [...statement.current.querySelectorAll('.word')];
     const dawnField = document.querySelector('[data-dawn]');
     let frame = 0;
     const update = () => {
@@ -29,9 +28,6 @@ export default function App() {
       if (reduced) return;
       // Hero copy clears out before it scrolls up into the lingering canopy.
       heroCopy.current.style.opacity = Math.max(0, 1 - scrollY / (innerHeight * 0.35)).toFixed(3);
-      const box = statement.current.getBoundingClientRect();
-      const progress = Math.min(Math.max(-box.top / (box.height - innerHeight), 0), 1) * 1.15;
-      words.forEach((w, i) => { w.style.opacity = 0.16 + 0.84 * Math.min(Math.max(progress * words.length - i, 0), 1); });
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
     addEventListener('scroll', onScroll, { passive: true });
@@ -71,13 +67,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="statement" ref={statement} aria-label="How I work">
-          <div className="statement-pin">
-            <p className="wrap statement-text">
-              {content.statement.split(' ').map((w, i) => <span className="word" key={i}>{w} </span>)}
-            </p>
-          </div>
-        </section>
+        <Showcase />
 
         <Work onGust={y => scene.current?.gust(y)} />
         <About />

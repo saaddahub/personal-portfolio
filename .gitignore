@@ -37,3 +37,6 @@ __pycache__/
 
 # Local rendering tools and temporary encoder files
 /tmp/
+
+# Blender auto-backups
+*.blend1
