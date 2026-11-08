@@ -13,14 +13,12 @@ export const content = {
     interfaces: {
       kicker: '3D product visuals',
       line: 'I render products in 3D, down to the last component, so you can see how they are made. Every layer has a reason to be there.',
-      // Bottom to top. Drawn plates stand in until Saad's 3D product frame sequence arrives.
-      layers: [
-        { part: 'Chassis', label: 'Accessibility' },
-        { part: 'Battery', label: 'Performance' },
-        { part: 'Logic board', label: 'State and logic' },
-        { part: 'Display', label: 'Interface' },
-        { part: 'Glass', label: 'Visual design' },
-      ],
+      // Rendered frames, already in playback order (assembled first). See scripts/prepare-frames.py.
+      product: {
+        path: '/showcase/frames/keyboard',
+        frames: 239,
+        alt: 'A mechanical keyboard coming apart into its keycaps, switches, plate, circuit board and case.',
+      },
     },
     dashboards: {
       kicker: 'Dashboards',

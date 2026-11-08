@@ -31,6 +31,7 @@ export default function Showcase() {
       for (const c of chapters) {
         const r = c.el.getBoundingClientRect();
         if (r.top <= h / 2 && r.bottom > h / 2) next = c;
+        if (r.top < h * 4) c.near?.(); // a few screens ahead: time to fetch heavy assets
         if (r.bottom < 0 || r.top > h) continue;
         // Reduced motion shows one composed still per chapter instead of scrubbing.
         const p = reduced ? c.still : clamp(-r.top / (r.height - h));
@@ -90,10 +91,10 @@ export default function Showcase() {
   );
 }
 
-function Chapter({ id, height, still, render, frame, caption = true, children }) {
+function Chapter({ id, height, still, render, frame, near, caption = true, children }) {
   const section = useRef(null), captionEl = useRef(null);
   useEffect(() => {
-    const ch = { id, el: section.current, caption: captionEl.current, render, frame, still, p: -1, frac: -1 };
+    const ch = { id, el: section.current, caption: captionEl.current, render, frame, near, still, p: -1, frac: -1 };
     chapters.add(ch);
     return () => chapters.delete(ch);
   }, []);
@@ -180,79 +181,67 @@ function Intro() {
   );
 }
 
-/* 2. 3D product visuals: a device explodes into labelled layers, reassembles, and the camera dives into its screen.
-   The plates stand in for Saad's 3D product frame sequence until it arrives. */
-const KINDS = ['chassis', 'battery', 'board', 'display', 'glass']; // matches sc.interfaces.layers, bottom to top
-const PLATE_ART = {
-  chassis: <span className="keys" />,
-  battery: <span className="cells">{Array.from({ length: 6 }, (_, i) => <span key={i} />)}</span>,
-  board: (
-    <svg viewBox="0 0 160 100" preserveAspectRatio="none">
-      <g fill="none" stroke="currentColor" strokeWidth="0.8">
-        <path d="M8 20H50V40H78M8 50H40V72H90V64M152 14H122V36H102M152 82H116V58H102M60 92V76H80M30 8V20M130 92V82" />
-      </g>
-      <rect x="78" y="30" width="24" height="34" rx="2" fill="currentColor" opacity="0.45" />
-      <rect x="18" y="78" width="16" height="10" rx="1" fill="currentColor" opacity="0.3" />
-      <rect x="120" y="44" width="12" height="8" rx="1" fill="currentColor" opacity="0.3" />
-    </svg>
-  ),
-  display: <span className="screen" />,
-  glass: null,
-};
+/* 2. 3D product visuals: Saad's rendered product comes apart frame by frame as you scroll. */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function Interfaces() {
-  const scene = useRef(null), q = useRef(null);
-  const { layers } = sc.interfaces;
+  const canvas = useRef(null), q = useRef({ imgs: [], want: 0, cur: 0, drawn: -1, size: '' });
+  const { product } = sc.interfaces, N = product.frames, STILL = 0.6;
+  const frameAt = p => Math.round(seg(p, 0.1, 0.88) * (N - 1));
+
+  // Draw frame i, or the nearest one that has loaded, scaled to fit and centred.
+  const draw = i => {
+    const s = q.current, cv = canvas.current;
+    let f = -1;
+    for (let d = 0; d < N && f < 0; d++) f = s.imgs[i - d] ? i - d : s.imgs[i + d] ? i + d : -1;
+    const dpr = Math.min(devicePixelRatio, 2), w = Math.round(cv.clientWidth * dpr), h = Math.round(cv.clientHeight * dpr);
+    if (f < 0 || (f === s.drawn && s.size === `${w}x${h}`)) return;
+    if (s.size !== `${w}x${h}`) { cv.width = w; cv.height = h; s.size = `${w}x${h}`; }
+    const img = s.imgs[f], iw = img.naturalWidth, ih = img.naturalHeight;
+    const k = Math.min((w / iw) * 1.1, h / ih); // the frames' empty margins may crop a little on narrow screens
+    const g = cv.getContext('2d');
+    g.clearRect(0, 0, w, h);
+    g.drawImage(img, (w - iw * k) / 2, (h - ih * k) / 2, iw * k, ih * k);
+    s.drawn = f;
+  };
+
+  // Called once the chapter is a few screens away: every 8th frame first, so a fast scroll always has a near frame, then the rest.
+  const near = () => {
+    const cv = canvas.current, s = q.current;
+    if (s.loading) return;
+    s.loading = true;
+    const set = cv.clientWidth * Math.min(devicePixelRatio, 2) > 1100 ? 'desktop' : 'mobile';
+    const order = REDUCED ? [frameAt(STILL)] : [...Array(N).keys()].sort((a, b) => (a % 8 > 0) - (b % 8 > 0));
+    for (const i of order) {
+      const img = new Image();
+      img.src = `${product.path}/${set}/${String(i + 1).padStart(4, '0')}.webp`;
+      // decode() first, so drawing never stalls the frame on a decode.
+      img.decode().then(() => {
+        s.imgs[i] = img;
+        const at = Math.round(s.cur);
+        if (s.drawn < 0 || Math.abs(i - at) < Math.abs(s.drawn - at)) draw(at);
+      }, () => {});
+    }
+  };
 
   const render = p => {
-    const el = scene.current;
-    const c = (q.current ??= {
-      dev: el.querySelector('.dev'),
-      plates: [...el.querySelectorAll('.plate')],
-      pins: [...el.querySelectorAll('.plate-pin')],
-      labels: [...el.querySelectorAll('.dev-labels li')].reverse(),
-      list: el.querySelector('.dev-labels'),
-      svg: el.querySelector('.dev-leaders'),
-      leaders: [...el.querySelectorAll('.dev-leaders path')],
-    });
-    const tilt = ease(seg(p, 0.02, 0.22)) * (1 - ease(seg(p, 0.66, 0.84)));
-    const spread = ease(seg(p, 0.12, 0.5)) * (1 - ease(seg(p, 0.64, 0.82)));
-    const zoom = ease(seg(p, 0.86, 1));
-    const gap = Math.min(innerWidth * 0.11, 96);
-    c.dev.style.transform = `scale(${1 + zoom * 2.6}) rotateX(${tilt * 56}deg) rotateZ(${tilt * -36}deg)`;
-    c.plates.forEach((pl, i) => { pl.style.transform = `translateZ(${i * 2 + (i - 2) * gap * spread}px)`; });
-    el.style.opacity = 1 - seg(p, 0.94, 1);
-
-    // Read every position first, then write, so the browser lays out once per frame.
-    const wide = innerWidth >= 760, box = el.getBoundingClientRect();
-    const left = c.list.getBoundingClientRect().left - box.left;
-    const rects = wide ? c.labels.map((li, i) => [c.pins[i].getBoundingClientRect(), li.getBoundingClientRect()]) : [];
-    if (wide) c.svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
-    c.labels.forEach((li, i) => {
-      const t = seg(spread, 0.4 + i * 0.1, 0.6 + i * 0.1);
-      li.style.opacity = t;
-      li.style.transform = `translateX(${(1 - t) * 1.5}rem)`;
-      if (!wide) return;
-      const [a, b] = rects[i];
-      const x1 = a.left - box.left, y1 = a.top - box.top, x2 = left - 14, y2 = b.top + b.height / 2 - box.top;
-      c.leaders[i].setAttribute('d', `M${x1} ${y1}L${x2 - 36} ${y2}H${x2}`);
-      c.leaders[i].style.strokeDashoffset = 1 - t;
-    });
+    const s = q.current, enter = ease(seg(p, 0, 0.1)), exit = ease(seg(p, 0.9, 1));
+    canvas.current.style.transform = `scale(${lerp(0.86, 1, enter) + exit * 0.14})`;
+    canvas.current.style.opacity = enter * (1 - exit);
+    s.want = frameAt(p);
+    if (REDUCED) { s.cur = s.want; draw(s.want); }
+  };
+  // Every animation frame, glide toward the scroll target: smooth even when the scroll position jumps.
+  const frame = () => {
+    const s = q.current;
+    const settled = Math.abs(s.want - s.cur) < 0.02;
+    s.cur = settled ? s.want : s.cur + (s.want - s.cur) * 0.35;
+    draw(Math.round(s.cur));
   };
 
   return (
-    <Chapter id="interfaces" height="400vh" still={0.58} render={render}>
-      <div className="dev-scene" ref={scene}>
-        <div className="dev-view">
-          <div className="dev">
-            {layers.map((l, i) => <div key={l.part} className={`plate plate-${KINDS[i]}`}>{PLATE_ART[KINDS[i]]}<span className="plate-pin" /></div>)}
-          </div>
-        </div>
-        <ol className="dev-labels">
-          {[...layers].reverse().map(l => <li key={l.part}><span className="part">{l.part}</span><span className="label">{l.label}</span></li>)}
-        </ol>
-        <svg className="dev-leaders" aria-hidden="true">{layers.map(l => <path key={l.part} pathLength="1" />)}</svg>
-      </div>
+    <Chapter id="interfaces" height="420vh" still={STILL} render={render} frame={frame} near={near}>
+      <canvas className="seq" ref={canvas} role="img" aria-label={product.alt} />
     </Chapter>
   );
 }

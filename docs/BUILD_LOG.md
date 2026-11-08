@@ -86,4 +86,4 @@ anime.js 4.5.0 was installed at the start of the session. It was then **removed 
 3. **Social preview image:** none exists, so shared links show text only. Add `og:image` in `index.html`.
 4. **Project imagery:** only Netflix Data Visualiser has a screenshot.
 5. **Story Mode:** specified in `docs/STORY_MODE.md`.
-6. **Showcase:** first version built between the hero and Selected work (`src/Showcase.jsx`). Waiting on device frames, PNLF screenshots, the real voice and approval of the draft lines. See `docs/SHOWCASE.md`.
+6. **Showcase:** first version built between the hero and Selected work (`src/Showcase.jsx`), with the keyboard as the first 3D product. Waiting on more products, PNLF screenshots, the real voice and approval of the draft lines. See `docs/SHOWCASE.md`.
