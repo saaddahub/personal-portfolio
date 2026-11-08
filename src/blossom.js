@@ -26,7 +26,8 @@ export function rng(seed) {
 // Branches, blossom glows and blossom dots, each tagged with its distance from the root
 // so growth can be drawn as a single advancing front.
 // The one tree every visitor sees, chosen for how it composes on desktop and phone.
-export const SEED = 21;
+export const SEED = 43;
+const SHOOTS = 0.4; // chance of a side shoot at each joint along a mid-level limb
 
 export function generateTree(width, height, seed = SEED, density = 1) {
   // Separate streams so tuning blossom density never reshapes the branches.
@@ -67,11 +68,17 @@ export function generateTree(width, height, seed = SEED, density = 1) {
     for (let i = 0; i < steps; i++) {
       a += bend + (r() - 0.5) * (depth < 2 ? 0.08 : 0.2) + sag * Math.cos(a);
       const l = len / steps, nx = px + Math.cos(a) * l, ny = py + Math.sin(a) * l;
-      segments.push({ x1: px, y1: py, x2: nx, y2: ny, w0: w + (wEnd - w) * (i / steps), w1: w + (wEnd - w) * ((i + 1) / steps), d0: d, d1: d + l, depth, seed: r() });
+      const w1 = w + (wEnd - w) * ((i + 1) / steps);
+      segments.push({ x1: px, y1: py, x2: nx, y2: ny, w0: w + (wEnd - w) * (i / steps), w1, d0: d, d1: d + l, depth, seed: r() });
       px = nx; py = ny; d += l;
-      if (depth >= 3 && i < steps - 1 && r() < 0.3) cluster(px, py, d, 0.45);
+      // Side shoots along the limb fill the crown the way a real cherry does, not only forks at the ends.
+      if (depth >= 2 && depth <= 6 && i < steps - 1 && r() < SHOOTS) {
+        const side = r() < 0.5 ? -1 : 1;
+        branch(px, py, a + side * (0.55 + r() * 0.5), len * (0.36 + r() * 0.22), w1 * 0.5, depth + 2, d);
+      }
+      if (depth >= 3 && i < steps - 1 && r() < 0.18) cluster(px, py, d, 0.4);
     }
-    if (depth >= 8 || len < size * 0.02) return cluster(px, py, d, 0.65);
+    if (depth >= 8 || len < size * 0.02) return cluster(px, py, d, 0.42);
     const kids = depth < 1 ? 2 : r() < 0.3 ? 3 : 2;
     for (let k = 0; k < kids; k++) {
       const side = kids === 3 ? k - 1 : k === 0 ? -1 : 1;
