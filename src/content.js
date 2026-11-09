@@ -13,11 +13,32 @@ export const content = {
     interfaces: {
       kicker: '3D product visuals',
       line: 'I render products in 3D, down to the last component, so you can see how they are made. Every layer has a reason to be there.',
-      // Rendered frames, already in playback order (assembled first). See scripts/prepare-frames.py.
+      // Frames from Saad's Flow video, in playback order (assembled first). Made with scripts/prepare-frames.py.
       product: {
         path: '/showcase/frames/keyboard',
-        frames: 239,
-        alt: 'A mechanical keyboard coming apart into its keycaps, switches, plate, circuit board and case.',
+        frames: 190,
+        still: '/showcase/frames/keyboard/still.webp', // the last frame, full size and sharpened, used for the zoom
+        alt: 'A mechanical keyboard with yellow switches coming apart into its keycaps, switches, frame, circuit board and case.',
+        // Callouts, measured on the last frame in 1920x1080 frame pixels. side: which way the label reaches;
+        // dy: nudges a label up or down to clear a neighbour.
+        parts: [
+          { x: 465, y: 262, side: 'l', name: 'Keycaps', note: 'Two-tone, 75% layout' },
+          { x: 1458, y: 205, side: 'r', name: 'Rotary knob', note: 'Volume and media' },
+          { x: 505, y: 470, side: 'l', name: 'Yellow switches', note: 'One under every key' },
+          { x: 425, y: 610, side: 'l', name: 'Top frame', note: 'Holds the switches in place' },
+          { x: 1452, y: 800, side: 'r', name: 'Circuit board', note: 'Turns presses into signals' },
+          { x: 1484, y: 915, side: 'r', name: 'Bottom case', note: 'Closes it all up' },
+        ],
+        // Then the camera moves in on the right-hand side for the small parts.
+        zoom: { x: 1250, y: 600, scale: 1.8 },
+        details: [
+          { x: 1297, y: 423, side: 'r', name: 'Keycap', note: 'Sits on the switch stem' },
+          { x: 1307, y: 600, side: 'r', name: 'Yellow switch', note: 'Springs back after every press' },
+          { x: 1072, y: 612, side: 'l', name: 'Stabiliser', note: 'Keeps long keys level' },
+          { x: 1425, y: 737, side: 'r', name: 'USB port', note: 'Power and data' },
+          { x: 1210, y: 727, side: 'l', dy: -26, name: 'Clock crystal', note: 'Keeps the timing exact' },
+          { x: 940, y: 745, side: 'r', dy: 34, name: 'Microcontroller', note: 'Reads every keypress' },
+        ],
       },
     },
     dashboards: {

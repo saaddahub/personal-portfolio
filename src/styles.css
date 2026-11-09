@@ -220,12 +220,35 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22e
   transform: scale(0); pointer-events: none;
 }
 
-/* 2. 3D product visuals: a scroll-scrubbed frame sequence, full bleed. */
+/* 2. 3D product visuals: a scroll-scrubbed frame sequence, full bleed, with numbered callouts. */
+/* Full bleed: the stage's side padding is cancelled so the canvas is centred on the viewport, not the padding. */
+.seq-wrap { position: relative; justify-self: stretch; margin-inline: calc(var(--gutter) * -1); height: 100%; will-change: transform, opacity; }
 .seq {
-  width: 100vw; height: 100%; will-change: transform, opacity;
+  display: block; width: 100%; height: 100%;
   /* Blends the frames' top and bottom edges into the page. */
   mask-image: linear-gradient(transparent, #000 7%, #000 93%, transparent);
   -webkit-mask-image: linear-gradient(transparent, #000 7%, #000 93%, transparent);
+}
+.seq-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.seq-lines path { fill: none; stroke: var(--blossom); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.8; }
+.seq-lines circle { fill: var(--blossom-pale); stroke: #0d0a10; stroke-width: 2; opacity: 0; }
+.seq-labels { position: absolute; inset: 0; pointer-events: none; }
+.seq-labels li { position: absolute; left: 0; top: 0; opacity: 0; }
+.seq-tag {
+  position: absolute; display: grid; grid-template-columns: auto auto; column-gap: 0.55rem; align-items: baseline;
+  padding: 0.35rem 0.65rem; border-radius: 8px; background: #0d0a10d9;
+  white-space: nowrap; transform: translateY(-50%);
+}
+[data-side='l'] > .seq-tag { right: 0; text-align: right; }
+.seq-num { grid-row: span 2; color: var(--blossom); font-size: 0.6875rem; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+.seq-name { font-size: clamp(0.9375rem, 1.2vw, 1.0625rem); font-weight: 400; }
+.seq-note { grid-column: 2; color: var(--dusk); font-size: 0.75rem; }
+@media (max-width: 759px) {
+  /* No room beside the product: hide the lines and pin each name just above its point. */
+  .seq-lines path, .seq-note, .seq-num { display: none; }
+  .seq-tag { grid-template-columns: auto; padding: 0.2rem 0.5rem; transform: translateY(calc(-100% - 0.6rem)); }
+  [data-side='l'] > .seq-tag { right: auto; text-align: left; }
+  .seq-name { font-size: 0.75rem; }
 }
 
 /* 3. Dashboards */

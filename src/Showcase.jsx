@@ -181,28 +181,59 @@ function Intro() {
   );
 }
 
-/* 2. 3D product visuals: Saad's rendered product comes apart frame by frame as you scroll. */
+/* 2. 3D product visuals: Saad's rendered product comes apart frame by frame as you scroll, its layers get
+   numbered callouts, then the camera moves in on one side to label the small parts. */
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function Interfaces() {
-  const canvas = useRef(null), q = useRef({ imgs: [], want: 0, cur: 0, drawn: -1, size: '' });
-  const { product } = sc.interfaces, N = product.frames, STILL = 0.6;
-  const frameAt = p => Math.round(seg(p, 0.1, 0.88) * (N - 1));
+  const wrap = useRef(null), canvas = useRef(null), lines = useRef(null), labels = useRef(null);
+  const q = useRef({ imgs: [], hi: null, want: 0, cur: 0, drawn: -1, size: '', zoom: 0, zoomDrawn: -1 });
+  const { product } = sc.interfaces, N = product.frames, STILL = 0.6, Z = product.zoom;
+  const callouts = [...product.parts, ...product.details];
+  const frameAt = p => Math.round(seg(p, 0.06, 0.5) * (N - 1));
 
-  // Draw frame i, or the nearest one that has loaded, scaled to fit and centred.
+  // Callout positions follow the drawn image: frame pixels (1920x1080) -> CSS pixels on the canvas.
+  const place = () => {
+    const { S, dx, dy, iw, ih, dpr } = q.current.view, cv = canvas.current, wide = cv.clientWidth >= 760;
+    lines.current.setAttribute('viewBox', `0 0 ${cv.clientWidth} ${cv.clientHeight}`);
+    callouts.forEach((c, i) => {
+      const ax = (dx + (c.x / 1920) * iw * S) / dpr, ay = (dy + (c.y / 1080) * ih * S) / dpr;
+      const dir = c.side === 'r' ? 1 : -1, ey = ay + (c.dy || 0), ex = ax + dir * 72;
+      const [path, dot] = lines.current.children[i].children;
+      path.setAttribute('d', `M${ax} ${ay}L${ax + dir * 28} ${ey}H${ex}`);
+      dot.setAttribute('cx', ax);
+      dot.setAttribute('cy', ay);
+      const li = labels.current.children[i];
+      if (wide) { li.style.transform = `translate(${ex + dir * 8}px, ${ey}px)`; return; }
+      // Phones: the name sits just above its point, reaching away from the product's centre, kept on screen.
+      const tw = li.firstChild.offsetWidth, x = Math.min(Math.max(dir > 0 ? ax - 8 : ax - tw + 8, 6), cv.clientWidth - tw - 6);
+      li.style.transform = `translate(${x}px, ${ay + (c.dy || 0) * 0.5}px)`;
+    });
+  };
+
+  // Draw frame i (or the nearest loaded one), fitted and centred, then moved in on the zoom point.
   const draw = i => {
     const s = q.current, cv = canvas.current;
     let f = -1;
     for (let d = 0; d < N && f < 0; d++) f = s.imgs[i - d] ? i - d : s.imgs[i + d] ? i + d : -1;
     const dpr = Math.min(devicePixelRatio, 2), w = Math.round(cv.clientWidth * dpr), h = Math.round(cv.clientHeight * dpr);
-    if (f < 0 || (f === s.drawn && s.size === `${w}x${h}`)) return;
+    if (f < 0 || (f === s.drawn && s.size === `${w}x${h}` && s.zoom === s.zoomDrawn)) return;
     if (s.size !== `${w}x${h}`) { cv.width = w; cv.height = h; s.size = `${w}x${h}`; }
-    const img = s.imgs[f], iw = img.naturalWidth, ih = img.naturalHeight;
+    const img = f === N - 1 && s.hi ? s.hi : s.imgs[f], iw = img.naturalWidth, ih = img.naturalHeight;
     const k = Math.min((w / iw) * 1.1, h / ih); // the frames' empty margins may crop a little on narrow screens
+    const fx = (Z.x / 1920) * iw, fy = (Z.y / 1080) * ih;
+    // The zoom point glides from where it sits to just left of centre, leaving room for the labels on the right.
+    const tx = lerp((w - iw * k) / 2 + fx * k, w * (cv.clientWidth >= 760 ? 0.45 : 0.5), s.zoom);
+    const ty = lerp((h - ih * k) / 2 + fy * k, h * 0.5, s.zoom);
+    const S = k * lerp(1, Z.scale, s.zoom), dx = tx - fx * S, dy = ty - fy * S;
     const g = cv.getContext('2d');
+    g.imageSmoothingQuality = 'high'; // the default 'low' turns fine edges and legends jagged when scaling
     g.clearRect(0, 0, w, h);
-    g.drawImage(img, (w - iw * k) / 2, (h - ih * k) / 2, iw * k, ih * k);
+    g.drawImage(img, dx, dy, iw * S, ih * S);
     s.drawn = f;
+    s.zoomDrawn = s.zoom;
+    s.view = { S, dx, dy, iw, ih, dpr };
+    place();
   };
 
   // Called once the chapter is a few screens away: every 8th frame first, so a fast scroll always has a near frame, then the rest.
@@ -211,6 +242,9 @@ function Interfaces() {
     if (s.loading) return;
     s.loading = true;
     const set = cv.clientWidth * Math.min(devicePixelRatio, 2) > 1100 ? 'desktop' : 'mobile';
+    const hi = new Image();
+    hi.src = product.still;
+    hi.decode().then(() => { s.hi = hi; s.drawn = -1; draw(Math.round(s.cur)); }, () => {});
     const order = REDUCED ? [frameAt(STILL)] : [...Array(N).keys()].sort((a, b) => (a % 8 > 0) - (b % 8 > 0));
     for (const i of order) {
       const img = new Image();
@@ -224,11 +258,23 @@ function Interfaces() {
     }
   };
 
+  // Timeline: build up (0-0.5), layer callouts (0.5-0.67), move in (0.66-0.78), detail callouts (0.78-0.95), out.
   const render = p => {
-    const s = q.current, enter = ease(seg(p, 0, 0.1)), exit = ease(seg(p, 0.9, 1));
-    canvas.current.style.transform = `scale(${lerp(0.86, 1, enter) + exit * 0.14})`;
-    canvas.current.style.opacity = enter * (1 - exit);
+    const s = q.current, enter = ease(seg(p, 0, 0.06)), exit = ease(seg(p, 0.94, 1));
+    wrap.current.style.transform = `scale(${lerp(0.86, 1, enter)})`;
+    wrap.current.style.opacity = enter * (1 - exit);
     s.want = frameAt(p);
+    s.zoom = ease(seg(p, 0.66, 0.78));
+    const nParts = product.parts.length;
+    callouts.forEach((c, i) => {
+      const t = i < nParts
+        ? seg(p, 0.51 + i * 0.02, 0.57 + i * 0.02) * (1 - seg(p, 0.63, 0.67))
+        : seg(p, 0.78 + (i - nParts) * 0.02, 0.84 + (i - nParts) * 0.02) * (1 - seg(p, 0.92, 0.95));
+      const [path, dot] = lines.current.children[i].children;
+      path.style.strokeDashoffset = 1 - t;
+      dot.style.opacity = t;
+      labels.current.children[i].style.opacity = t;
+    });
     if (REDUCED) { s.cur = s.want; draw(s.want); }
   };
   // Every animation frame, glide toward the scroll target: smooth even when the scroll position jumps.
@@ -239,9 +285,22 @@ function Interfaces() {
     draw(Math.round(s.cur));
   };
 
+  const number = i => String(i < product.parts.length ? i + 1 : i - product.parts.length + 1).padStart(2, '0');
   return (
-    <Chapter id="interfaces" height="420vh" still={STILL} render={render} frame={frame} near={near}>
-      <canvas className="seq" ref={canvas} role="img" aria-label={product.alt} />
+    <Chapter id="interfaces" height="560vh" still={STILL} render={render} frame={frame} near={near}>
+      <div className="seq-wrap" ref={wrap}>
+        <canvas className="seq" ref={canvas} role="img" aria-label={product.alt} />
+        <svg className="seq-lines" ref={lines} aria-hidden="true">
+          {callouts.map((c, i) => <g key={i}><path pathLength="1" /><circle r="3.5" /></g>)}
+        </svg>
+        <ol className="seq-labels" ref={labels}>
+          {callouts.map((c, i) => (
+            <li key={i} data-side={c.side}>
+              <span className="seq-tag"><span className="seq-num">{number(i)}</span><span className="seq-name">{c.name}</span><span className="seq-note">{c.note}</span></span>
+            </li>
+          ))}
+        </ol>
+      </div>
     </Chapter>
   );
 }
