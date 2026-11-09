@@ -225,7 +225,10 @@ function Interfaces() {
     // The zoom point glides from where it sits to just left of centre, leaving room for the labels on the right.
     const tx = lerp((w - iw * k) / 2 + fx * k, w * (cv.clientWidth >= 760 ? 0.45 : 0.5), s.zoom);
     const ty = lerp((h - ih * k) / 2 + fy * k, h * 0.5, s.zoom);
-    const S = k * lerp(1, Z.scale, s.zoom), dx = tx - fx * S, dy = ty - fy * S;
+    // Never magnify past the image's real pixels (0.9 CSS px per image px): beyond that it only gets blurrier.
+    // A higher-resolution still raises this ceiling, so the zoom grows by itself when one is supplied.
+    const zMax = Math.max(1, Math.min(Z.scale, (0.9 * dpr) / k));
+    const S = k * lerp(1, zMax, s.zoom), dx = tx - fx * S, dy = ty - fy * S;
     const g = cv.getContext('2d');
     g.imageSmoothingQuality = 'high'; // the default 'low' turns fine edges and legends jagged when scaling
     g.clearRect(0, 0, w, h);
