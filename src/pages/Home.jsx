@@ -76,7 +76,7 @@ export default function Home() {
       </nav>
 
       {/* A curiosity gap: name something the visitor can't get anywhere else, and make it feel slightly private. */}
-      <Scribble anchor='.nav-tabs a[href="/story"]' text={'psst. the part that\nisn’t on his CV'} side="s" gap={[-150, 46]} bend={-0.3} seed={4} delay={3.9} accent show={story.on && at.top} />
+      <Scribble anchor='.nav-tabs a[href="/story"]' text={'psst. the part that\nisn’t on his CV'} side="s" gap={[-230, 120]} bend={-0.35} seed={4} delay={3.9} accent show={story.on && at.top} />
       <Scribble anchor=".sound" kind="circle" text={'I talk,\nif you let me'} side="nw" gap={[22, 42]} bend={0.3} seed={7} delay={0.6} avoid=".sc-intro .sc-caption" media="(min-width: 1120px)" show={sound.on && at.intro && soundOff} />
       <Scribble anchor=".page-next a" text={'quiet now, as promised.\nmostly.'} side="e" gap={[56, -34]} bend={0.3} seed={23} delay={0.4} show={next.fresh && at.end} />
     </>
