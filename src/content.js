@@ -102,6 +102,33 @@ export const content = {
   },
   projects: [
     {
+      id: 'pnlf',
+      title: 'Pakistan’s National Students Forum',
+      year: '', // [year, from Saad]
+      status: '', // [status, from Saad]
+      stack: [], // [built with, from Saad]
+      role: '', // [role, from Saad]
+      description: '', // [one line, from Saad]
+    },
+    {
+      id: 'interviewer',
+      title: 'AI Interviewer',
+      year: '2026',
+      status: 'In the lab',
+      stack: ['Python', 'LLM', 'Prompt design'],
+      role: 'Product and development',
+      description: 'Role-specific interview practice with questions that respond to the conversation and feedback on every answer. A quieter place to make your first mistakes.',
+    },
+    {
+      id: 'imc',
+      title: 'IMC, Islam Medical Complex',
+      year: '', // [year, from Saad]
+      status: '', // [status, from Saad]
+      stack: [], // [built with, from Saad]
+      role: '', // [role, from Saad]
+      description: '', // [one line, from Saad]
+    },
+    {
       id: 'netflix',
       title: 'Netflix Data Visualiser',
       year: '2026',
@@ -114,15 +141,6 @@ export const content = {
       alt: 'Netflix Data Visualiser dashboard with charts of genres and release years',
     },
     {
-      id: 'interviewer',
-      title: 'AI Interviewer',
-      year: '2026',
-      status: 'In the lab',
-      stack: ['Python', 'LLM', 'Prompt design'],
-      role: 'Product and development',
-      description: 'Role-specific interview practice with questions that respond to the conversation and feedback on every answer. A quieter place to make your first mistakes.',
-    },
-    {
       id: 'hospital',
       title: 'Hospital Database',
       year: '2025',
@@ -130,6 +148,7 @@ export const content = {
       stack: ['MySQL', 'SQL', 'ERD'],
       role: 'Database design',
       description: 'A normalized relational model connecting patients, staff, appointments and billing, with the multi-join queries a front desk actually needs.',
+      hidden: true, // not on the Work page; the Tour still uses its data
     },
     {
       id: 'hotel',
@@ -139,6 +158,7 @@ export const content = {
       stack: ['C++', 'OOP', 'File I/O'],
       role: 'Architecture and development',
       description: 'Rooms, bookings, customers and services in a modular C++ system. An exercise in making the architecture as orderly as the reception desk.',
+      hidden: true, // not on the Work page; the Tour still uses its data
     },
     {
       id: 'blossom',
@@ -149,6 +169,7 @@ export const content = {
       role: 'Design and development',
       description: 'A procedural cherry tree that grows on every visit, and petals carried by a wind you steer with your pointer and your scroll.',
       liveUrl: 'https://saadsalam.dev',
+      hidden: true, // not on the Work page; the Tour still uses its data
     },
   ],
   // Dashboards on the Work page, each tilting up into view as it scrolls in. Empty until Saad sends them; until

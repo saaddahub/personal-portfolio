@@ -5,8 +5,8 @@ import { Link } from '../router.jsx';
 import { scene } from '../scene.js';
 import './pages.css';
 
-const { projects, dashboards } = content;
-const years = projects.map(p => Number(p.year));
+const projects = content.projects.filter(p => !p.hidden), { dashboards } = content;
+const years = projects.map(p => Number(p.year)).filter(Number.isFinite); // a project without a year yet is left out of the range
 const clamp = x => Math.min(Math.max(x, 0), 1);
 const gustAt = el => { const b = el.getBoundingClientRect(); scene.current?.gust(b.top + b.height / 2); };
 
@@ -77,7 +77,7 @@ export default function Work() {
                   <div className="work-panel-inner">
                     <div className="work-detail">
                       <div className="work-story work-in">
-                        <p className="work-description">{p.description}</p>
+                        {p.description && <p className="work-description">{p.description}</p>}
                         {p.liveUrl && (
                           <p className="work-live">
                             <a className="action action-primary" href={p.liveUrl} target="_blank" rel="noreferrer">Visit the live project <ArrowUpRight aria-hidden="true" /></a>
@@ -86,8 +86,8 @@ export default function Work() {
                         )}
                       </div>
                       <dl className="work-facts work-in" style={{ '--k': 1 }}>
-                        <div><dt>Role</dt><dd>{p.role}</dd></div>
-                        <div><dt>Built with</dt><dd><ul className="work-stack">{p.stack.map(s => <li key={s}>{s}</li>)}</ul></dd></div>
+                        {p.role && <div><dt>Role</dt><dd>{p.role}</dd></div>}
+                        {p.stack.length > 0 && <div><dt>Built with</dt><dd><ul className="work-stack">{p.stack.map(s => <li key={s}>{s}</li>)}</ul></dd></div>}
                       </dl>
                       {p.image && (
                         <figure className="work-figure work-in" style={{ '--k': 2 }}>
