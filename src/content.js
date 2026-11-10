@@ -100,6 +100,15 @@ export const content = {
       ],
     },
   },
+  // The water drop that guides visitors round the site (src/drop). It glides to each page's title and says its
+  // line once per visit, in the narrator's voice (clips: drop-<page>.0.mp3, made by scripts/narrate.py).
+  drop: {
+    home: 'Hello. I’m the drop. I’ll walk you round. Scroll whenever you’re ready.',
+    work: 'His work. Four projects. Open any row and it unfolds. Go on, I’ll wait.',
+    about: 'The person behind it all. Quieter than his work. Worth the scroll.',
+    story: 'Two ways in. Pick My Story. It’s the part that isn’t on his CV.',
+    contact: 'This is where you say hello. One line is plenty. Go on.',
+  },
   projects: [
     {
       id: 'pnlf',

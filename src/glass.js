@@ -6,7 +6,7 @@
 
 // The tab bar's lens is left out: it sits inside the bar, which is itself glass, so it has no page behind it to bend.
 const SELECTOR = [
-  '.nav-glass', '.sound', '.sc-caption', '.seq-tag', '.be-panel', '.board-card', '.mail-copy', '.social-go', // the main pages
+  '.nav-glass', '.drop-body', '.drop-bubble', '.sound', '.sc-caption', '.seq-tag', '.be-panel', '.board-card', '.mail-copy', '.social-go', // the main pages
   '.story .glass', '.tp', '.ch-caption', '.story-pill', '.mine-card', // Story Mode
 ].join(', ');
 const N = 1.5, SVGNS = 'http://www.w3.org/2000/svg';
@@ -28,14 +28,16 @@ export function bend(t, thickness, bezel) {
 }
 
 // Encodes the displacement as R (x) and G (y) around 128, pointing inward so the rim magnifies what is behind it.
-export function displacementMap(w, h, r, bezel, thickness) {
-  const data = new Uint8ClampedArray(w * h * 4), max = bend(1e-3, thickness, bezel);
+// edge: the depth whose bend counts as full strength. A slab normalises at its very rim; the drop (a sphere whose
+// outermost rim is clipped away by its wobble) normalises a little further in, so its visible body bends hard.
+export function displacementMap(w, h, r, bezel, thickness, edge = 1e-3) {
+  const data = new Uint8ClampedArray(w * h * 4), max = bend(edge, thickness, bezel);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const px = x + 0.5, py = y + 0.5, d = sdf(px, py, w, h, r), i = (y * w + x) * 4;
     let dx = 0, dy = 0;
     if (d < 0 && -d < bezel) {
       const gx = sdf(px + 1, py, w, h, r) - sdf(px - 1, py, w, h, r), gy = sdf(px, py + 1, w, h, r) - sdf(px, py - 1, w, h, r);
-      const len = Math.hypot(gx, gy) || 1, m = bend(-d / bezel, thickness, bezel) / max;
+      const len = Math.hypot(gx, gy) || 1, m = Math.min(1, bend(-d / bezel, thickness, bezel) / max);
       dx = (-gx / len) * m; dy = (-gy / len) * m;
     }
     data[i] = 128 + dx * 127; data[i + 1] = 128 + dy * 127; data[i + 2] = 128; data[i + 3] = 255;
@@ -99,14 +101,16 @@ function attach(el) {
     if (key === built || w < 8 || h < 8) return;
     built = key;
     const r = Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, h / 2, w / 2);
-    const bezel = Math.max(6, Math.min(r * 1.25, h * 0.42, 46)), thickness = bezel * 2;
+    // The water drop is a sphere, not a slab: its whole body is curved, so it is one deep lens edge to edge.
+    const sphere = el.matches('.drop-body');
+    const bezel = sphere ? Math.min(w, h) / 2 : Math.max(6, Math.min(r * 1.25, h * 0.42, 46)), thickness = bezel * (sphere ? 2.6 : 2);
     canvas.width = w; canvas.height = h;
-    g.putImageData(new ImageData(displacementMap(w, h, r, bezel, thickness), w, h), 0, 0);
+    g.putImageData(new ImageData(displacementMap(w, h, r, bezel, thickness, sphere ? 0.14 : 1e-3), w, h), 0, 0);
     img.setAttribute('href', canvas.toDataURL());
     g.putImageData(new ImageData(specularMap(w, h, r, bezel), w, h), 0, 0);
     shine.setAttribute('href', canvas.toDataURL());
     // Peak displacement grows with the rim: a deep rim bends light further.
-    maps.forEach(m => m.setAttribute('scale', (bezel * 1.7 * m.dataset.k).toFixed(1)));
+    maps.forEach(m => m.setAttribute('scale', (bezel * (sphere ? 2.4 : 1.7) * m.dataset.k).toFixed(1)));
   };
   // While a surface resizes (the lens stretching between tabs) the current map stretches with it; the exact map
   // is rebuilt once the size settles.

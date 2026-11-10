@@ -56,7 +56,7 @@ export default function Home() {
     <>
       <section className="hero" aria-labelledby="name">
         <div className="wrap hero-copy" ref={heroCopy}>
-          <h1 id="name" className="hero-name">
+          <h1 id="name" className="hero-name" data-drop="home">
             {content.name.map((part, i) => <span className="line" key={part}><span style={{ '--i': i }}>{part}</span></span>)}
           </h1>
           <p className="hero-role">{content.role} {content.pitch}</p>

@@ -6,7 +6,7 @@ import { scene } from '../scene.js';
 import './pages.css';
 
 const projects = content.projects.filter(p => !p.hidden), { dashboards } = content;
-const years = projects.map(p => Number(p.year)).filter(Number.isFinite); // a project without a year yet is left out of the range
+const years = projects.filter(p => p.year).map(p => Number(p.year)); // a project without a year yet is left out of the range
 const clamp = x => Math.min(Math.max(x, 0), 1);
 const gustAt = el => { const b = el.getBoundingClientRect(); scene.current?.gust(b.top + b.height / 2); };
 
@@ -46,9 +46,9 @@ export default function Work() {
   return (
     <>
       <header className="open wrap work-open" ref={opening}>
-        <h1 className="open-title page-title">Selected work</h1>
+        <h1 className="open-title page-title" data-drop="work">Selected work</h1>
         <p className="open-lead" data-reveal="rise">
-          {projects.length} projects, {Math.min(...years)}–{Math.max(...years)}. Open any row for the details.
+          {projects.length} projects{years.length > 0 && `, ${Math.min(...years) === Math.max(...years) ? Math.max(...years) : `${Math.min(...years)}–${Math.max(...years)}`}`}. Open any row for the details.
         </p>
       </header>
 

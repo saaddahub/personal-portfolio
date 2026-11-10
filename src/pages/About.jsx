@@ -52,7 +52,7 @@ export default function About() {
   return (
     <>
       <header className="open wrap about-open" ref={opening}>
-        <h1 className="open-title page-title">About</h1>
+        <h1 className="open-title page-title" data-drop="about">About</h1>
         <p className="open-lead" data-reveal="rise">{content.role}</p>
         <dl className="about-now">
           {content.currently.map(([label, note], i) => (

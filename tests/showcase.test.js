@@ -24,3 +24,10 @@ test('every Story Mode line has a clip too', async () => {
   assert.ok(keys.length > 20);
   for (const k of keys) assert.ok(existsSync(new URL(`../public/showcase/audio/${k}.mp3`, import.meta.url)), `${k}.mp3 (run scripts/narrate.py)`);
 });
+
+test('every line the water drop says has a clip', () => {
+  for (const [id, text] of Object.entries(content.drop)) {
+    assert.ok(text.trim(), `drop.${id} has words`);
+    assert.ok(existsSync(new URL(`../public/showcase/audio/drop-${id}.0.mp3`, import.meta.url)), `drop-${id}.0.mp3 (run scripts/narrate.py)`);
+  }
+});

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import { startScene } from './blossom.js';
 import Nav from './Nav.jsx';
+import Drop from './drop/Drop.jsx';
 import { afterNavigate, loaders, usePath } from './router.jsx';
 import { scene } from './scene.js';
 import Home from './pages/Home.jsx';
@@ -68,6 +69,7 @@ export default function App() {
       <canvas ref={treeCanvas} className="tree" aria-hidden="true" />
       <canvas ref={petalCanvas} className="petals" aria-hidden="true" />
       <Nav dawn={dawn} />
+      <Drop />
       <main className="page" key={path}><Page /></main>
     </>
   );

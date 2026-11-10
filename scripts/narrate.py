@@ -23,6 +23,7 @@ const add = (prefix, id, voice) => voice.forEach(([, text], i) => out.push([`${p
 for (const [id, c] of Object.entries(content.showcase)) add('', id, c.voice);
 for (const [id, v] of Object.entries(lines)) add('tour-', id, v);
 for (const [id, c] of Object.entries(mine)) if (c?.voice) add('mine-', id, c.voice);
+for (const [id, text] of Object.entries(content.drop)) out.push([`drop-${id}.0`, text]);
 console.log(JSON.stringify(out));
 """
 clips = json.loads(subprocess.run(['node', '--input-type=module', '-e', read], cwd=root, capture_output=True, text=True, check=True).stdout)

@@ -10,7 +10,7 @@ const CHORDS = [
   [110.0, 164.81, 220.0, 277.18],
 ];
 
-let ctx, master, duck, voiceBus, startedAt = 0, current = null, wanted = null, timer = 0;
+let ctx, master, duck, voiceBus, meter, level = null, startedAt = 0, current = null, wanted = null, timer = 0;
 const buffers = {}, played = new Set(), requested = new Set();
 
 export const soundStarted = () => !!ctx;
@@ -27,6 +27,10 @@ export function startSound(keys) {
   duck.connect(master);
   voiceBus = ctx.createGain();
   voiceBus.connect(master);
+  meter = ctx.createAnalyser(); // the water drop listens to the voice and ripples with it
+  meter.fftSize = 512;
+  voiceBus.connect(meter);
+  level = new Float32Array(meter.fftSize);
   startedAt = ctx.currentTime;
 
   const music = ctx.createGain();
@@ -142,3 +146,11 @@ export function voiceProgress(key) {
   return played.has(key) ? 1 : null;
 }
 
+// How loud the narrator is right now, 0 to 1 (0 before the sound starts).
+export function voiceLevel() {
+  if (!meter) return 0;
+  meter.getFloatTimeDomainData(level);
+  let sum = 0;
+  for (const x of level) sum += x * x;
+  return Math.min(1, Math.sqrt(sum / level.length) * 5);
+}

@@ -85,7 +85,7 @@ function Chooser({ sound, setSound, onChoose, enter }) {
   return (
     <section className="chooser wrap" aria-labelledby="story-title" data-enter={enter || undefined}>
       <div className="chooser-head">
-        <h1 id="story-title" className="page-title chooser-title" tabIndex={-1}>The story so far</h1>
+        <h1 id="story-title" className="page-title chooser-title" data-drop="story" tabIndex={-1}>The story so far</h1>
         <div className="chooser-aside">
           <p className="chooser-lead">Two ways in, both narrated and captioned. You can switch at any point.</p>
           <button type="button" className="story-pill" aria-pressed={sound} onClick={() => setSound(!sound)}>

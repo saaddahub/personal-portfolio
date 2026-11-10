@@ -53,7 +53,7 @@ export default function Contact() {
 
       <div className="wrap contact-main">
         <div className="contact-lead">
-          <h1 id="contact-title" className="dawn-title page-title">Say hello.</h1>
+          <h1 id="contact-title" className="dawn-title page-title" data-drop="contact">Say hello.</h1>
           <div data-reveal="rise">
             <p className="dawn-text">{content.availability}</p>
           </div>
