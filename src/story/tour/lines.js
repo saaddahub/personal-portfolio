@@ -1,4 +1,4 @@
-// The Tour's narrator lines, kept apart from the scenes so scripts/narrate.py can read them. [scroll progress, line].
+// The Tour's narrator lines, kept apart from the scenes so scripts/narrate.mjs can read them. [scroll progress, line].
 export const lines = {
   layers: [
     [0.03, 'Right then. The tour. Five things Saad has built, and I get to take them apart.'],

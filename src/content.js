@@ -12,7 +12,7 @@ export const content = {
   pitch: 'Useful interfaces, thoughtful systems, built with curiosity.',
   // The Showcase. A dry British narrator talks about Saad as you scroll. voice: [scroll progress, line] beats;
   // each line plays from public/showcase/audio/<chapter>.<n>.mp3 and is shown as the caption.
-  // Rerun scripts/narrate.py after editing any line. The voice lines are drafts for Saad to approve or rewrite.
+  // Rerun scripts/narrate.mjs after editing any line. The voice lines are drafts for Saad to approve or rewrite.
   showcase: {
     intro: {
       kicker: 'About me',
@@ -123,7 +123,7 @@ export const content = {
     },
   },
   // The water drop that guides visitors round the site (src/drop). It glides to each page's title and says its
-  // line once per visit, in the narrator's voice (clips: drop-<page>.0.mp3, made by scripts/narrate.py).
+  // line once per visit, in the narrator's voice (clips: drop-<page>.0.mp3, made by scripts/narrate.mjs).
   drop: {
     home: 'Hello. I’m the drop. I’ll walk you round. Scroll whenever you’re ready.',
     work: 'His work. Four projects. Open any row and it unfolds. Go on, I’ll wait.',
