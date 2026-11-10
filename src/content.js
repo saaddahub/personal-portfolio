@@ -103,7 +103,7 @@ export const content = {
   projects: [
     {
       id: 'pnlf',
-      title: 'Pakistan’s National Students Forum',
+      title: 'Pakistan’s National Leaders Forum',
       year: '', // [year, from Saad]
       status: '', // [status, from Saad]
       stack: [], // [built with, from Saad]
