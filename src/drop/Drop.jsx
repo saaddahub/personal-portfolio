@@ -3,7 +3,7 @@ import { content } from '../content.js';
 import { preload, soundStarted, speak, voiceLevel } from '../narrator.js';
 import { afterNavigate } from '../router.jsx';
 import { RING, blobPath, chase, poke, ripple, stretch } from './physics.js';
-import { FACES, MOODS } from './faces.jsx';
+import { FACES, IDLE, MOODS } from './faces.jsx';
 import { OUTFITS, SPECS } from './outfits.jsx';
 import './drop.css';
 
@@ -40,7 +40,7 @@ function aim(r) {
 export default function Drop() {
   const body = useRef(null), svg = useRef(null), face = useRef(null), wear = useRef(null), mirror = useRef(null), bubble = useRef(null);
   const [line, setLine] = useState(null);
-  const [mood, setMood] = useState('happy');
+  const [mood, setMood] = useState('chill');
   const [outfit, setOutfit] = useState('none');
 
   useEffect(() => {
@@ -49,8 +49,9 @@ export default function Drop() {
     const w = new Array(RING).fill(0), v = new Array(RING).fill(0);
     const pointer = { x: -1e4, y: -1e4 };
     let raf = 0, last = performance.now(), r = 0, lastScroll = scrollY, showing = null, hideAt = 0;
-    let nextBreath = 0, nextBlink = performance.now() + 2500, nextShy = performance.now() + 15000, moodUntil = 0;
-    let hovered = false, current = 'happy', shyFrom = null, dressed = 'none';
+    let nextBreath = 0, nextBlink = performance.now() + 2500, nextShy = performance.now() + 25000, nextQuirk = performance.now() + 9000, moodUntil = 0, shakeUntil = 0;
+    let hovered = false, current = 'chill', shyFrom = null, dressed = 'none';
+    const pokes = []; // when the cursor last landed on it, to tell playing from pestering
     const recent = [];
     const dpr = Math.min(devicePixelRatio || 1, 2), mctx = mirror.current.getContext('2d');
     let fresnel = null;
@@ -79,10 +80,19 @@ export default function Drop() {
       const goal = aim(r);
       const dx = pointer.x - s.x, dy = pointer.y - s.y, d = Math.hypot(dx, dy);
 
-      // Hover: a new face every time the cursor lands on it; about one time in four it goes shy instead.
+      // Hover: a new look every time the cursor lands on it. Now and then it goes shy instead, and poked three
+      // times in a few seconds it has had enough: it scowls, shakes and backs off.
       const over = d < r * 1.05;
       if (over && !hovered) {
-        if (recent.at(-1) !== 'shy' && Math.random() < 0.27) {
+        pokes.push(now);
+        while (pokes.length && now - pokes[0] > 5000) pokes.shift();
+        if (pokes.length >= 3 && current !== 'irritated') {
+          feel('irritated', 2600);
+          pokes.length = 0;
+          shakeUntil = now + 520;
+          shyFrom = { x: dx / (d || 1), y: dy / (d || 1) };
+          s.vx -= shyFrom.x * 420; s.vy -= shyFrom.y * 420;
+        } else if (recent.at(-1) !== 'shy' && Math.random() < 0.18) {
           recent.push('shy'); if (recent.length > 4) recent.shift();
           feel('shy', 2200);
           shyFrom = { x: dx / (d || 1), y: dy / (d || 1) };
@@ -92,20 +102,23 @@ export default function Drop() {
           const next = pick(MOODS, recent);
           recent.push(next); if (recent.length > 4) recent.shift();
           feel(next, 3600);
-          poke(v, -Math.PI / 2, 1.1); // a happy little bounce
+          poke(v, -Math.PI / 2, 0.45); // a small, unbothered acknowledgement
         }
       }
       hovered = over;
-      // Now and then, unprompted, a shy moment.
-      if (now > nextShy) { if (current === 'happy') { feel('shy', 1700); shyFrom = null; } nextShy = now + 14000 + Math.random() * 16000; }
-      if (now > moodUntil && current !== 'happy' && !showing) feel('happy', 0);
+      // Left alone it gets bored: a side-eye, an eye-roll, heavy lids. And once in a long while, a shy moment.
+      if (now > nextQuirk) { if (current === 'chill' && !showing) feel(IDLE[Math.floor(Math.random() * IDLE.length)], 1700); nextQuirk = now + 8000 + Math.random() * 7000; }
+      if (now > nextShy) { if (current === 'chill' && !showing) { feel('shy', 1700); shyFrom = null; } nextShy = now + 25000 + Math.random() * 20000; }
+      if (now > moodUntil && current !== 'chill' && !showing) feel('chill', 0);
 
       let ax = goal.x, ay = goal.y; // where it is heading, after reacting to the cursor
       if (REDUCED) { s.x = goal.x; s.y = goal.y; } else {
         // Curious about a cursor nearby (leans in), still while being hovered, keeps its distance while shy.
-        const pull = current === 'shy' && shyFrom ? -0.25 : over ? 0 : d < 220 ? 0.12 : 0;
+        const pull = (current === 'shy' || current === 'irritated') && shyFrom ? -0.25 : over ? 0 : d < 220 ? 0.12 : 0;
         ax = goal.x + dx * pull; ay = goal.y + dy * pull;
-        chase(s, ax, ay + Math.sin(t * 1.7) * 3, dt);
+        // Shades on or feeling funky: it bobs to its own beat. Otherwise a slow drift.
+        const groove = current === 'cool' || current === 'funky' ? Math.abs(Math.sin(t * 6.2)) * -7 : Math.sin(t * 1.7) * 3;
+        chase(s, ax, ay + groove, dt);
 
         // The screen's edges are walls: the drop dents against them and rebounds.
         const lo = [r + 4, r + 4], hi = [innerWidth - r - 4, innerHeight - r - 4];
@@ -124,7 +137,8 @@ export default function Drop() {
 
       // Draw: stretched along the way it is travelling, its rim drawn from the rippling surface.
       const st = REDUCED ? 0 : stretch(s.vx, s.vy), a = Math.atan2(s.vy, s.vx);
-      el.style.transform = wear.current.style.transform = `translate(${(s.x - r).toFixed(1)}px, ${(s.y - r).toFixed(1)}px) rotate(${a.toFixed(3)}rad) scale(${(1 + st).toFixed(3)}, ${(1 - st * 0.6).toFixed(3)}) rotate(${(-a).toFixed(3)}rad)`;
+      const jolt = now < shakeUntil ? Math.sin(now * 0.09) * 4 * ((shakeUntil - now) / 520) : 0; // an irritated shudder
+      el.style.transform = wear.current.style.transform = `translate(${(s.x - r + jolt).toFixed(1)}px, ${(s.y - r).toFixed(1)}px) rotate(${a.toFixed(3)}rad) scale(${(1 + st).toFixed(3)}, ${(1 - st * 0.6).toFixed(3)}) rotate(${(-a).toFixed(3)}rad)`;
       const path = blobPath(w.map(x => Math.max(-0.1, Math.min(0.1, x))), r * 0.9, r * 2);
       el.style.clipPath = `path('${path}')`;
       rim.setAttribute('d', path);
@@ -167,7 +181,7 @@ export default function Drop() {
         showing = goal.id;
         hideAt = now + 6500;
         setLine(content.drop[goal.id]);
-        feel('joy', 6500);
+        feel('talk', 6500);
         poke(v, -Math.PI / 2, 0.9); // a little hop as it starts to talk
         if (soundStarted()) { preload([keyOf(goal.id)]); speak(keyOf(goal.id)); }
       }
@@ -181,7 +195,7 @@ export default function Drop() {
     const onMove = e => { pointer.x = e.clientX; pointer.y = e.clientY; };
     const onLeave = e => { if (!e.relatedTarget) pointer.x = pointer.y = -1e4; };
     // A page change: a splash and a hop, then it heads for the new page's title.
-    const off = afterNavigate(() => { for (let i = 0; i < RING; i++) v[i] += (Math.random() - 0.5) * 4; s.vy -= 520; showing = null; setLine(null); feel('wow', 1200); lastScroll = scrollY; });
+    const off = afterNavigate(() => { for (let i = 0; i < RING; i++) v[i] += (Math.random() - 0.5) * 4; s.vy -= 520; showing = null; setLine(null); feel('surprised', 1000); lastScroll = scrollY; });
     addEventListener('pointermove', onMove, { passive: true });
     document.addEventListener('pointerout', onLeave);
     addEventListener('resize', size);
