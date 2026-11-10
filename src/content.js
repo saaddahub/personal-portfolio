@@ -1,18 +1,29 @@
 // Everything a visitor reads. Edit here; the page has no other copy.
+const email = 'saadsalam659@gmail.com';
+
 export const content = {
   name: ['Saad', 'Akhtar'],
   role: 'Full-stack developer and AI student in Lahore.',
   pitch: 'Useful interfaces, thoughtful systems, built with curiosity.',
-  // The Showcase. Each chapter's line is both its narration (public/showcase/audio/<id>.wav) and its caption.
-  // Only the intro is Saad's own wording; the other lines are drafts for him to approve or rewrite.
+  // The Showcase. A dry British narrator talks about Saad as you scroll. voice: [scroll progress, line] beats;
+  // each line plays from public/showcase/audio/<chapter>.<n>.mp3 and is shown as the caption.
+  // Rerun scripts/narrate.py after editing any line. The voice lines are drafts for Saad to approve or rewrite.
   showcase: {
     intro: {
       kicker: 'About me',
-      line: 'I work where interfaces, data, and systems meet. I like software that feels considered.',
+      line: 'I work where interfaces, data, and systems meet. I like software that feels considered.', // Saad's own words, on screen
+      voice: [
+        [0.02, 'Right then. This is Saad. He builds software in Lahore. I just do the talking.'],
+        [0.5, 'Interfaces, data and systems. Most people pick one. He wanted all three. Greedy.'],
+      ],
     },
     interfaces: {
       kicker: '3D product visuals',
-      line: 'I render products in 3D, down to the last component, so you can see how they are made. Every layer has a reason to be there.',
+      voice: [
+        [0.03, 'Keep scrolling. He’s taking a keyboard apart. Relax, it’s a render. No keys were harmed.'],
+        [0.5, 'Every layer, numbered and named. Keycaps, switches, the circuit board. He does love a label.'],
+        [0.72, 'Closer now. The little bits matter most. That tiny crystal keeps the time. Bless it.'],
+      ],
       // Frames from Saad's Flow video, in playback order (assembled first). Made with scripts/prepare-frames.py.
       product: {
         path: '/showcase/frames/keyboard',
@@ -43,7 +54,11 @@ export const content = {
     },
     dashboards: {
       kicker: 'Dashboards',
-      line: 'Data should answer a question before you have to ask it. These are dashboards I have built.',
+      voice: [
+        [0.03, 'Dashboards. Numbers, made friendly. They answer the question before you’ve asked it.'],
+        [0.14, 'That’s the entire Netflix catalogue, charted. He called it research. I’m not arguing.'],
+        [0.45, 'These two are for PNLF. I’d explain the charts, but I’m only the voice.'],
+      ],
       boards: [
         { title: 'Netflix Data Visualiser', note: 'Genres, release trends and ratings across the catalogue.', image: '/images/netflix-visualiser.jpg' },
         { title: 'PNLF dashboard', note: 'Screenshot on the way.' },
@@ -52,7 +67,10 @@ export const content = {
     },
     backend: {
       kicker: 'Backend',
-      line: 'Behind every screen is a system that keeps it honest. I build the backend too, so changing the site is a decision, not a deployment.',
+      voice: [
+        [0.04, 'Now, the bit nobody sees. Watch one small edit in the admin.'],
+        [0.4, 'Checked, saved, cache cleared, live. Nobody had to redeploy anything. Lovely.'],
+      ],
       field: 'Contact headline',
       from: 'Get in touch.',
       to: 'Say hello.',
@@ -67,7 +85,11 @@ export const content = {
     },
     security: {
       kicker: 'Security',
-      line: 'Security is not a feature you add at the end. It is every layer saying no to the wrong thing, quietly, every time.',
+      voice: [
+        [0.04, 'Security. Five layers, and each one says no to something different.'],
+        [0.3, 'Here come the bad requests. Every one stops at its layer. Politely. Firmly.'],
+        [0.8, 'That’s the tour. The proper work is just below. I’ll be quiet now. Promise.'],
+      ],
       // Outermost first. Saad to confirm each layer is one his projects actually use.
       layers: [
         ['HTTPS', 'Eavesdropping'],
@@ -129,6 +151,10 @@ export const content = {
       liveUrl: 'https://saadsalam.dev',
     },
   ],
+  // Dashboards on the Work page, each tilting up into view as it scrolls in. Empty until Saad sends them; until
+  // then the page says they are on the way. One entry per dashboard, in display order:
+  // { title, note (one line), image: '/images/<file>' in public/, alt (required with image), url (optional live link) }
+  dashboards: [],
   about: [
     'I’m Saad, a developer in Lahore studying Artificial Intelligence at the University of Management and Technology. I build full-stack products and the data tools behind them, and I’m spending this year going deep on machine learning.',
     'Most of my time goes into building things, taking them apart, and finding a simpler way to put them back together. Good documentation, I maintain, counts as a love language.',
@@ -145,9 +171,11 @@ export const content = {
     { years: '2019', title: 'First prize, speech and documentation', place: 'School competition', description: 'An early lesson that explaining an idea is part of making it work.' },
   ],
   availability: 'Open to internships, research roles and collaborative projects. Email is the quickest way to reach me.',
-  email: 'saadsalam659@gmail.com',
-  // Add LinkedIn here once the profile URL is confirmed.
-  links: [
-    { label: 'GitHub', url: 'https://github.com/saaddahub' },
+  email,
+  // The Socials list that ends the Contact page, in this order: { label, handle (shown under it), url }.
+  // Confirmed links only. LinkedIn goes in once its URL is confirmed.
+  socials: [
+    { label: 'GitHub', handle: 'saaddahub', url: 'https://github.com/saaddahub' },
+    { label: 'Email', handle: email, url: `mailto:${email}` },
   ],
 };

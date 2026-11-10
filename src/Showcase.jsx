@@ -37,26 +37,32 @@ export default function Showcase() {
         const p = reduced ? c.still : clamp(-r.top / (r.height - h));
         if (p !== c.p) { c.p = p; c.render(p); }
         if (!reduced) c.frame?.(p, now);
-        if (!c.caption) continue;
-        const frac = voiceProgress(c.id) ?? (reduced ? 1 : seg(p, 0.04, 0.5));
-        if (frac !== c.frac) { c.frac = frac; paintCaption(c.caption, frac); }
+        // The narrator's current line is the last beat the scroll has passed.
+        const b = Math.max(c.beats.findLastIndex(at => at <= p), 0);
+        if (b !== c.b) { c.b = b; c.frac = -1; c.captions.forEach((el, i) => { el.dataset.on = i === b; }); }
+        const at = c.beats[b], end = c.beats[b + 1] ?? 1;
+        const frac = voiceProgress(`${c.id}.${b}`) ?? (reduced ? 1 : seg(p, at, at + (end - at) / 2));
+        if (frac !== c.frac) { c.frac = frac; paintCaption(c.captions[b], frac); }
       }
-      if (next !== active.current) {
-        active.current = next;
+      const key = next && `${next.id}.${next.b}`;
+      if (key !== active.current) {
+        active.current = key;
         clearTimeout(wait);
-        // A short wait so scrolling straight through a chapter doesn't start and cut its line.
-        if (next) wait = setTimeout(() => speak(next.id), 400); else hush();
+        // A short wait so scrolling straight through a line doesn't start and cut it.
+        if (key) wait = setTimeout(() => speak(key), 400); else hush();
       }
       const show = root.current.getBoundingClientRect().bottom > h * 0.6;
       if (show !== pill) setShown((pill = show));
     };
     raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); clearTimeout(wait); };
+    // Leaving Home silences the Showcase: its sound controls live here, so nothing may keep playing elsewhere.
+    return () => { cancelAnimationFrame(raf); clearTimeout(wait); hush(); setMuted(true); };
   }, []);
 
   const turnOn = () => {
-    startSound(Object.keys(sc));
-    if (active.current) speak(active.current.id);
+    startSound(Object.entries(sc).flatMap(([id, c]) => c.voice.map((_, i) => `${id}.${i}`)));
+    setMuted(false); // coming back to Home after the sound was silenced on the way out
+    if (active.current) speak(active.current);
     setSound('on');
   };
   const toggleMute = () => {
@@ -80,7 +86,7 @@ export default function Showcase() {
               {sound === 'muted' ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
               <span className="sr-only">Mute narration</span>
             </button>
-            <button type="button" className="sound-btn" onClick={() => active.current && speak(active.current.id, true)}>
+            <button type="button" className="sound-btn" onClick={() => active.current && speak(active.current, true)}>
               <RotateCcw aria-hidden="true" />
               <span className="sr-only">Replay this line</span>
             </button>
@@ -91,10 +97,11 @@ export default function Showcase() {
   );
 }
 
-function Chapter({ id, height, still, render, frame, near, caption = true, children }) {
-  const section = useRef(null), captionEl = useRef(null);
+function Chapter({ id, height, still, render, frame, near, children }) {
+  const section = useRef(null);
   useEffect(() => {
-    const ch = { id, el: section.current, caption: captionEl.current, render, frame, near, still, p: -1, frac: -1 };
+    const captions = [...section.current.querySelectorAll('.sc-caption')], beats = sc[id].voice.map(([at]) => at);
+    const ch = { id, el: section.current, captions, beats, render, frame, near, still, p: -1, b: -1, frac: -1 };
     chapters.add(ch);
     return () => chapters.delete(ch);
   }, []);
@@ -103,69 +110,148 @@ function Chapter({ id, height, still, render, frame, near, caption = true, child
       <div className="sc-stage">
         <h2 id={`${id}-title`} className="sc-kicker">{sc[id].kicker}</h2>
         {children}
-        {caption && <p ref={captionEl} className="sc-caption">{sc[id].line.split(' ').map((w, i) => <span key={i}>{w} </span>)}</p>}
+        {sc[id].voice.map(([, text], i) => (
+          <p key={i} className="sc-caption" data-on={i === 0}>{text.split(' ').map((w, j) => <span key={j}>{w} </span>)}</p>
+        ))}
       </div>
     </section>
   );
 }
 
-/* 1. Intro: the statement assembles letter by letter, then flies through the camera. */
+/* 1. Intro: the statement assembles letter by letter. The three accents then gather into points of light that arc
+   down, meet beside the last word and write "considered" as they glide through it, and the camera pushes through
+   that word into chapter 2. */
 const ACCENTS = { interfaces: 'frame', data: 'bars', systems: 'nodes' };
 const ACCENT_ART = {
   frame: <path pathLength="1" d="M0 12V0h14M86 0h14v12M100 28v12H86M14 40H0V28" />,
   bars: <path pathLength="1" d="M8 52v-6M20 52v-10M32 52v-4M44 52v-12M56 52v-7M68 52v-14M80 52v-9M92 52v-11" />,
   nodes: <><path pathLength="1" d="M0-6L24-14L48-4L72-16L100-7" /><path className="dots" d="M0-6h.01M24-14h.01M48-4h.01M72-16h.01M100-7h.01" /></>,
 };
+// Where each accent collapses to, and its light sets off from, in the accent's 100x40 viewBox.
+const ACCENT_FROM = { frame: [50, 40], bars: [50, 52], nodes: [48, -4] };
+const MEET = 0.6, WRITTEN = 0.76; // the lights meet just before "considered", and have written it by WRITTEN
+const gatherAt = (p, i) => seg(p, 0.455 + i * 0.01, 0.5 + i * 0.01) ** 2; // accelerating, like being drawn in
+const glideAt = p => 1 - (1 - seg(p, MEET, WRITTEN)) ** 2; // the merged light slowing to rest as it writes
+// Shows the stretch [a, b] of a trail path (user units), hidden when it has no length.
+const dash = (path, a, b, on) => {
+  const show = on && b - a > 0.5;
+  path.style.opacity = show ? '' : 0;
+  if (show) { path.style.strokeDasharray = `${(b - a).toFixed(1)} 99999`; path.style.strokeDashoffset = (-a).toFixed(1); }
+};
 
 function Intro() {
-  const box = useRef(null), spark = useRef(null), q = useRef(null);
+  const box = useRef(null), q = useRef(null);
   const [lineA, lineB] = sc.intro.line.split(/(?<=\.) /);
+  const [, lead, word, stop] = lineB.match(/^(.*\s)(\S*?)(\W*)$/);
   const total = lineA.replace(/ /g, '').length;
   let offset = 0;
   const wordsA = lineA.split(' ').map(w => { const at = offset; offset += w.length; return { w, end: offset, at }; });
+
+  // Layout positions (offsets ignore transforms), taken again whenever the viewport or the font changes.
+  const measure = c => {
+    const el = box.current, hl = c.hl, fs = parseFloat(getComputedStyle(hl).fontSize);
+    const x0 = hl.offsetLeft - 0.2 * fs, y = hl.offsetTop + hl.offsetHeight * 0.9, w = hl.offsetWidth + 0.4 * fs;
+    el.style.transformOrigin = `${hl.offsetLeft + hl.offsetWidth / 2}px ${hl.offsetTop + hl.offsetHeight / 2}px`;
+    c.svg.setAttribute('viewBox', `0 0 ${el.offsetWidth} ${el.offsetHeight}`);
+    c.paths = c.accents.map((a, i) => {
+      const em = parseFloat(getComputedStyle(a).fontSize), [fx, fy] = ACCENT_FROM[a.dataset.kind];
+      const dx = a.offsetLeft - 0.14 * em + (fx / 100) * (a.offsetWidth + 0.28 * em);
+      const dy = a.offsetTop - 0.06 * em + (fy / 40) * (a.offsetHeight + 0.12 * em);
+      // A thrown arc that lands from the upper left, so the light carries on along the baseline through the word.
+      const d = Math.hypot(x0 - dx, y - dy), k = Math.max(0, Math.min(0.35 * d, (x0 + 16) / 0.82));
+      const path = `M${dx} ${dy}C${dx + (x0 - dx) * 0.45} ${dy - 0.12 * d} ${x0 - 0.82 * k} ${y - 0.57 * k} ${x0} ${y}H${x0 + w}`;
+      c.trails[i].forEach(t => t.setAttribute('d', path));
+      return c.trails[i][1].getTotalLength() - w; // length of the flight, before the glide
+    });
+    Object.assign(c, { fs, w, live: true, risen: false, focus: -1, exit: -1 });
+  };
 
   const render = p => {
     const el = box.current;
     const c = (q.current ??= {
       chars: [...el.querySelectorAll('.c')],
       accents: [...el.querySelectorAll('.accent')],
-      words: [...el.querySelectorAll('.intro-b span')],
+      lineB: el.querySelector('.intro-b'),
+      hl: el.querySelector('.hl'),
+      svg: el.querySelector('.intro-trails'),
+      trails: [...el.querySelectorAll('.intro-trails g')].map(g => [...g.children]),
+      lights: [...el.querySelectorAll('.intro-light')],
     });
-    const n = c.chars.length;
-    c.chars.forEach((ch, i) => {
-      const t = ease(seg(p, 0.03 + (0.34 * i) / n, 0.11 + (0.34 * i) / n));
-      ch.style.transform = t === 1 ? 'none' : `translateY(${(1 - t) * 105}%) rotate(${(1 - t) * 10}deg)`;
+    const key = `${innerWidth}x${innerHeight}:${document.fonts.status}`;
+    if (c.key !== key) { c.key = key; measure(c); }
+
+    if (p < 0.46 || !c.risen) {
+      c.risen = p >= 0.46;
+      const n = c.chars.length;
+      c.chars.forEach((ch, i) => {
+        const t = ease(seg(p, 0.03 + (0.34 * i) / n, 0.11 + (0.34 * i) / n));
+        ch.style.transform = t === 1 ? 'none' : `translateY(${(1 - t) * 105}%) rotate(${(1 - t) * 10}deg)`;
+      });
+    }
+    c.accents.forEach((a, i) => {
+      const at = +a.dataset.at, g = gatherAt(p, i);
+      a.style.setProperty('--draw', ease(seg(p, at, at + 0.1)).toFixed(3));
+      a.lastChild.style.transform = g ? `scale(${1 - g})` : '';
     });
-    const merge = ease(seg(p, 0.46, 0.58));
-    c.accents.forEach(a => { const at = +a.dataset.at; a.style.setProperty('--draw', (ease(seg(p, at, at + 0.1)) * (1 - merge)).toFixed(3)); });
-    c.words.forEach((w, i) => {
-      const t = ease(seg(p, 0.56 + i * 0.03, 0.66 + i * 0.03));
-      w.style.opacity = t;
-      w.style.transform = `translateY(${(1 - t) * 0.6}em)`;
-    });
-    c.words.at(-1).style.backgroundSize = `${ease(seg(p, 0.74, 0.84)) * 100}% 0.1em`;
-    const exit = ease(seg(p, 0.84, 1));
-    el.style.transform = `scale(${1 + exit * 2.2})`;
-    el.style.opacity = 1 - exit;
-    // The accents gather into a point of light, which steps aside for the second line and returns to lead into chapter 2.
-    spark.current.style.transform = `scale(${merge * (1 - ease(seg(p, 0.58, 0.66))) + exit * 9})`;
-    spark.current.style.opacity = 1 - seg(p, 0.92, 1);
+
+    // Line two racks into focus: the blur clears, and the lens breathes a little as it pulls.
+    const r = seg(p, 0.49, 0.59), f = r * r * (3 - 2 * r);
+    if (f !== c.focus) {
+      c.focus = f;
+      const s = c.lineB.style;
+      s.opacity = ease(seg(p, 0.49, 0.55));
+      s.filter = f > 0 && f < 1 ? `blur(${((1 - f) * 10).toFixed(2)}px)` : '';
+      s.transform = f < 1 ? `scale(${1 + (1 - f) * 0.04})` : '';
+    }
+
+    // Distance light i has travelled along its path: accelerating through the flight, then gliding to rest through the word.
+    const glide = glideAt(p);
+    const travel = (i, at) => {
+      const a = seg(at, 0.5 + i * 0.01, MEET);
+      return a < 1 ? a * a * c.paths[i] : c.paths[i] + glideAt(at) * c.w;
+    };
+    const live = p > 0.45 && p < 0.83;
+    if (live || c.live) {
+      c.live = live;
+      c.hl.style.setProperty('--x', `${(glide * c.w - 0.2 * c.fs).toFixed(1)}px`);
+      c.hl.style.setProperty('--heat', (seg(p, MEET, MEET + 0.01) * (1 - seg(p, WRITTEN - 0.01, 0.82))).toFixed(3));
+      const flare = Math.max(0, 1 - Math.abs(p - MEET) / 0.02), cool = seg(p, WRITTEN, 0.81), one = seg(p, MEET, MEET + 0.015);
+      c.lights.forEach((l, i) => {
+        const g = gatherAt(p, i), s = travel(i, p), [tail, head] = c.trails[i], pt = head.getPointAtLength(s);
+        // The three add up where they meet, then carry on as one.
+        l.style.opacity = live ? (g * (1 - cool) * (i ? 1 - one : 1)).toFixed(3) : 0;
+        l.style.transform = `translate(${pt.x.toFixed(1)}px, ${pt.y.toFixed(1)}px) scale(${((0.4 + 0.6 * g) * (1 + 0.35 * flare) * (1 - 0.4 * cool)).toFixed(3)})`;
+        // Long-exposure streaks: the path covered over the last stretch of scroll, so they lengthen with speed and vanish at rest.
+        dash(tail, travel(i, p - 0.035), s, live);
+        dash(head, travel(i, p - 0.007), s, live);
+      });
+    }
+
+    // The camera pushes through "considered", accelerating and losing focus as the words pass the lens.
+    const x = seg(p, 0.84, 1);
+    if (x !== c.exit) {
+      c.exit = x;
+      el.style.transform = x ? `scale(${1 + 3 * x * x})` : '';
+      el.style.filter = x ? `blur(${(5 * x * x).toFixed(2)}px)` : '';
+      el.style.opacity = x ? 1 - x * x * (3 - 2 * x) : '';
+    }
   };
 
   return (
-    <Chapter id="intro" height="300vh" still={0.82} render={render} caption={false}>
+    <Chapter id="intro" height="300vh" still={0.82} render={render}>
       <div className="intro" ref={box}>
         <p className="sr-only">{sc.intro.line}</p>
         <p className="intro-a" aria-hidden="true">
           {wordsA.map(({ w, end }, i) => {
             const kind = ACCENTS[w.replace(/\W/g, '').toLowerCase()];
             const chars = <span className="w">{[...w].map((ch, j) => <span className="c" key={j}>{ch}</span>)}</span>;
+            const [fx, fy] = ACCENT_FROM[kind] ?? [];
             return (
               <Fragment key={i}>
                 {kind ? (
-                  <span className="accent" data-at={0.05 + (0.34 * end) / total}>
+                  <span className="accent" data-kind={kind} data-at={0.05 + (0.34 * end) / total}>
                     {chars}
-                    <svg viewBox="0 0 100 40" preserveAspectRatio="none">{ACCENT_ART[kind]}</svg>
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" style={{ transformOrigin: `${fx}% ${fy * 2.5}%` }}>{ACCENT_ART[kind]}</svg>
                   </span>
                 ) : chars}{' '}
               </Fragment>
@@ -173,10 +259,17 @@ function Intro() {
           })}
         </p>
         <p className="intro-b" aria-hidden="true">
-          {lineB.split(' ').map((w, i, all) => <Fragment key={i}><span className={i === all.length - 1 ? 'hl' : undefined}>{w}</span>{' '}</Fragment>)}
+          {lead}
+          <span className="hl">
+            <span className="hl-ink"><span>{word}</span>{stop}</span>
+            <span className="hl-hot">{word}{stop}</span>
+          </span>
         </p>
+        <svg className="intro-trails" aria-hidden="true">
+          {Object.keys(ACCENTS).map(k => <g key={k}><path className="tail" /><path className="head" /></g>)}
+        </svg>
+        {Object.keys(ACCENTS).map(k => <span key={k} className="intro-light" aria-hidden="true" />)}
       </div>
-      <span className="intro-spark" ref={spark} aria-hidden="true" />
     </Chapter>
   );
 }

@@ -1,0 +1,93 @@
+/* The glass tab bar: monogram on the left, one floating glass bar in the centre, a lens under the current tab. */
+.nav {
+  position: fixed; inset: 0 0 auto; z-index: 10;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: 1rem var(--gutter);
+  pointer-events: none;
+  transition: transform 0.7s var(--ease), opacity 0.5s var(--ease);
+}
+.nav > * { pointer-events: auto; }
+/* Story Mode can ask the bar to step aside while a chapter plays; it comes back on hover or keyboard focus. */
+:root[data-immersive] .nav:not(:hover, :focus-within) { transform: translateY(-140%); opacity: 0; }
+
+.nav-mark {
+  justify-self: start;
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  border-radius: 50%;
+  font-weight: 500; font-size: 0.9375rem; letter-spacing: 0.02em; text-decoration: none;
+  transition: transform 100ms ease-out, background-color 0.3s var(--ease);
+}
+.nav-mark:active { transform: scale(0.94); }
+@media (hover: hover) { .nav-mark:hover { background-color: #f4ede90f; } }
+
+.nav-glass {
+  position: relative;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--night-raised) 72%, transparent), color-mix(in oklab, var(--night-raised) 78%, transparent));
+  border: 1px solid #f4ede91a;
+  /* Light catching the top edge, a darker lip below, and a soft lift off the night. */
+  box-shadow: inset 0 1px 0 #ffffff1f, inset 0 -1px 0 #00000059, 0 18px 40px -22px #000000d0;
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+}
+/* With real refraction (glass.js) the bar needs far less tint: the bent light behind it is the material. */
+.nav-glass[data-liquid] { background: linear-gradient(180deg, color-mix(in oklab, var(--night-raised) 16%, transparent), color-mix(in oklab, var(--night-raised) 26%, transparent)); }
+.nav-tabs { position: relative; display: flex; gap: 0.125rem; }
+.nav-tabs a {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 0.95rem; border-radius: 999px;
+  color: var(--dusk); font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
+  transition: color 0.4s var(--ease), transform 100ms ease-out;
+}
+.nav-tabs a:active { transform: scale(0.96); }
+.nav-tabs a[aria-current='page'] { color: var(--mist); }
+@media (hover: hover) { .nav-tabs a:not([aria-current]):hover { color: var(--mist); } }
+.nav-label { display: inline-block; }
+
+.nav-lens {
+  position: absolute; z-index: 0; inset-block: 0; left: var(--l, 0); right: var(--r, 100%);
+  border-radius: 999px;
+  background:
+    radial-gradient(120% 90% at 30% 0%, #ffffff26, transparent 60%),
+    #f4ede912;
+  box-shadow: inset 0 1px 0 #ffffff33, inset 0 -1px 0 #0000004d, 0 6px 16px -8px #000000b0;
+  opacity: 0;
+  transition: left 0.55s var(--ease), right 0.55s var(--ease), opacity 0.4s var(--ease);
+}
+.nav-lens[data-ready='true'] { opacity: 1; }
+/* Leading edge first, trailing edge after: the lens stretches toward the new tab, then gathers itself. */
+.nav-tabs[data-dir='forward'] .nav-lens { transition: right 0.38s var(--ease), left 0.7s var(--ease) 0.05s, opacity 0.4s var(--ease); }
+.nav-tabs[data-dir='back'] .nav-lens { transition: left 0.38s var(--ease), right 0.7s var(--ease) 0.05s, opacity 0.4s var(--ease); }
+
+.nav-spark { width: 0.7rem; height: 0.7rem; fill: var(--blossom-pale); filter: drop-shadow(0 0 6px #f5a9c2aa); }
+.motion .nav-spark { animation: spark 3.2s var(--ease) infinite; }
+@keyframes spark { 0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.7; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+
+/* Dawn tone, once the sunrise is behind the bar on the Contact page. */
+.nav[data-dawn-tone='true'] { color: var(--dawn-ink); }
+.nav[data-dawn-tone='true'] .nav-glass { background: #f6d4deb8; border-color: #2a152124; box-shadow: inset 0 1px 0 #ffffff80, 0 18px 40px -24px #6e3d5080; }
+.nav[data-dawn-tone='true'] .nav-tabs a { color: var(--dawn-dim); }
+.nav[data-dawn-tone='true'] .nav-tabs a[aria-current='page'] { color: var(--dawn-ink); }
+.nav[data-dawn-tone='true'] .nav-lens { background: #ffffff8c; box-shadow: inset 0 1px 0 #ffffffcc, 0 6px 16px -10px #6e3d5099; }
+.nav[data-dawn-tone='true'] .nav-spark { fill: var(--blossom-deep); filter: none; }
+.nav[data-dawn-tone='true'] :focus-visible { outline-color: var(--dawn-ink); }
+
+/* backwards, not both: a lingering finished animation would cut the glass off from the page behind it */
+.motion .nav { animation: fade 1.2s var(--ease) 0.4s backwards; }
+.motion[data-page='/'] .nav { animation-delay: 1.8s; } /* on Home it arrives after the name */
+
+@media (max-width: 640px) {
+  .nav { grid-template-columns: 1fr; justify-items: center; padding-top: 0.75rem; }
+  .nav-mark { display: none; }
+  .nav-tabs a { padding: 0.5rem 0.7rem; font-size: 0.875rem; }
+  .nav-spark { display: none; }
+}
+@media (max-width: 370px) { .nav-tabs a { padding-inline: 0.55rem; font-size: 0.8125rem; } }
+
+@media (prefers-reduced-transparency: reduce) {
+  .nav-glass { background: var(--night-raised); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .nav[data-dawn-tone='true'] .nav-glass { background: var(--dawn); }
+}
+@media (prefers-contrast: more) { .nav-glass { background: var(--night-raised); border-color: var(--dusk); } }

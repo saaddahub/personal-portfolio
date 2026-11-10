@@ -1,0 +1,282 @@
+/* Work, About and Contact. Each opens at page scale, low on the left and clear of the canopy like the hero, and
+   keeps one moment of its own further down: the index catching the light, Saad's words lit in reading order,
+   and a sunrise behind the tree.
+   This file loads before styles.css (it is imported from the pages, which App imports first), so any rule here
+   that overrides a shared one needs the extra specificity. */
+
+/* Openings */
+.open {
+  position: relative; z-index: 2;
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-block: 7rem clamp(2.75rem, 9vh, 6.5rem);
+}
+.open-title { font-size: clamp(3.25rem, 10vw, 6rem); font-weight: 250; line-height: 0.92; letter-spacing: -0.04em; text-wrap: balance; }
+.open-lead { margin-top: 1.5rem; max-width: 30rem; color: var(--dusk); font-size: clamp(1.0625rem, 1.4vw, 1.25rem); text-wrap: pretty; }
+.pages-heading { font-size: clamp(2.25rem, 4.2vw, 3.75rem); font-weight: 250; line-height: 1; letter-spacing: -0.035em; }
+/* A lift and a clearing blur for things arriving in the first screen, so they read as arriving, not loading. */
+.motion [data-reveal='rise']:not(.is-in) { transform: translateY(0.75rem); filter: blur(6px); }
+
+/* Work: a typographic index at page scale. */
+.work-open { min-height: 88svh; } /* the first row peeks in below: the index continues */
+.work-index { position: relative; z-index: 2; }
+.work-list { border-bottom: 1px solid var(--line); }
+.work-row { position: relative; border-top: 1px solid var(--line); }
+/* An open row's rule turns blossom, drawn from the left. */
+.work-row::before {
+  content: ''; position: absolute; inset: -1px 0 auto; height: 1px;
+  background: var(--blossom); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.9s var(--ease);
+}
+.work-row[data-open='true']::before { transform: scaleX(1); }
+.work-head {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: baseline; gap: 0.5rem 2rem;
+  padding: clamp(1.4rem, 3.2vh, 2.2rem) 0;
+  /* --lit is scrubbed by scroll (Work.jsx): rows below the reading line wait in the dark, slid aside. */
+  opacity: calc(0.2 + 0.8 * var(--lit, 1));
+  translate: calc((1 - var(--lit, 1)) * 3rem) 0;
+  transition: opacity 0.35s var(--ease), translate 0.6s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.work-head:focus-visible, .work-row[data-open='true'] .work-head { opacity: 1; translate: none; }
+.work-head:focus-visible { outline: 2px solid var(--blossom); outline-offset: 4px; border-radius: 6px; }
+.work-title {
+  font-size: clamp(1.9rem, 4.6vw, 4rem); font-weight: 250; line-height: 1; letter-spacing: -0.035em;
+  transform-origin: left;
+  transition: transform 0.6s var(--ease), color 0.4s var(--ease);
+}
+.work-meta { display: flex; gap: 1.25rem; color: var(--dusk); font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.work-icon { width: 1.25rem; height: 1.25rem; align-self: center; color: var(--dusk); transition: transform 0.6s var(--ease), color 0.4s var(--ease); }
+.work-head:active .work-title { transform: scale(0.985); }
+.work-row[data-open='true'] .work-icon { transform: rotate(45deg); color: var(--blossom); }
+.work-row[data-open='true'] .work-title { color: var(--blossom-pale); }
+@media (hover: hover) {
+  .work-head:hover .work-title { transform: translateX(0.6rem); color: var(--blossom-pale); }
+  .work-head:hover .work-icon { color: var(--mist); }
+}
+
+/* The panel grows in place and can reverse mid-flight; its contents arrive one after another and leave together. */
+.work-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s var(--ease); }
+.work-row[data-open='true'] .work-panel { grid-template-rows: 1fr; }
+.work-panel-inner { min-height: 0; overflow: hidden; }
+.work-detail { display: grid; gap: 2.25rem clamp(2rem, 6vw, 6rem); padding: 0.5rem 0 clamp(2.5rem, 6vh, 4rem); }
+.work-in {
+  opacity: 0; translate: 0 0.75rem; filter: blur(4px);
+  transition: opacity 0.2s var(--ease), translate 0.2s var(--ease), filter 0.2s var(--ease);
+}
+.work-row[data-open='true'] .work-in {
+  opacity: 1; translate: none; filter: none;
+  transition-duration: 0.8s; transition-delay: calc(0.14s + var(--k, 0) * 80ms);
+}
+.work-description { max-width: 34ch; font-size: clamp(1.25rem, 1.9vw, 1.6rem); font-weight: 300; line-height: 1.42; letter-spacing: -0.01em; text-wrap: pretty; }
+.work-live { margin-top: 1.75rem; display: grid; justify-items: start; gap: 0.2rem; }
+.work-host { color: var(--dusk); font-size: 0.875rem; overflow-wrap: anywhere; }
+.work-facts { display: grid; gap: 1.25rem; align-content: start; font-size: 0.9375rem; }
+.work-facts dt { color: var(--dusk); font-size: 0.8125rem; margin-bottom: 0.2rem; }
+.work-stack { display: grid; gap: 0.1rem; }
+/* The screenshot opens like a shutter, settling from a slight zoom. */
+.work-figure {
+  grid-column: 1 / -1; margin: 0; overflow: hidden;
+  border-radius: 14px; outline: 1px solid #ffffff1a; outline-offset: -1px;
+  clip-path: inset(0 0 100% 0 round 14px);
+  transition: clip-path 0.25s var(--ease), opacity 0.2s var(--ease), translate 0.2s var(--ease), filter 0.2s var(--ease);
+}
+.work-figure img { width: 100%; scale: 1.12; transition: scale 0.25s var(--ease); }
+.work-row[data-open='true'] .work-figure { clip-path: inset(0 round 14px); transition-duration: 1.2s, 0.8s, 0.8s, 0.8s; }
+.work-row[data-open='true'] .work-figure img { scale: 1; transition: scale 1.8s var(--ease) 0.25s; }
+@media (min-width: 900px) { .work-detail { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+@media (max-width: 899px) {
+  .work-head { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'title icon' 'meta icon'; }
+  .work-title { grid-area: title; }
+  .work-meta { grid-area: meta; }
+  .work-icon { grid-area: icon; }
+}
+
+/* Dashboards: a data-driven slot (content.dashboards). Each one tilts up into place as it scrolls in, like a
+   screen being opened; --p is scrubbed by Work.jsx and defaults to flat and finished. */
+.dash { position: relative; z-index: 2; padding-top: clamp(5rem, 13vh, 9rem); }
+.dash-soon { margin-top: 1.1rem; max-width: 34rem; color: var(--dusk); text-wrap: pretty; }
+.dash-list { display: grid; gap: clamp(4.5rem, 14vh, 9rem); margin-top: clamp(2.5rem, 7vh, 4.5rem); }
+.dash-item { perspective: 1600px; }
+.dash-item figure { margin: 0; }
+.dash-frame {
+  overflow: hidden; border-radius: 14px; outline: 1px solid #ffffff1a; outline-offset: -1px;
+  transform-origin: 50% 100%;
+  transform: rotateX(calc((1 - var(--p, 1)) * 18deg)) scale(calc(0.88 + var(--p, 1) * 0.12));
+  opacity: calc(0.25 + var(--p, 1) * 0.75);
+}
+.dash-frame img { width: 100%; scale: calc(1.1 - var(--p, 1) * 0.1); }
+.dash-caption { display: grid; justify-items: start; gap: 0.35rem; margin-top: 1.5rem; }
+.dash-caption h3 { font-size: clamp(1.4rem, 2.4vw, 2rem); font-weight: 300; letter-spacing: -0.025em; line-height: 1.1; }
+.dash-caption p { max-width: 52ch; color: var(--dusk); }
+
+/* About */
+.about-now {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem 2rem;
+  max-width: 58rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
+}
+.about-now dt { color: var(--dusk); font-size: 0.8125rem; margin-bottom: 0.25rem; }
+.about-now dd { font-size: clamp(1rem, 1.3vw, 1.125rem); text-wrap: pretty; }
+@media (max-width: 759px) { .about-now { grid-template-columns: 1fr; gap: 0.9rem; } }
+
+/* The voice: a pinned stage while the words light. Without motion it is a plain paragraph. */
+.voice { position: relative; z-index: 2; }
+.motion .voice { height: 240svh; }
+.voice-stage { display: grid; align-content: center; min-height: 100svh; padding-block: 6rem 3rem; }
+.motion .voice-stage { position: sticky; top: 0; }
+.voice-text { max-width: 30ch; font-size: clamp(1.75rem, 4.2vw, 3.6rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.03em; text-wrap: pretty; }
+.voice-after { position: relative; z-index: 2; display: grid; gap: 1.75rem; }
+.about-text { max-width: 36ch; font-size: clamp(1.25rem, 1.9vw, 1.6rem); font-weight: 300; line-height: 1.42; letter-spacing: -0.01em; text-wrap: pretty; }
+
+/* So far: the timeline is a branch that grows down to the reading line, a blossom opening at each moment.
+   --grow and data-open come from About.jsx; without them the branch is whole and every blossom open. */
+.path { position: relative; z-index: 2; padding-top: clamp(5rem, 13vh, 9rem); }
+.timeline { --x: 11.5rem; position: relative; margin-top: clamp(2.5rem, 6vh, 3.5rem); }
+.timeline::before {
+  content: ''; position: absolute; top: 0.85rem; bottom: 0; left: var(--x); width: 1px; translate: -50% 0;
+  background: linear-gradient(var(--blossom-deep), var(--bark) 80%, transparent);
+  transform: scaleY(var(--grow, 1)); transform-origin: top;
+}
+.timeline li {
+  display: grid; grid-template-columns: 9rem 2rem minmax(0, 1fr); grid-template-areas: 'years bud body';
+  column-gap: 1.5rem; align-items: start;
+  padding-bottom: clamp(2.5rem, 7vh, 4rem);
+}
+.timeline-years { grid-area: years; padding-top: 0.2rem; color: var(--dusk); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.timeline-bud { grid-area: bud; justify-self: center; width: 1.75rem; height: 1.75rem; overflow: visible; }
+.timeline-bud .petal {
+  fill: var(--blossom-pale);
+  transform-box: view-box; transform-origin: center;
+  transform: rotate(var(--a)) scale(1);
+  transition: transform 0.9s var(--ease) calc(var(--k) * 50ms), fill 0.9s var(--ease);
+}
+.timeline-bud .heart { fill: var(--blossom-deep); }
+.timeline-body { grid-area: body; transition: opacity 0.8s var(--ease), translate 0.8s var(--ease); }
+.timeline-years { transition: opacity 0.8s var(--ease); }
+.timeline h3 { font-size: 1.25rem; font-weight: 450; letter-spacing: -0.01em; line-height: 1.3; }
+.timeline-place { color: var(--dusk); font-size: 0.9375rem; margin-bottom: 0.6rem; }
+.timeline-body p:last-child { max-width: 56ch; }
+/* Not reached yet: a closed bud, and the words waiting in the dark. */
+.motion .timeline li:not([data-open='true']) .petal { transform: rotate(calc(var(--a) - 50deg)) scale(0.18); fill: var(--blossom-deep); transition-delay: 0s; }
+.motion .timeline li:not([data-open='true']) .timeline-body { opacity: 0.22; translate: 0 0.75rem; }
+.motion .timeline li:not([data-open='true']) .timeline-years { opacity: 0.22; }
+@media (max-width: 759px) {
+  .timeline { --x: 1rem; }
+  .timeline li { grid-template-columns: 2rem minmax(0, 1fr); grid-template-areas: 'bud years' '. body'; column-gap: 1rem; row-gap: 0.25rem; }
+  .timeline-years { padding-top: 0.3rem; }
+}
+
+/* Contact. The page opens at night and, once the page change settles, the sky rises from below with the sun
+   behind it (Contact.jsx sets data-sun). The sky sits under the tree and the ground under the petals, so the
+   petals turn dawn pink as the sky passes them and settle on the ground strip. Without motion it is dawn. */
+:root[data-page='/contact'] .page { z-index: auto; } /* lets the sky and ground drop behind the scene */
+.contact {
+  --ink: var(--dawn-ink); --dim: var(--dawn-dim); --sky: var(--dawn);
+  --hair: color-mix(in srgb, currentColor 18%, transparent);
+  position: relative; overflow: clip;
+  min-height: 100svh; display: flex; flex-direction: column;
+  color: var(--ink);
+  transition: color 1.6s var(--ease) 0.5s;
+}
+.motion .contact:not([data-sun='up']) { --ink: var(--mist); --dim: var(--dusk); --sky: var(--night); }
+.contact ::selection { background: var(--ink); color: var(--sky); }
+.contact :focus-visible { outline-color: currentColor; }
+
+.sky {
+  position: absolute; inset: -24rem 0 0; z-index: -1;
+  background: linear-gradient(to bottom, var(--night) 0, #160c13 3rem, #24111c 6rem, #3a1a2b 9rem, #57253d 12rem, #7b3552 15rem, #a2526f 18rem, #c87792 21rem, #e3a3b8 24rem, #f0bccb 27rem, var(--dawn) 30rem);
+  transition: transform 3.8s var(--ease);
+}
+.motion .contact:not([data-sun='up']) .sky { transform: translateY(calc(100svh + 24rem)); }
+/* The sun stays below the horizon; only its light shows, warm at the core, lifting the dawn around the tree. */
+.sun {
+  position: absolute; z-index: -1; left: 68%; bottom: 0;
+  width: 110vmax; aspect-ratio: 1; translate: -50% 52%;
+  background: radial-gradient(closest-side, #fff8f1, #ffeaee 16%, #fbd6e0 34%, #f6cad666 54%, transparent);
+  transition: transform 4.6s var(--ease) 0.35s, opacity 3.2s var(--ease) 0.35s;
+}
+.motion .contact:not([data-sun='up']) .sun { transform: translateY(35vh) scale(0.55); opacity: 0; }
+/* Backlit by the sunrise, the tree settles into a softer silhouette. */
+:root[data-page='/contact'] .tree { transition: filter 3.6s var(--ease) 0.6s; }
+:root[data-page='/contact']:has(.contact[data-sun='up']) .tree,
+:root[data-page='/contact']:not(.motion) .tree { filter: brightness(0.62) saturate(0.85); }
+
+.contact-main {
+  position: relative; z-index: 2; flex: 1;
+  display: grid; align-content: end; gap: 3.5rem clamp(2rem, 6vw, 6rem);
+  padding-top: 8rem;
+}
+@media (min-width: 960px) { .contact-main { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: end; } }
+.dawn-title { font-size: clamp(3.25rem, 10vw, 6rem); font-weight: 250; line-height: 0.95; letter-spacing: -0.04em; }
+.dawn-text { margin-top: 1.5rem; max-width: 36ch; color: var(--dim); font-size: clamp(1.0625rem, 1.5vw, 1.25rem); text-wrap: pretty; }
+.contact .dawn-text, .social-handle, .contact .page-next-kicker, .footer { transition: color 1.6s var(--ease) 0.5s; }
+.mail { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; }
+.mail-link {
+  font-size: clamp(1.4rem, 3.4vw, 2.6rem); font-weight: 300; letter-spacing: -0.025em; overflow-wrap: anywhere;
+  text-decoration-color: var(--hair);
+  transition: text-decoration-color 0.4s var(--ease);
+}
+@media (hover: hover) { .mail-link:hover { text-decoration-color: currentColor; } }
+.mail-copy {
+  all: unset; box-sizing: border-box; cursor: pointer; position: relative;
+  display: grid; place-items: center; flex: none;
+  width: 2.75rem; height: 2.75rem; border-radius: 50%;
+  border: 1px solid var(--hair);
+  transition: background-color 0.3s var(--ease), transform 100ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Copy and Check cross-fade in place. */
+.mail-copy svg {
+  grid-area: 1 / 1; width: 1.05rem; height: 1.05rem;
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), scale 0.3s cubic-bezier(0.2, 0, 0, 1), filter 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+.mail-copy svg[data-on='false'] { opacity: 0; scale: 0.25; filter: blur(4px); }
+.mail-copy:active { transform: scale(0.96); }
+.mail-copy:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (hover: hover) { .mail-copy:hover { background-color: color-mix(in srgb, currentColor 8%, transparent); } }
+
+/* Socials: one typographic row per profile, from content.socials. */
+.socials-title { font-size: 1.25rem; font-weight: 450; letter-spacing: -0.01em; margin-bottom: 0.9rem; }
+.socials ul { border-bottom: 1px solid var(--hair); }
+.social {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 1.5rem;
+  padding: 1.1rem 0; border-top: 1px solid var(--hair);
+  text-decoration: none; transform-origin: left;
+  transition: transform 100ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.social-label { font-size: clamp(1.6rem, 2.8vw, 2.4rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.03em; transition: translate 0.6s var(--ease); }
+.social-handle { grid-column: 1; color: var(--dim); font-size: 0.9375rem; overflow-wrap: anywhere; transition: translate 0.6s var(--ease) 0.04s, color 1.6s var(--ease) 0.5s; }
+.social-go {
+  grid-column: 2; grid-row: 1 / span 2;
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+  border: 1px solid var(--hair);
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.social-go svg { width: 1.05rem; height: 1.05rem; transition: rotate 0.6s var(--ease); }
+.social:active { transform: scale(0.985); }
+.social:focus-visible { outline-offset: 2px; }
+@media (hover: hover) {
+  .social:hover .social-label, .social:hover .social-handle { translate: 0.5rem 0; }
+  .social:hover .social-go { background-color: currentColor; border-color: currentColor; }
+  .social:hover .social-go svg { color: var(--sky); rotate: 45deg; }
+}
+
+.contact .page-next { position: relative; z-index: 2; padding-block: clamp(3.5rem, 10vh, 6rem) 0; }
+.contact .page-next-kicker { color: var(--dim); }
+.contact .page-next-title { font-size: clamp(1.6rem, 3.6vw, 2.75rem); font-weight: 300; letter-spacing: -0.03em; }
+.contact .page-next svg { width: clamp(1.25rem, 2.4vw, 2rem); }
+@media (hover: hover) { .contact .page-next a:hover .page-next-title { color: inherit; } }
+.footer {
+  position: relative; z-index: 2;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem;
+  padding-block: clamp(2.5rem, 6vh, 4rem) 1.75rem;
+  color: var(--dim); font-size: 0.875rem;
+}
+.ground {
+  position: relative; z-index: 0; height: 4.5rem;
+  background: linear-gradient(to bottom, #d9577e00, #d9577e3d 55%, #c94a7252);
+  transition: opacity 2s var(--ease) 1.4s;
+}
+.motion .contact:not([data-sun='up']) .ground { opacity: 0; }

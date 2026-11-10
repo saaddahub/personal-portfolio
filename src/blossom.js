@@ -182,7 +182,8 @@ export function startScene({ treeCanvas, petalCanvas, reduced }) {
   const tctx = treeCanvas.getContext('2d'), pctx = petalCanvas.getContext('2d');
   const buffer = document.createElement('canvas'), bctx = buffer.getContext('2d');
   const petalPath = new Path2D(PETAL_PATH);
-  const dawnEl = document.querySelector('[data-dawn]'), groundEl = document.querySelector('[data-ground]');
+  // Only the Contact page has a dawn and a ground; they come and go with the page, so they are looked up each frame.
+  let groundEl = null;
   const small = matchMedia('(pointer: coarse)').matches || innerWidth < 760;
   const maxPetals = small ? 110 : 240;
   const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -230,6 +231,7 @@ export function startScene({ treeCanvas, petalCanvas, reduced }) {
   }
 
   function drawTree() {
+    if (!tw || !th) return; // a hidden page lays the canvas out at 0x0; the resize observer rebuilds it once it has a size
     tctx.setTransform(1, 0, 0, 1, 0, 0);
     tctx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
     // Skew around the trunk base: the canopy moves, the roots stay put.
@@ -252,7 +254,7 @@ export function startScene({ treeCanvas, petalCanvas, reduced }) {
   observer.observe(treeCanvas);
   if (reduced) {
     drawTree();
-    return { stop: () => observer.disconnect(), gust() {} };
+    return { stop: () => observer.disconnect(), gust() {}, navigated() {} };
   }
 
   function spawn(box, shaking, ds) {
@@ -311,6 +313,8 @@ export function startScene({ treeCanvas, petalCanvas, reduced }) {
     emit += ((fromTree ? (grown ? 6 : 2) : 5) + Math.min(scrollSpeed, 3000) * 0.004 + (shaking ? Math.min(speed, 2500) * 0.006 : 0)) * dt;
     for (; emit >= 1; emit--) if (petals.length < maxPetals) spawn(fromTree ? box : null, shaking, ds);
 
+    const dawnEl = document.querySelector('[data-dawn]'), nextGround = document.querySelector('[data-ground]');
+    if (nextGround !== groundEl) { groundEl = nextGround; settled.length = 0; } // petals that landed on another page stay there
     const ground = groundEl?.getBoundingClientRect();
     const groundY = ground && ground.top < vh ? ground.top : Infinity;
     const dawnTop = dawnEl ? dawnEl.getBoundingClientRect().top : Infinity;
@@ -387,6 +391,15 @@ export function startScene({ treeCanvas, petalCanvas, reduced }) {
         if (d < 170) p.vx -= 240 * (1 - d / 170);
       }
       gustX -= 30;
+    },
+    // A page change: the scroll jumped to the top on purpose, so it must not read as a fling. Instead a gust
+    // sweeps the air sideways and the canopy releases a burst, so the petals carry the visitor into the new page.
+    navigated() {
+      lastScroll = scrollY;
+      treeCanvas.style.opacity = ''; // redraw the tree at the new page's top on the next frame
+      for (const p of petals) { p.vx -= 160 + Math.random() * 220; p.vy -= Math.random() * 60; }
+      gustX -= 70;
+      emit += 18;
     },
   };
 }

@@ -1,0 +1,256 @@
+/* My Story scenes. One grammar: night ground, one key light from the upper left (highlights on top-left edges,
+   soft shadows falling down and right), light drawn as filaments with a soft bloom, glass for things you could
+   hold, and the blossom's pink for what is alive. Every scene fills the shell's sticky stage. */
+
+.mine-scene {
+  position: absolute; inset: 0; overflow: hidden;
+  color: var(--mist); font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+.mine-scene p, .mine-scene ul { margin: 0; padding: 0; }
+/* The usable box: clear of the chapter title above and the captions below. */
+.mine-safe { position: absolute; inset: min(6rem, 16%) clamp(20px, 4%, 40px) min(7.5rem, 20%); pointer-events: none; }
+.mine-dot { display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.6; vertical-align: middle; margin: 0 0.7em; }
+
+/* Petals, shared by the first and last chapters: a cherry petal's lens, lit from the upper left. */
+.mine-lahore-petals i, .mine-next-petals i {
+  position: absolute; left: 0; top: 0;
+  border-radius: 100% 0 100% 0 / 100% 0 100% 0;
+  background: radial-gradient(120% 120% at 25% 20%, var(--blossom-pale), var(--blossom) 45%, var(--blossom-deep));
+  will-change: transform;
+}
+
+/* 1. Lahore */
+.mine-lahore { display: grid; place-items: center; perspective: 900px; }
+.mine-lahore-halo {
+  position: absolute; left: 50%; top: 46%; width: min(120vw, 70rem); aspect-ratio: 2 / 1; border-radius: 50%;
+  background: radial-gradient(closest-side, #f5a9c22e, #d9577e14 45%, transparent 72%);
+  opacity: 0; pointer-events: none;
+}
+.mine-lahore-word {
+  position: absolute; left: 0; right: 0; top: 46%; transform: translateY(-50%);
+  display: flex; justify-content: center; perspective: 900px;
+  font-size: clamp(4.25rem, 21vw, 15rem); font-weight: 250; line-height: 1; letter-spacing: -0.04em;
+}
+.mine-lahore-word span { display: inline-block; will-change: transform, filter, opacity; backface-visibility: visible; }
+.mine-lahore-meta {
+  position: absolute; left: 0; right: 0; top: calc(46% + clamp(2.6rem, 11vw, 8.2rem));
+  text-align: center; color: var(--dusk); font-size: clamp(0.9375rem, 1.4vw, 1.125rem); letter-spacing: 0.01em;
+}
+.mine-lahore-petals { position: absolute; inset: 0; pointer-events: none; }
+
+/* 2. A voice worth hearing */
+.mine-voice {
+  --mic-h: min(calc((100svh - 13.5rem) * 0.62), 30rem);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(0.5rem, 2vh, 1.5rem);
+  padding: min(6rem, 16%) 0 min(7.5rem, 20%);
+}
+.mine-voice-rig { position: relative; width: 100%; height: var(--mic-h); flex: none; }
+.mine-voice-mic { position: absolute; left: 50%; top: 0; height: 100%; width: auto; aspect-ratio: 1 / 2; transform: translateX(-50%); overflow: visible; }
+.mine-voice-line, .mine-voice-glow { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mine-voice-line { stroke: var(--blossom-pale); stroke-width: 2; }
+.mine-voice-glow { stroke: var(--blossom); stroke-width: 9; stroke-opacity: 0.16; }
+.mine-voice-body { opacity: 0; }
+.mine-voice-spec { fill: none; stroke: #fff; stroke-opacity: 0.35; stroke-width: 3; stroke-linecap: round; }
+.mine-voice-light { opacity: 0; }
+.mine-voice-pivot { fill: var(--night); stroke: var(--blossom-pale); stroke-width: 1.5; opacity: 0; }
+.mine-voice-nib { opacity: 0; }
+.mine-voice-nib circle:last-child { fill: #fff; }
+/* The waves sit at the capsule's height, either side of it. */
+.mine-voice-bars {
+  position: absolute; left: 50%; top: 26.7%; transform: translate(-50%, -50%);
+  display: flex; align-items: center; height: calc(var(--mic-h) * 0.5);
+}
+.mine-voice-gap { width: calc(var(--mic-h) * 0.3); flex: none; }
+.mine-voice-side { display: flex; align-items: center; gap: clamp(3px, 0.7vw, 10px); height: 100%; }
+.mine-voice-side i {
+  display: block; width: clamp(3px, 0.5vw, 7px); height: 100%; border-radius: 99px;
+  background: linear-gradient(transparent, #f4ede9b3 28%, #fff 50%, #f4ede9b3 72%, transparent);
+  box-shadow: 0 0 12px #f5a9c240; transform: scaleY(0.03); opacity: 0; will-change: transform;
+}
+.mine-voice-award { text-align: center; padding: 0 var(--gutter, 1.25rem); }
+.mine-voice-year { font-size: clamp(2rem, 4.4vw, 3.5rem); font-weight: 250; line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.mine-voice-prize { margin-top: 0.4rem !important; font-size: 1.125rem; font-weight: 450; letter-spacing: -0.01em; color: var(--blossom-pale); }
+.mine-voice-event { font-size: 0.9375rem; color: var(--dusk); text-wrap: balance; }
+
+/* 3. From medicine to machines */
+.mine-switch-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; }
+.mine-switch-grid { opacity: 0; }
+.mine-switch-trace { color: var(--blossom); }
+.mine-switch-trace path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mine-switch-trace-core { stroke: url(#mine-trail); stroke-width: 2.2; }
+.mine-switch-trace-glow { stroke: currentColor; stroke-width: 10; stroke-opacity: 0.14; }
+.mine-switch-edges line { stroke: var(--mist); stroke-width: 1; stroke-opacity: 0; stroke-linecap: round; }
+.mine-switch-node { color: var(--blossom-pale); opacity: 0; }
+.mine-switch-node circle:nth-child(2) { fill: var(--night); stroke: var(--mist); stroke-width: 1.5; }
+.mine-switch-node circle:nth-child(3) { fill: var(--mist); }
+.mine-switch-signals circle { fill: var(--blossom-pale); opacity: 0; }
+.mine-switch-head { color: var(--blossom-pale); opacity: 0; }
+.mine-switch-head circle:last-child { fill: #fff; }
+.mine-switch-label { position: absolute; display: grid; gap: 0.15rem; opacity: 0; }
+.mine-switch-label span:first-child { font-size: clamp(1.25rem, 2.2vw, 1.75rem); font-weight: 300; letter-spacing: -0.02em; }
+.mine-switch-label span:last-child { font-size: 0.875rem; color: var(--dusk); font-variant-numeric: tabular-nums; }
+.mine-switch-from { left: 0; top: 0.5rem; }
+.mine-switch-to { right: 0; bottom: 0; text-align: right; }
+
+/* 4. University: glass tiles on a table, in a perspective that stays fixed while the table moves. */
+.mine-umt {
+  --cols: 6; --rows: 4;
+  --cell: min(calc((100vw - 2 * clamp(20px, 4vw, 40px)) / var(--cols)), calc((100svh - 13.5rem) / var(--rows)), 8.5rem);
+  display: grid; place-items: center; padding: min(6rem, 16%) 0 min(7.5rem, 20%);
+}
+.mine-umt-table { perspective: 1400px; perspective-origin: 50% 30%; }
+.mine-umt-grid {
+  position: relative; list-style: none; display: grid; gap: calc(var(--cell) * 0.08);
+  grid-template-columns: repeat(var(--cols), calc(var(--cell) * 0.92));
+  grid-template-rows: repeat(var(--rows), calc(var(--cell) * 0.92));
+  transform-style: preserve-3d; will-change: transform;
+}
+.mine-tile { position: relative; grid-column: var(--c) / span var(--w); grid-row: var(--r) / span var(--h); transform-style: preserve-3d; }
+.mine-tile-shadow {
+  position: absolute; inset: 8% 4% -6% 10%; border-radius: 18px;
+  background: #000; filter: blur(14px); opacity: 0.5; transform: translateZ(-1px);
+}
+.mine-tile-card { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 100%; }
+.mine-tile-face, .mine-tile-back {
+  position: absolute; inset: 0; border-radius: clamp(10px, calc(var(--cell) * 0.14), 18px); overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.mine-tile-face {
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 0.2rem; padding: clamp(0.55rem, calc(var(--cell) * 0.14), 1.1rem);
+  background: linear-gradient(155deg, #ffffff1c, #ffffff08 42%, color-mix(in oklab, var(--night) 40%, transparent)), color-mix(in oklab, var(--night-raised) 72%, transparent);
+  border: 1px solid #ffffff14;
+  box-shadow: inset 0 1px 0 #ffffff2e, inset 0 -1px 0 #00000059;
+}
+.mine-tile-back {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 50% 50%, #f5a9c240 0 6%, transparent 7%),
+    repeating-linear-gradient(45deg, #f4ede90a 0 1px, transparent 1px 9px),
+    linear-gradient(155deg, #2a1521, var(--night-raised));
+  border: 1px solid #f5a9c22e; box-shadow: inset 0 1px 0 #ffffff1f;
+}
+.mine-tile-sheen {
+  position: absolute; inset: -20% -40%; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, #ffffff26 48%, #ffffff0a 54%, transparent 62%);
+  transform: translateX(-130%);
+}
+.mine-tile-empty .mine-tile-face { background: linear-gradient(155deg, #ffffff12, #ffffff05 45%, color-mix(in oklab, var(--night) 35%, transparent)), color-mix(in oklab, var(--night-raised) 55%, transparent); }
+.mine-tile-title { position: relative; font-size: clamp(0.875rem, calc(var(--cell) * 0.16), 1.3rem); font-weight: 350; line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
+.mine-tile-name .mine-tile-title { font-size: clamp(1.15rem, calc(var(--cell) * 0.26), 2rem); font-weight: 300; letter-spacing: -0.03em; }
+.mine-tile-note, .mine-tile-tool { position: relative; font-size: clamp(0.75rem, calc(var(--cell) * 0.12), 0.9375rem); color: var(--dusk); line-height: 1.25; }
+.mine-tile-years { position: relative; font-size: clamp(0.8125rem, calc(var(--cell) * 0.13), 1rem); color: var(--blossom-pale); font-variant-numeric: tabular-nums; }
+.mine-tile-tool { color: var(--mist); opacity: 0.8; }
+@media (max-aspect-ratio: 4 / 5) {
+  .mine-umt { --cols: 4; --rows: 6; }
+  .mine-tile { grid-column: var(--nc) / span var(--nw); grid-row: var(--nr) / span var(--nh); }
+}
+
+/* 5. Teaching */
+.mine-teach-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mine-teach-ink { fill: none; stroke: var(--mist); stroke-width: 1; stroke-linecap: round; opacity: 0.6; }
+.mine-teach-underline { fill: none; stroke: var(--blossom); stroke-width: 2; stroke-linecap: round; }
+.mine-teach-text {
+  position: absolute; inset: min(6rem, 16%) clamp(20px, 4%, 40px) min(7.5rem, 20%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(0.9rem, 2.4vh, 1.6rem);
+  text-align: center;
+}
+.mine-teach-sentence { max-width: 18ch; font-size: clamp(1.9rem, 5vw, 4rem); font-weight: 300; line-height: 1.12; letter-spacing: -0.03em; text-wrap: balance; }
+.mine-teach-accent { white-space: nowrap; color: var(--blossom-pale); }
+.mine-word { display: inline-block; margin: 0 0.12em; will-change: transform, opacity; opacity: 0; }
+.mine-teach-topics { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1rem; font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 300; color: var(--dusk); }
+.mine-teach-role { font-size: 0.875rem; color: var(--dusk); opacity: 0; }
+
+/* 6. Off the clock */
+.mine-off-haze {
+  position: absolute; inset: auto 0 0; height: 60%; pointer-events: none;
+  background: linear-gradient(transparent, #d9577e1f 55%, #f3c6d32b);
+}
+.mine-off-city { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mine-off-bldg { fill: #120d15; stroke: #f4ede90d; }
+.mine-off-mast { stroke: #f4ede926; stroke-width: 1; }
+.mine-off-lit rect { fill: #ffdbe6; fill-opacity: 0.75; }
+.mine-off-branch { fill: none; stroke: #4a2a36; stroke-width: 3; stroke-linecap: round; }
+.mine-off-bloom { fill: var(--blossom); transform: scale(0); }
+.mine-off-bloom:nth-child(3n) { fill: var(--blossom-pale); }
+.mine-off-bloom:nth-child(5n) { fill: var(--blossom-deep); }
+.mine-off-targets { position: absolute; inset: 0; list-style: none; pointer-events: none; }
+.mine-off-targets li { position: absolute; display: grid; gap: 0.1rem; text-align: center; white-space: nowrap; opacity: 0; will-change: filter, opacity; }
+.mine-off-targets li span:first-child { font-size: clamp(1.3rem, 3vw, 2.5rem); font-weight: 250; letter-spacing: -0.03em; }
+.mine-off-targets li span:last-child { font-size: 0.8125rem; color: var(--dusk); }
+.mine-off-targets li:nth-child(4) span:first-child { color: var(--blossom-pale); }
+.mine-off-reticle { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; overflow: visible; opacity: 0; pointer-events: none; }
+.mine-off-reticle * { vector-effect: non-scaling-stroke; }
+.mine-off-ring { fill: none; stroke: var(--mist); stroke-width: 1; stroke-opacity: 0.7; }
+.mine-off-ticks path { stroke: var(--blossom-pale); stroke-width: 1.5; stroke-linecap: round; }
+.mine-off-dot { fill: var(--blossom); }
+
+/* 7. What comes next: the postcard */
+.mine-next-petals { position: absolute; inset: 0; pointer-events: none; }
+.mine-next-petals i { opacity: 0; }
+.mine-card-fly {
+  position: absolute; inset: min(6rem, 16%) clamp(20px, 4%, 40px) min(7.5rem, 20%);
+  display: grid; place-items: center; opacity: 0; pointer-events: none;
+}
+.mine-card-toss { pointer-events: auto; }
+.mine-card {
+  position: relative; overflow: hidden; touch-action: none; cursor: grab;
+  display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 1fr auto; gap: 1.25rem 1.75rem;
+  width: min(36rem, calc(100vw - 2 * clamp(20px, 4vw, 40px))); aspect-ratio: 3 / 2; padding: clamp(1.1rem, 3vw, 1.75rem);
+  border-radius: 22px;
+  background: linear-gradient(155deg, #ffffff1f, #ffffff08 40%, color-mix(in oklab, var(--night) 25%, transparent)), color-mix(in oklab, var(--night-raised) 40%, transparent);
+  backdrop-filter: blur(var(--mine-blur, 22px)) saturate(160%); -webkit-backdrop-filter: blur(var(--mine-blur, 22px)) saturate(160%);
+  border: 1px solid #ffffff1a;
+  box-shadow: inset 0 1px 0 #ffffff33, inset 0 -1px 0 #00000059, 0 30px 60px -28px #000000c0, 0 10px 20px -12px #00000080;
+  user-select: none;
+}
+.mine-card:active { cursor: grabbing; }
+.mine-card-sheen {
+  position: absolute; inset: -30% -50%; pointer-events: none;
+  background: linear-gradient(110deg, transparent 40%, #ffffff1f 49%, transparent 58%); transform: translateX(-120%);
+}
+.mine-card-message { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; padding-right: 1.75rem; border-right: 1px solid var(--line); }
+.mine-card-lead { font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 300; line-height: 1.32; letter-spacing: -0.01em; text-wrap: balance; }
+.mine-card-avail { font-size: 0.875rem; color: var(--dusk); line-height: 1.5; }
+.mine-card-address { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 0.15rem; }
+.mine-card-stamp {
+  position: absolute; right: 0; top: 0; width: 3.4rem; height: 4rem; display: grid; place-items: center;
+  background: #2a1521; border-radius: 3px;
+  outline: 1.5px dashed #f5a9c259; outline-offset: -4px;
+}
+.mine-card-stamp svg { width: 70%; }
+.mine-card-stamp ellipse { fill: var(--blossom); }
+.mine-card-stamp circle { fill: var(--blossom-pale); }
+.mine-card-postmark { position: absolute; right: 3.9rem; top: 0.5rem; width: 6.5rem; fill: none; stroke: var(--dusk); stroke-width: 1.2; opacity: 0.6; }
+.mine-card-postmark text { fill: var(--dusk); stroke: none; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; font-family: inherit; }
+.mine-card-to { font-size: 1.25rem; font-weight: 450; letter-spacing: -0.01em; }
+.mine-card-to span { display: block; font-size: 0.8125rem; font-weight: 400; color: var(--dusk); }
+.mine-card-place, .mine-card-email { font-size: 0.875rem; color: var(--dusk); overflow-wrap: anywhere; }
+.mine-card-email { color: var(--mist); user-select: text; }
+.mine-card-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.mine-card-send {
+  position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 0.15rem;
+  color: var(--mist); font-weight: 450; text-decoration: none;
+  transition: transform 150ms ease-out;
+}
+.mine-card-send::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0.55rem; height: 1px; background: var(--blossom); transform-origin: left; transition: transform 0.5s var(--ease); }
+.mine-card-send svg { width: 1rem; height: 1rem; transition: transform 0.5s var(--ease); }
+.mine-card-send:active { transform: scale(0.96); }
+.mine-card-send:focus-visible { outline: 2px solid var(--blossom); outline-offset: 4px; border-radius: 6px; }
+@media (hover: hover) { .mine-card-send:hover svg { transform: translate(2px, -2px); } }
+.mine-card-hint { font-size: 0.8125rem; color: var(--dusk); }
+@media (max-width: 640px) {
+  .mine-card { grid-template-columns: 1fr; grid-template-rows: auto auto auto; aspect-ratio: auto; gap: 1rem; }
+  .mine-card-message { padding: 0 0 1rem; border-right: 0; border-bottom: 1px solid var(--line); }
+  .mine-card-address { min-height: 7.5rem; }
+  .mine-card-postmark { right: 4rem; top: 0.25rem; width: 5.5rem; }
+}
+
+/* Glass turns solid when transparency is unwelcome. */
+@media (prefers-reduced-transparency: reduce) {
+  .mine-card { background: var(--night-raised); backdrop-filter: none; -webkit-backdrop-filter: none; border-color: #f4ede926; }
+  .mine-tile-face, .mine-tile-empty .mine-tile-face { background: var(--night-raised); }
+}
+@media (prefers-contrast: more) {
+  .mine-card, .mine-tile-face { background: var(--night-raised); border-color: var(--dusk); }
+}
