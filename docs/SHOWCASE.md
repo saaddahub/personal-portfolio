@@ -25,11 +25,11 @@ The first version is built: `src/Showcase.jsx`, `src/narrator.js`, the copy in `
 | Licensed music file | A soft D–Bm–G–A pad synthesized in the browser with Web Audio | No file to download and no licence needed. Replace it if Saad picks a track. |
 | Recorded voice | Placeholder WAVs from the Windows desktop voice, made by `scripts/narrate-placeholder.ps1` | Shows the full audio flow now. Replace with the real voice (MP3 recommended; update the extension in `narrator.js`). Rerun the script after editing any line. |
 | Word timings from `.vtt` files | Captions light word by word from the clip's playback position, or from scroll position when sound is off | No timing files to keep in sync. |
-| PNLF dashboards | The Netflix visualiser, plus two "PNLF dashboard: screenshot on the way" cards with drawn chart outlines | The screenshots haven't arrived. Add `image` to each board in `content.js`. |
+| PNLF dashboards | The Netflix visualiser, then the PNLF admin overview (`public/images/pnlf-admin.webp`): it zooms in, tilts, and nine boxes cut from the screenshot lift off one at a time with numbered names, then hover together and fold into the wire | One screenshot, not live charts. Boxes are measured in image pixels in `content.showcase.dashboards.portal.boxes`; re-measure them if the screenshot changes. |
 | Backend options A and B | Option A only | It needs no assets. |
 | Lazy-loaded chunk, skip link, keyboard shortcuts | Not built | The Showcase adds about 6 KB gzipped, and the nav's Work link already skips past it. |
 
-**Still to do:** more products, PNLF screenshots, the real voice, Saad's approval of the draft lines and of the security layers, and a live check at full frame rate on a real phone.
+**Still to do:** more products, the real voice, Saad's approval of the draft lines and of the security layers, and a live check at full frame rate on a real phone.
 
 Read `docs/BUILD_LOG.md` first for how the current site works. This spec borrows the motion grammar and glass recipe from `docs/STORY_MODE.md` but replaces its browser-voice narrator: **the browser never speaks here. Every word is a recorded audio file shipped with the site.**
 

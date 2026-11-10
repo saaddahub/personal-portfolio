@@ -401,30 +401,88 @@ function Interfaces() {
   );
 }
 
-/* 3. Dashboards: a deep 3D stack; each board comes forward, reveals, and flies off. The last folds into a wire. */
-function Dashboards() {
-  const stack = useRef(null), q = useRef(null);
-  const { boards } = sc.dashboards, N = boards.length;
+/* 3. Dashboards: a deep 3D stack; each board comes forward, reveals, and flies off. Then the PNLF portal zooms in
+   and tilts, its boxes lift off the screen one at a time to be named while the camera follows, all of them hover
+   together, and the portal settles and folds into a wire. */
+const TILT = [24, -16, 5]; // the portal's three-quarter pose: rotateX, rotateY, rotateZ in degrees
+const BOARDS_END = 0.28, TOUR = [0.42, 0.82];
 
-  const render = p => {
-    const c = (q.current ??= { cards: [...stack.current.children] });
-    const arrive = ease(seg(p, 0, 0.12)), fold = ease(seg(p, 0.8, 0.95));
-    // Opacity stays on the cards: on the stack it would flatten the 3D and break their depth order.
-    const fade = arrive * (1 - seg(p, 0.95, 1));
-    stack.current.style.transform = `scale(${lerp(1.35, 1, arrive)}) scaleY(${1 - fold * 0.99})`;
-    c.cards.forEach((card, i) => {
-      let u = ((p - 0.12) / 0.66) * N - i;
-      if (i === N - 1) u = Math.min(u, 0.7); // the last board stays to be folded
-      const depth = Math.min(Math.max(-u, 0), 3), leave = ease(seg(u, 0.7, 1.15));
-      card.style.transform = `translate3d(0, ${-depth * 7 - leave * 120}%, ${-depth * 140 + leave * 80}px) rotateX(${Math.min(depth, 1) * 22 - leave * 35}deg)`;
-      card.style.opacity = fade * (1 - depth / 3.2) * (1 - seg(u, 0.72, 0.95)); // gone before the next board settles
-      card.style.setProperty('--reveal', ease(seg(u, -0.1, 0.5)).toFixed(3));
+function Dashboards() {
+  const wrap = useRef(null), stack = useRef(null), plane = useRef(null), lines = useRef(null), labels = useRef(null), q = useRef(null);
+  const { boards, portal } = sc.dashboards, N = boards.length, B = portal.boxes, W = portal.width, H = portal.height;
+  const step = (TOUR[1] - TOUR[0]) / B.length;
+  const centre = b => [(b.x + b.w / 2) / W - 0.5, (b.y + b.h / 2) / H - 0.5];
+
+  // Boxes hover (a slow bob, out of step with each other), then their names follow them on screen.
+  const pose = now => {
+    const c = q.current;
+    c.boxes.forEach((el, i) => {
+      const z = c.lift[i] + (c.lift[i] && Math.sin(now / 900 + i * 1.7) * 5 * c.hover);
+      el.style.transform = `translateZ(${z.toFixed(1)}px) scale(${(1 + 0.04 * c.pop[i]).toFixed(4)})`;
+      el.style.setProperty('--lift', z.toFixed(1));
+    });
+    const box = wrap.current.getBoundingClientRect(), wide = box.width >= 760;
+    B.forEach((b, i) => {
+      if (!c.t[i]) return;
+      const r = c.boxes[i].getBoundingClientRect(), left = centre(b)[0] < 0, dir = left ? -1 : 1;
+      const [path, dot] = lines.current.children[i].children, li = labels.current.children[i];
+      const ax = wide ? (left ? r.left + 12 : r.right - 12) - box.left : r.left + r.width / 2 - box.left;
+      const ay = (wide ? r.top + r.height / 2 : r.top + 6) - box.top, ey = ay - 22, ex = ax + dir * 84;
+      path.setAttribute('d', `M${ax} ${ay}L${ax + dir * 28} ${ey}H${ex}`);
+      dot.setAttribute('cx', ax);
+      dot.setAttribute('cy', ay);
+      const tw = li.firstChild.offsetWidth;
+      // Kept on screen: a left label hangs off its x, a right one (and every label on phones) starts at it.
+      const x = wide ? (left ? Math.max(ex - 8, tw + 6) : Math.min(ex + 8, box.width - tw - 6)) : Math.min(Math.max(ax - tw / 2, 6), box.width - tw - 6);
+      li.style.transform = `translate(${x.toFixed(1)}px, ${(wide ? ey : ay).toFixed(1)}px)`;
     });
   };
 
+  const render = p => {
+    const c = (q.current ??= {
+      cards: [...stack.current.children], boxes: [...plane.current.querySelectorAll('.pt-box')],
+      lift: B.map(() => 0), pop: B.map(() => 0), t: B.map(() => 0), hover: 0,
+    });
+    const pw = plane.current.offsetWidth, ph = plane.current.offsetHeight;
+    const arrive = ease(seg(p, 0, 0.06));
+    stack.current.style.transform = `scale(${lerp(1.35, 1, arrive)})`;
+    // Opacity stays on the cards: on the stack it would flatten the 3D and break their depth order.
+    c.cards.forEach((card, i) => {
+      const u = ((p - 0.06) / (BOARDS_END - 0.06)) * N - i;
+      const depth = Math.min(Math.max(-u, 0), 3), leave = ease(seg(u, 0.7, 1.15));
+      card.style.transform = `translate3d(0, ${-depth * 7 - leave * 120}%, ${-depth * 140 + leave * 80}px) rotateX(${Math.min(depth, 1) * 22 - leave * 35}deg)`;
+      card.style.opacity = arrive * (1 - depth / 3.2) * (1 - seg(u, 0.72, 0.95)); // gone before the next board settles
+      card.style.setProperty('--reveal', ease(seg(u, -0.1, 0.5)).toFixed(3));
+    });
+
+    // The portal: in from the distance, into its pose, a camera that visits each box, then down, flat and folded.
+    const zoom = ease(seg(p, 0.27, 0.37)), tilt = ease(seg(p, 0.35, 0.43)), back = ease(seg(p, 0.82, 0.86));
+    const settle = ease(seg(p, 0.88, 0.92)), flat = ease(seg(p, 0.9, 0.94)), fold = ease(seg(p, 0.93, 0.98));
+    const cam = ease(seg(p, TOUR[0] - 0.02, TOUR[0] + 0.03)) * (1 - back);
+    const k = Math.min(Math.max((p - TOUR[0]) / step, 0), B.length - 0.001), at = Math.floor(k);
+    const glide = ease(seg(k - at, 0, 0.4)), [x0, y0] = at ? centre(B[at - 1]) : [0, 0], [x1, y1] = centre(B[at]);
+    const fx = lerp(x0, x1, glide), fy = lerp(y0, y1, glide);
+    const s = plane.current.style, o = seg(p, 0.27, 0.31) * (1 - seg(p, 0.975, 1));
+    s.opacity = o; // below 1 it flattens the lifted boxes, so it only fades while they lie flat
+    s.transform = `translate3d(${(-fx * pw * 0.4 * cam).toFixed(1)}px, ${(-fy * ph * 0.35 * cam).toFixed(1)}px, ${((1 - zoom) * -1400).toFixed(0)}px) `
+      + `scale(${(1 + 0.1 * cam).toFixed(4)}) ${TILT.map((d, i) => `rotate${'XYZ'[i]}(${(d * tilt * (1 - flat)).toFixed(2)}deg)`).join(' ')} scaleY(${1 - fold * 0.99})`;
+
+    c.hover = 1 - settle;
+    B.forEach((b, i) => {
+      const a = TOUR[0] + i * step;
+      c.pop[i] = ease(seg(p, a, a + step * 0.5)) * (1 - ease(seg(p, a + step * 0.9, a + step * 1.4)));
+      c.lift[i] = (b.z * ease(seg(p, a, a + step * 0.6)) + 40 * c.pop[i]) * (1 - settle);
+      c.t[i] = seg(p, a + step * 0.2, a + step * 0.45) * (1 - seg(p, a + step * 0.95, a + step * 1.15));
+      lines.current.children[i].children[0].style.strokeDashoffset = 1 - c.t[i];
+      lines.current.children[i].children[1].style.opacity = c.t[i];
+      labels.current.children[i].style.opacity = c.t[i];
+    });
+    if (REDUCED) pose(0);
+  };
+
   return (
-    <Chapter id="dashboards" height="360vh" still={0.2} render={render}>
-      <div className="boards">
+    <Chapter id="dashboards" height="700vh" still={0.87} render={render} frame={(p, now) => q.current && pose(now)}>
+      <div className="boards" ref={wrap}>
         <div className="board-stack" ref={stack}>
           {boards.map((b, i) => (
             <article className="board-card" key={i}>
@@ -439,6 +497,27 @@ function Dashboards() {
             </article>
           ))}
         </div>
+        <div className="pt-plane" ref={plane}>
+          <img className="pt-shot" src={portal.image} alt={portal.alt} width={W} height={H} loading="lazy" />
+          {B.map((b, i) => (
+            <div key={i} className="pt-box" aria-hidden="true" style={{
+              left: `${(b.x / W) * 100}%`, top: `${(b.y / H) * 100}%`, width: `${(b.w / W) * 100}%`, height: `${(b.h / H) * 100}%`,
+              backgroundImage: `url(${portal.image})`, backgroundSize: `${(W / b.w) * 100}% ${(H / b.h) * 100}%`,
+              backgroundPosition: `${b.w < W ? (b.x / (W - b.w)) * 100 : 0}% ${b.h < H ? (b.y / (H - b.h)) * 100 : 0}%`,
+              borderRadius: `${(16 / b.w) * 100}% / ${(16 / b.h) * 100}%`,
+            }} />
+          ))}
+        </div>
+        <svg className="seq-lines" ref={lines} aria-hidden="true">
+          {B.map((b, i) => <g key={i}><path pathLength="1" /><circle r="3.5" /></g>)}
+        </svg>
+        <ol className="seq-labels" ref={labels}>
+          {B.map((b, i) => (
+            <li key={i} data-side={centre(b)[0] < 0 ? 'l' : 'r'}>
+              <span className="seq-tag"><span className="seq-num">{String(i + 1).padStart(2, '0')}</span><span className="seq-name">{b.name}</span><span className="seq-note">{b.note}</span></span>
+            </li>
+          ))}
+        </ol>
       </div>
     </Chapter>
   );

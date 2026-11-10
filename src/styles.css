@@ -286,8 +286,23 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22e
 }
 
 /* 3. Dashboards */
-.boards { width: 100%; height: 100%; display: grid; place-items: center; perspective: 1400px; }
-.board-stack { position: relative; width: min(100%, 50rem, (100svh - 17rem) * 1.45); aspect-ratio: 16 / 11; transform-style: preserve-3d; will-change: transform; }
+.boards { position: relative; width: 100%; height: 100%; display: grid; place-items: center; perspective: 1400px; }
+.board-stack { position: relative; grid-area: 1 / 1; width: min(100%, 50rem, (100svh - 17rem) * 1.45); aspect-ratio: 16 / 11; transform-style: preserve-3d; will-change: transform; }
+/* The PNLF portal: a screenshot whose boxes are cut from the same image and lifted toward the viewer. Nothing here
+   may clip or fade while they float (overflow, filters, opacity), or the 3D flattens back into one picture. */
+.pt-plane { position: relative; grid-area: 1 / 1; width: min(100%, 54rem, (100svh - 18rem) * 1.6); aspect-ratio: 16 / 10; transform-style: preserve-3d; will-change: transform; opacity: 0; }
+@media (max-width: 759px) { .pt-plane { width: 88%; } } /* the tilt brings the left edge nearer, so it needs room */
+.pt-shot { display: block; width: 100%; height: 100%; border-radius: 10px; box-shadow: 0 0 0 1px #f4ede91f, 0 50px 90px -40px #000; }
+.pt-box { position: absolute; background-repeat: no-repeat; transform-style: preserve-3d; box-shadow: 0 0 0 1px #0a2a1a14, inset 0 1px 0 #fff; will-change: transform; }
+/* Left behind on the screen below: an empty slot where the box sat, and its shadow, darker the higher it floats. */
+.pt-box::before, .pt-box::after { content: ''; position: absolute; border-radius: inherit; }
+.pt-box::before { inset: 0; background: #e9eeea; opacity: clamp(0, var(--lift, 0) / 8, 1); transform: translateZ(calc(0.5px - var(--lift, 0) * 1px)); }
+.pt-box::after {
+  inset: 8% 5% -2%; background: #03140b; filter: blur(10px);
+  opacity: clamp(0, var(--lift, 0) / 140, 0.45); transform: translateZ(calc(1px - var(--lift, 0) * 1px));
+}
+/* Names sit over the white portal here, so their glass is darker than elsewhere to stay readable. */
+.boards .seq-tag, .boards .seq-tag[data-liquid] { background: color-mix(in oklab, var(--night) 84%, transparent); }
 .board-card {
   position: absolute; inset: 0;
   display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 0.9rem;

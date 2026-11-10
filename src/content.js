@@ -1,5 +1,10 @@
 // Everything a visitor reads. Edit here; the page has no other copy.
 const email = 'saadsalam659@gmail.com';
+// The PNLF admin overview, shown in the Showcase and on the Work page.
+const pnlfAdmin = {
+  image: '/images/pnlf-admin.webp',
+  alt: 'The PNLF admin portal: a green sidebar menu, quick actions, cards for members, volunteers, team and lead applications and hostel requests, and a filterable student directory.',
+};
 
 export const content = {
   name: ['Saad', 'Akhtar'],
@@ -56,14 +61,31 @@ export const content = {
       kicker: 'Dashboards',
       voice: [
         [0.03, 'Dashboards. Numbers, made friendly. They answer the question before you’ve asked it.'],
-        [0.14, 'That’s the entire Netflix catalogue, charted. He called it research. I’m not arguing.'],
-        [0.45, 'These two are for PNLF. I’d explain the charts, but I’m only the voice.'],
+        [0.1, 'That’s the entire Netflix catalogue, charted. He called it research. I’m not arguing.'],
+        [0.3, 'This one runs PNLF, a national student forum. Watch the important bits float up. He insisted.'],
+        [0.6, 'Members, volunteers, hostels, campus leads. All on one screen. Nobody misses the spreadsheet.'],
       ],
       boards: [
         { title: 'Netflix Data Visualiser', note: 'Genres, release trends and ratings across the catalogue.', image: '/images/netflix-visualiser.jpg' },
-        { title: 'PNLF dashboard', note: 'Screenshot on the way.' },
-        { title: 'PNLF dashboard', note: 'Screenshot on the way.' },
       ],
+      // After the boards, the PNLF admin portal zooms in and tilts, and each box lifts off the screen to be named.
+      // Boxes are in the image's own pixels, in the order they rise; z is how high each one hovers.
+      portal: {
+        ...pnlfAdmin,
+        width: 1440,
+        height: 900,
+        boxes: [
+          { x: 0, y: 0, w: 256, h: 900, z: 26, name: 'Admin menu', note: 'Applications, people, website' },
+          { x: 672, y: 60, w: 614, h: 84, z: 44, name: 'Quick actions', note: 'Queues and edits, one click away' },
+          { x: 297, y: 246, w: 206, h: 181, z: 56, name: 'All members', note: 'Every record, pooled in one place' },
+          { x: 518, y: 243, w: 212, h: 187, z: 72, name: 'Member roster', note: 'Every registered profile' },
+          { x: 745, y: 246, w: 206, h: 181, z: 56, name: 'Volunteers', note: 'Approved and pending, at a glance' },
+          { x: 969, y: 246, w: 206, h: 181, z: 56, name: 'Team recruitment', note: 'New requests flagged in yellow' },
+          { x: 1193, y: 246, w: 206, h: 181, z: 56, name: 'Campus leads', note: 'Who wants to run a campus or team' },
+          { x: 297, y: 445, w: 206, h: 153, z: 48, name: 'Student housing', note: 'Hostel requests, start to finish' },
+          { x: 772, y: 721, w: 598, h: 139, z: 40, name: 'Identity records', note: 'Search by hometown, city or CNIC' },
+        ],
+      },
     },
     backend: {
       kicker: 'Backend',
@@ -184,7 +206,9 @@ export const content = {
   // Dashboards on the Work page, each tilting up into view as it scrolls in. Empty until Saad sends them; until
   // then the page says they are on the way. One entry per dashboard, in display order:
   // { title, note (one line), image: '/images/<file>' in public/, alt (required with image), url (optional live link) }
-  dashboards: [],
+  dashboards: [
+    { title: 'PNLF admin portal', note: 'Members, volunteers, team and lead applications and hostel requests, all on one screen.', ...pnlfAdmin },
+  ],
   about: [
     'I’m Saad, a developer in Lahore studying Artificial Intelligence at the University of Management and Technology. I build full-stack products and the data tools behind them, and I’m spending this year going deep on machine learning.',
     'Most of my time goes into building things, taking them apart, and finding a simpler way to put them back together. Good documentation, I maintain, counts as a love language.',
