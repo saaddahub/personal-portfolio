@@ -401,11 +401,11 @@ function Interfaces() {
   );
 }
 
-/* 3. Dashboards: a deep 3D stack; each board comes forward, reveals, and flies off. Then the PNLF portal zooms in
-   and tilts, its boxes lift off the screen one at a time to be named while the camera follows, all of them hover
-   together, and the portal settles and folds into a wire. */
+/* 3. Dashboards: first the PNLF portal zooms in and tilts, its boxes lift off the screen one at a time to be named
+   while the camera follows, all of them hover together, then it settles, lies flat and flies off. Then the boards
+   come forward from a deep 3D stack, reveal, and fly off; the last folds into a wire. */
 const TILT = [24, -16, 5]; // the portal's three-quarter pose: rotateX, rotateY, rotateZ in degrees
-const BOARDS_END = 0.28, TOUR = [0.42, 0.82];
+const TOUR = [0.15, 0.62], BOARDS = [0.755, 0.86];
 
 function Dashboards() {
   const wrap = useRef(null), stack = useRef(null), plane = useRef(null), lines = useRef(null), labels = useRef(null), q = useRef(null);
@@ -444,28 +444,30 @@ function Dashboards() {
       lift: B.map(() => 0), pop: B.map(() => 0), t: B.map(() => 0), hover: 0,
     });
     const pw = plane.current.offsetWidth, ph = plane.current.offsetHeight;
-    const arrive = ease(seg(p, 0, 0.06));
-    stack.current.style.transform = `scale(${lerp(1.35, 1, arrive)})`;
+    const arrive = ease(seg(p, BOARDS[0], BOARDS[0] + 0.05)), fold = ease(seg(p, 0.88, 0.96));
+    stack.current.style.transform = `scale(${lerp(1.35, 1, arrive)}) scaleY(${1 - fold * 0.99})`;
     // Opacity stays on the cards: on the stack it would flatten the 3D and break their depth order.
+    const fade = arrive * (1 - seg(p, 0.96, 1));
     c.cards.forEach((card, i) => {
-      const u = ((p - 0.06) / (BOARDS_END - 0.06)) * N - i;
+      let u = ((p - BOARDS[0]) / (BOARDS[1] - BOARDS[0])) * N - i;
+      if (i === N - 1) u = Math.min(u, 0.7); // the last board stays to be folded
       const depth = Math.min(Math.max(-u, 0), 3), leave = ease(seg(u, 0.7, 1.15));
       card.style.transform = `translate3d(0, ${-depth * 7 - leave * 120}%, ${-depth * 140 + leave * 80}px) rotateX(${Math.min(depth, 1) * 22 - leave * 35}deg)`;
-      card.style.opacity = arrive * (1 - depth / 3.2) * (1 - seg(u, 0.72, 0.95)); // gone before the next board settles
+      card.style.opacity = fade * (1 - depth / 3.2) * (1 - seg(u, 0.72, 0.95)); // gone before the next board settles
       card.style.setProperty('--reveal', ease(seg(u, -0.1, 0.5)).toFixed(3));
     });
 
-    // The portal: in from the distance, into its pose, a camera that visits each box, then down, flat and folded.
-    const zoom = ease(seg(p, 0.27, 0.37)), tilt = ease(seg(p, 0.35, 0.43)), back = ease(seg(p, 0.82, 0.86));
-    const settle = ease(seg(p, 0.88, 0.92)), flat = ease(seg(p, 0.9, 0.94)), fold = ease(seg(p, 0.93, 0.98));
+    // The portal: in from the distance, into its pose, a camera that visits each box, then down, flat and away.
+    const zoom = ease(seg(p, 0.01, 0.09)), tilt = ease(seg(p, 0.07, 0.15)), back = ease(seg(p, 0.62, 0.66));
+    const settle = ease(seg(p, 0.67, 0.71)), flat = ease(seg(p, 0.69, 0.73)), away = ease(seg(p, 0.72, 0.8));
     const cam = ease(seg(p, TOUR[0] - 0.02, TOUR[0] + 0.03)) * (1 - back);
     const k = Math.min(Math.max((p - TOUR[0]) / step, 0), B.length - 0.001), at = Math.floor(k);
     const glide = ease(seg(k - at, 0, 0.4)), [x0, y0] = at ? centre(B[at - 1]) : [0, 0], [x1, y1] = centre(B[at]);
     const fx = lerp(x0, x1, glide), fy = lerp(y0, y1, glide);
-    const s = plane.current.style, o = seg(p, 0.27, 0.31) * (1 - seg(p, 0.975, 1));
-    s.opacity = o; // below 1 it flattens the lifted boxes, so it only fades while they lie flat
-    s.transform = `translate3d(${(-fx * pw * 0.4 * cam).toFixed(1)}px, ${(-fy * ph * 0.35 * cam).toFixed(1)}px, ${((1 - zoom) * -1400).toFixed(0)}px) `
-      + `scale(${(1 + 0.1 * cam).toFixed(4)}) ${TILT.map((d, i) => `rotate${'XYZ'[i]}(${(d * tilt * (1 - flat)).toFixed(2)}deg)`).join(' ')} scaleY(${1 - fold * 0.99})`;
+    const s = plane.current.style;
+    s.opacity = seg(p, 0.01, 0.04) * (1 - seg(p, 0.72, 0.755)); // below 1 it flattens the lifted boxes, so it only fades while they lie flat
+    s.transform = `translate3d(${(-fx * pw * 0.4 * cam).toFixed(1)}px, ${(-fy * ph * 0.35 * cam - away * ph * 0.9).toFixed(1)}px, ${((1 - zoom) * -1400 + away * 200).toFixed(0)}px) `
+      + `scale(${(1 + 0.1 * cam).toFixed(4)}) ${TILT.map((d, i) => `rotate${'XYZ'[i]}(${(d * tilt * (1 - flat)).toFixed(2)}deg)`).join(' ')} rotateX(${(-away * 30).toFixed(2)}deg)`;
 
     c.hover = 1 - settle;
     B.forEach((b, i) => {
@@ -481,7 +483,7 @@ function Dashboards() {
   };
 
   return (
-    <Chapter id="dashboards" height="700vh" still={0.87} render={render} frame={(p, now) => q.current && pose(now)}>
+    <Chapter id="dashboards" height="700vh" still={0.665} render={render} frame={(p, now) => q.current && pose(now)}>
       <div className="boards" ref={wrap}>
         <div className="board-stack" ref={stack}>
           {boards.map((b, i) => (

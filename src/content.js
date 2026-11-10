@@ -61,14 +61,14 @@ export const content = {
       kicker: 'Dashboards',
       voice: [
         [0.03, 'Dashboards. Numbers, made friendly. They answer the question before you’ve asked it.'],
-        [0.1, 'That’s the entire Netflix catalogue, charted. He called it research. I’m not arguing.'],
-        [0.3, 'This one runs PNLF, a national student forum. Watch the important bits float up. He insisted.'],
-        [0.6, 'Members, volunteers, hostels, campus leads. All on one screen. Nobody misses the spreadsheet.'],
+        [0.1, 'This one runs PNLF, a national student forum. Watch the important bits float up. He insisted.'],
+        [0.38, 'Members, volunteers, hostels, campus leads. All on one screen. Nobody misses the spreadsheet.'],
+        [0.76, 'That’s the entire Netflix catalogue, charted. He called it research. I’m not arguing.'],
       ],
       boards: [
         { title: 'Netflix Data Visualiser', note: 'Genres, release trends and ratings across the catalogue.', image: '/images/netflix-visualiser.jpg' },
       ],
-      // After the boards, the PNLF admin portal zooms in and tilts, and each box lifts off the screen to be named.
+      // Before the boards, the PNLF admin portal zooms in and tilts, and each box lifts off the screen to be named.
       // Boxes are in the image's own pixels, in the order they rise; z is how high each one hovers.
       portal: {
         ...pnlfAdmin,
