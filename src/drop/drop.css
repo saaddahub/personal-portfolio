@@ -1,25 +1,38 @@
-/* The water drop (Drop.jsx). Its body is clear glass with a faint milky tint so its face reads: glass.js bends
-   what sits behind it like a solid glass sphere and lays its reflection over the top. */
+/* The water drop (Drop.jsx): clear glass. glass.js bends what sits behind it like a solid sphere; the mirror canvas
+   reflects the tree and petals around it (strongest at the rim, as glass does); a rainbow fringe runs round the
+   edge and a studio highlight sits on top. */
 .drop { position: fixed; inset: 0; z-index: 9; pointer-events: none; }
 .drop-body {
   position: absolute; left: 0; top: 0;
   border-radius: 50%;
   background:
-    radial-gradient(60% 55% at 34% 28%, #ffffff2e, transparent 62%),
-    radial-gradient(70% 60% at 62% 82%, #f5a9c21f, transparent 70%),
-    color-mix(in oklab, var(--mist) 24%, transparent); /* pearly enough for a dark face to read, clear enough to see through */
+    radial-gradient(58% 34% at 50% 16%, #ffffff47, transparent 70%), /* the soft window of light across the top */
+    radial-gradient(95% 16% at 50% 44%, #ffffff1c, transparent 72%), /* the horizon, reflected across its middle */
+    radial-gradient(70% 45% at 55% 92%, #f5a9c233, transparent 70%), /* warm light bouncing up from below */
+    color-mix(in oklab, var(--mist) 6%, transparent);
   transform-origin: 50% 50%;
   will-change: transform;
 }
+.drop-mirror { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+.drop-body::before { /* the rainbow fringe a glass ball shows at its edge */
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 210deg, #ff7ad9, #ffd36e, #7dffcb, #6fc8ff, #b98bff, #ff7ad9);
+  -webkit-mask: radial-gradient(circle, transparent 62%, #000 79%, transparent 91%);
+  mask: radial-gradient(circle, transparent 62%, #000 79%, transparent 91%);
+  mix-blend-mode: screen; opacity: 0.9;
+}
 .drop-body svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.drop-rim { fill: none; stroke: #ffffffc0; stroke-width: 2.4; }
+.drop-rim { fill: none; stroke: #ffffffd9; stroke-width: 2.6; }
 .drop-body::after { /* the catchlight */
   content: ''; position: absolute; left: 22%; top: 15%; width: 24%; height: 14%;
-  border-radius: 50%; background: #ffffffe6; filter: blur(1.4px); transform: rotate(-30deg);
+  border-radius: 50%; background: #fff; filter: blur(1.2px); transform: rotate(-30deg);
+  box-shadow: 34px 46px 0 -4px #ffffff59; /* and a second, fainter glint on the far side */
 }
 
 /* The face */
 .drop-face .eye { fill: #120c10; }
+/* A soft light halo round every eye shape, so dark eyes read on clear glass. */
+.drop-face .eye, .drop-face .line { filter: drop-shadow(0 0 1.1px #ffffffd0) drop-shadow(0 0 2.5px #ffffff55); }
 .drop-face .spark { fill: #fff; opacity: 0.95; }
 .drop-face .line { fill: none; stroke: #120c10; stroke-width: 4.6; stroke-linecap: round; stroke-linejoin: round; }
 .drop-face .blush { fill: #f5a9c2; filter: blur(1.6px); transition: opacity 0.4s var(--ease); }

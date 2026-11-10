@@ -38,7 +38,7 @@ function aim(r) {
 }
 
 export default function Drop() {
-  const body = useRef(null), svg = useRef(null), face = useRef(null), wear = useRef(null), bubble = useRef(null);
+  const body = useRef(null), svg = useRef(null), face = useRef(null), wear = useRef(null), mirror = useRef(null), bubble = useRef(null);
   const [line, setLine] = useState(null);
   const [mood, setMood] = useState('happy');
   const [outfit, setOutfit] = useState('none');
@@ -52,6 +52,8 @@ export default function Drop() {
     let nextBreath = 0, nextBlink = performance.now() + 2500, nextShy = performance.now() + 15000, moodUntil = 0;
     let hovered = false, current = 'happy', shyFrom = null, dressed = 'none';
     const recent = [];
+    const dpr = Math.min(devicePixelRatio || 1, 2), mctx = mirror.current.getContext('2d');
+    let fresnel = null;
 
     const feel = (m, ms) => { current = m; setMood(m); moodUntil = performance.now() + ms; };
     const size = () => {
@@ -59,6 +61,14 @@ export default function Drop() {
       el.style.width = el.style.height = wear.current.style.width = wear.current.style.height = `${r * 2}px`;
       svg.current.setAttribute('viewBox', `0 0 ${r * 2} ${r * 2}`);
       face.current.parentNode.setAttribute('transform', `scale(${(r * 2) / 100})`); // the face box covers the whole drop
+      const px = Math.round(r * 2 * dpr);
+      mirror.current.width = mirror.current.height = px;
+      // Fresnel: glass reflects little where you look straight into it and nearly everything at a grazing angle.
+      fresnel = mctx.createRadialGradient(px / 2, px / 2, 0, px / 2, px / 2, px / 2);
+      fresnel.addColorStop(0, 'rgba(0,0,0,0.5)');
+      fresnel.addColorStop(0.6, 'rgba(0,0,0,0.7)');
+      fresnel.addColorStop(0.9, 'rgba(0,0,0,0.95)');
+      fresnel.addColorStop(1, 'rgba(0,0,0,1)');
     };
     size();
 
@@ -119,6 +129,25 @@ export default function Drop() {
       el.style.clipPath = `path('${path}')`;
       rim.setAttribute('d', path);
 
+      // Reflection: the tree and the petals around the drop, gathered from a wide view and squeezed into the ball
+      // the way a glass sphere reflects its whole surroundings, faint at the centre and strong toward the rim.
+      const px = mirror.current.width, span = r * 10, tree = document.querySelector('.tree'), petals = document.querySelector('.petals');
+      mctx.globalCompositeOperation = 'source-over';
+      mctx.clearRect(0, 0, px, px);
+      for (const cv of [tree, petals]) {
+        if (!cv?.width) continue;
+        const q = cv.getBoundingClientRect(), kx = cv.width / q.width, ky = cv.height / q.height;
+        mctx.globalAlpha = cv === tree ? Number(tree.style.opacity || 1) : 1; // the tree fades out as the page scrolls
+        mctx.drawImage(cv, (s.x - span / 2 - q.left) * kx, (s.y - span / 2 - q.top) * ky, span * kx, span * ky, 0, 0, px, px);
+      }
+      mctx.globalAlpha = 0.85;
+      mctx.globalCompositeOperation = 'lighter'; // glass throws back light brighter than the night around it
+      mctx.drawImage(mirror.current, 0, 0);
+      mctx.globalAlpha = 1;
+      mctx.globalCompositeOperation = 'destination-in';
+      mctx.fillStyle = fresnel;
+      mctx.fillRect(0, 0, px, px);
+
       // The eyes: they follow a cursor within reach, look where it is going otherwise, look away when shy, and blink.
       const near = d < 420, shy = current === 'shy';
       const lx = shy ? (shyFrom ? -shyFrom.x : 0.8) * 9 : near ? (dx / Math.max(d, 1)) * Math.min(d / 30, 9) : Math.max(-6, Math.min(6, s.vx / 110));
@@ -163,6 +192,7 @@ export default function Drop() {
   return (
     <div className="drop" aria-hidden="true">
       <div className="drop-body" ref={body} data-mood={mood}>
+        <canvas ref={mirror} className="drop-mirror" />
         <svg ref={svg}>
           <path className="drop-rim" />
           <g>
