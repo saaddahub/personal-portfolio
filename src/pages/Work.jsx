@@ -91,8 +91,19 @@ export default function Work() {
                       </dl>
                       {p.image && (
                         <figure className="work-figure work-in" style={{ '--k': 2 }}>
-                          <img src={p.image} alt={p.alt} loading="lazy" width="1416" height="797" />
+                          <img src={p.image} alt={p.alt} loading="lazy" width={p.width ?? 1416} height={p.height ?? 797} />
                         </figure>
+                      )}
+                      {p.shots && (
+                        <ul className="work-shots">
+                          {p.shots.map((s, i) => (
+                            <li key={s.image}>
+                              <figure className="work-figure work-in" style={{ '--k': 3 + i }}>
+                                <img src={s.image} alt={s.alt} loading="lazy" width={p.width} height={p.height} />
+                              </figure>
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </div>
                   </div>

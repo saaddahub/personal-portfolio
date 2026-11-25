@@ -85,6 +85,10 @@
 .work-figure img { width: 100%; scale: 1.12; transition: scale 0.25s var(--ease); }
 .work-row[data-open='true'] .work-figure { clip-path: inset(0 round 14px); transition-duration: 1.2s, 0.8s, 0.8s, 0.8s; }
 .work-row[data-open='true'] .work-figure img { scale: 1; transition: scale 1.8s var(--ease) 0.25s; }
+/* Extra screenshots under the main one: tighter gap than the detail grid so they read as one group. */
+.work-shots { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: -1.25rem 0 0; padding: 0; list-style: none; }
+.work-shots .work-figure { height: 100%; }
+@media (max-width: 560px) { .work-shots { grid-template-columns: minmax(0, 1fr); } }
 @media (min-width: 900px) { .work-detail { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
 @media (max-width: 899px) {
   .work-head { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'title icon' 'meta icon'; }

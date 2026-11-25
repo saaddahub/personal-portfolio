@@ -133,13 +133,48 @@ export const content = {
   },
   projects: [
     {
+      id: 'fingerpay',
+      title: 'FingerPay',
+      year: '2026',
+      status: 'Live prototype',
+      stack: ['Next.js', 'Supabase', 'Kotlin', 'Android'],
+      role: 'Design and development',
+      description: 'Pay at the counter with a thumb: no phone, no card, no cash. A web site, a merchant terminal and a customer app, with receipts and a thumb lock over plain SMS. A student prototype; every bank, NADRA and Raast connection is simulated.',
+      liveUrl: 'https://www.fingerpay.app',
+      // Shots from fingerpay.app at 1440x900, saved at 1600x1000, with the cursor's blue ink stirred into each.
+      width: 1600,
+      height: 1000,
+      image: '/images/fingerpay/hero.webp',
+      alt: 'The FingerPay home page: “Pay with nothing.” either side of a phone showing PKR 180.00 and a thumbprint, waiting for a thumb, as blue ink swirls behind it.',
+      shots: [
+        { image: '/images/fingerpay/instant.webp', alt: '“Instant.” in large type on black, with a timeline showing a sale settling in under three seconds.' },
+        { image: '/images/fingerpay/certain.webp', alt: '“Certain.” on black, beside a card reading Settled, PKR 180.00, Rasheed Kiryana Store.' },
+        { image: '/images/fingerpay/sale.webp', alt: 'A sale, start to finish: the cashier types 180, the terminal waits for a thumb, the sale settles and an SMS receipt arrives.' },
+        { image: '/images/fingerpay/fine-print.webp', alt: 'The fine print, in large print: under 3 seconds at the counter, a 0.45% shop fee, PKR 0 for a declined sale and a PKR 5,000 per-tap limit.' },
+      ],
+    },
+    {
       id: 'pnlf',
       title: 'Pakistan’s National Leaders Forum',
       year: '', // [year, from Saad]
-      status: '', // [status, from Saad]
-      stack: [], // [built with, from Saad]
+      status: 'Live',
+      stack: ['Next.js', 'Supabase', 'Three.js'],
       role: '', // [role, from Saad]
       description: '', // [one line, from Saad]
+      liveUrl: 'https://www.pnlf.com.pk',
+      // Shots from pnlf.com.pk at 1440x900, saved at 1600x1000; the admin shot is the one the Showcase uses.
+      width: 1600,
+      height: 1000,
+      image: '/images/pnlf/hero.webp',
+      alt: 'The PNLF home page: “Empowering Students with Campus Chapters.” in white on a dark green photo of a student crowd, with a Join PNLF button.',
+      shots: [
+        { image: '/images/pnlf/mission.webp', alt: 'The PNLF Vision and Mission section: a deep green vision card beside a white mission card.' },
+        { image: '/images/pnlf/leadership.webp', alt: 'Executive Leadership: round portraits of the forum’s vice president, general secretary and team heads.' },
+        { image: '/images/pnlf/pillars.webp', alt: 'Core Pillars of the PNLF Student Society: campus chapters, career mentorship, cultural harmony and student accommodation.' },
+        { image: '/images/pnlf/join.webp', alt: 'How You Can Join the PNLF Forum: cards for becoming a campus lead, helping the community grow and the career mentorship wing.' },
+        { image: '/images/pnlf/hostels.webp', alt: 'Verified Hostels in Lahore: a search bar with area and type filters above cards for girls’ and boys’ hostels.' },
+        pnlfAdmin,
+      ],
     },
     {
       id: 'interviewer',
